@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.3.1
+// @version      1.3.2
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -13,16 +13,12 @@
 
 function createForm() //creates mass upload form and returns all input fields
 {
-	"use strict";
-
     var myUserscriptInfo = document.createElement("div");
     myUserscriptInfo.setAttribute("class", "alert alert-info");
     myUserscriptInfo.setAttribute("role", "alert");
-    myUserscriptInfo.innerHTML = "<h4>You are using Shitty Mass Upload Userscript For Mangadex™ by Xnot</h4>"
-    + "<ol><li>Insert chapter names,volume numbers, and chapter numbers separated by <strike>comas</strike> a dash followed by a coma (-,) into their respective fields"
+    myUserscriptInfo.innerHTML = "<h4>You are using (shitty) Mass Upload Userscript For Mangadex™ by Xnot</h4>"
+    + "<ol><li>Insert chapter names,volume numbers, and chapter numbers separated by a dash followed by a coma (-,) into their respective fields"
     + "<br />Protip: use TEXTJOIN(CONCAT(UNICHAR(45),UNICHAR(44)),0 ,ROWSHERE) on excel"
-    + "<br /><strike>If there's a chapter name that actually has a comma in it, then you're shit outta luck</strike>"
-    + "<br />I sure hope there aren't as many chapter names with \"-,\" in them as ones with comas</li>"
     + "<li>Click browse and use shift/ctrl so select all files</li>"
     + "<li>Select group and language from the standard upload form below the mass upload form</li>"
     + "Hopefully I can care enough to figure these out properly soon"
@@ -54,7 +50,7 @@ function createForm() //creates mass upload form and returns all input fields
     var chapterNameField = chapterNameGroup.childNodes[3].childNodes[1];
     chapterNameField.setAttribute("id", "chapter_names");
     chapterNameField.setAttribute("name", "chapter_names");
-    chapterNameField.setAttribute("placeholder", "nameForCh1, nameForCh2, nameForCh3");
+    chapterNameField.setAttribute("placeholder", "nameForCh1-, nameForCh2-, nameForCh3");
 
 	//modify volume field
 	var volumeNumberLabel = volumeNumberGroup.childNodes[1];
@@ -63,7 +59,7 @@ function createForm() //creates mass upload form and returns all input fields
     var volumeNumberField = volumeNumberGroup.childNodes[3].childNodes[1];
     volumeNumberField.setAttribute("id", "volume_numbers");
     volumeNumberField.setAttribute("name", "volume_numbers");
-    volumeNumberField.setAttribute("placeholder", "volumeForCh1, volumeForCh2, volumeForCh3");
+    volumeNumberField.setAttribute("placeholder", "volumeForCh1-, volumeForCh2-, volumeForCh3");
 
     //modify chapter number field
 	var chapterNumberLabel = chapterNumberGroup.childNodes[1];
@@ -72,7 +68,7 @@ function createForm() //creates mass upload form and returns all input fields
     var chapterNumberField = chapterNumberGroup.childNodes[3].childNodes[1];
     chapterNumberField.setAttribute("id", "chapter_numbers");
     chapterNumberField.setAttribute("name", "chapter_numbers");
-    chapterNumberField.setAttribute("placeholder", "ch1, ch2, ch3");
+    chapterNumberField.setAttribute("placeholder", "ch1-, ch2-, ch3");
 
     //modify the group 1 field
     group1Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
@@ -96,7 +92,7 @@ function createForm() //creates mass upload form and returns all input fields
     group2Field.setAttribute("id", "groups_id_2");
     group2Field.setAttribute("name", "groups_id_2");
     group2Field.setAttribute("disabled", "");
-    group2Field.setAttribute("placeholder", "not implemented (by Holo, not my fault)");
+    group2Field.setAttribute("placeholder", "not implemented by Holo");
 
  	//modify the language field
     languageGroup.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
@@ -108,7 +104,7 @@ function createForm() //creates mass upload form and returns all input fields
     languageField.setAttribute("id", "langs_id");
     languageField.setAttribute("name", "langs_id");
     languageField.setAttribute("disabled", "");
-    languageField.setAttribute("placeholder", "not implemented because it's a pain in the ass and who the fuck mass uploads multiple languages, fill in the language in the bottom form instead");
+    languageField.setAttribute("placeholder", "not implemented because it's a pain in the ass and no one mass uploads multiple languages, fill in the language in the bottom form instead");
 
   	//modify the file field
   	var fileLabel = fileGroup.childNodes[1];
@@ -120,6 +116,11 @@ function createForm() //creates mass upload form and returns all input fields
     fileField.setAttribute("id", "files");
     fileField.setAttribute("name", "files");
     fileField.setAttribute("multiple", "");
+    fileField.addEventListener("change", function()
+                                            {
+                                                fileText.value = this.files.length + " file(s) selected";
+                                                uploadButton.focus();
+                                            });
 
     //modify buttons
     buttonsGroup.removeChild(buttonsGroup.childNodes[1]); //delete redundant back button
@@ -130,10 +131,10 @@ function createForm() //creates mass upload form and returns all input fields
 	uploadButton.setAttribute("class", "btn btn-danger");
 	uploadButton.setAttribute("id", "mass_upload_button");
 	uploadButton.childNodes[2].innerHTML = "Mass Upload";
-	uploadButton.addEventListener("click", function(event){
-                                                        massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, fileField]); //group1Field, 
-                                                     });
-
+	uploadButton.addEventListener("click", function(event)
+                                            {
+                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, fileField]); //group1Field, 
+                                            });
 
     document.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
 }
@@ -143,7 +144,7 @@ function massUpload(event, fields)
     var splitFields = splitInputs(fields);
     if(splitFields[3].length != splitFields[0].length || splitFields[3].length != splitFields[1].length || splitFields[3].length != splitFields[2].length)
     {
-        $("#message_container").html("<div class='alert alert-warning text-center' role='alert'><strong>Warning:</strong> The amount of files does not match names, volumes, or chatpers. All files will be uploaded but some may have empty fields</div>.").show().delay(3000).fadeOut();
+        $("#message_container").html("<div class='alert alert-warning text-center' role='alert'><strong>Warning:</strong> The amount of files does not match names, volumes, or chatpers. All files will be uploaded but some may have empty fields</div>.").show().delay(6000).fadeOut();
     }
     uploadNext(event, splitFields, 0);
 }
@@ -186,6 +187,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     //var group1Field = uploadForm.childNodes[9].childNodes[3].childNodes[1];
     //var languageGroup = uploadForm.childNodes[13];
     var fileField = uploadForm.childNodes[15].childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
+    var fileText = uploadForm.childNodes[15].childNodes[3].childNodes[1].childNodes[1];
     var uploadButton = uploadForm.childNodes[17].childNodes[3].childNodes[1];
 
     var chapterNameList = splitFields[0];
@@ -207,6 +209,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     chapterNameField.value = chapterNameList[i]; //fill in bottom form so uploader can see what's being uploaded
     volumeNumberField.value = volumeNumberList[i];
     chapterNumberField.value = chapterNumberList[i];
+    fileText.value = fileList[i].name;
 
     var j = i+1; //for printing purposes only
     var success_msg = "<div class='alert alert-success text-center' role='alert'><strong>Success:</strong> " + j + "/" + fileList.length + "chapters have been uploaded.</div>";
