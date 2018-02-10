@@ -5,7 +5,7 @@
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
-// @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-massuploader.meta.js
+// @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-massuploader.user.js
 // @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-massuploader.user.js
 // @match        https://mangadex.com/upload/*
 // @grant        none
