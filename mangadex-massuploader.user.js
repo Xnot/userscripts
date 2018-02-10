@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Mangadex (shitty) Mass Uloader
+// @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
 // @version      1.3
 // @icon         https://mangadex.com/favicon.ico
