@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.4
+// @version      1.5
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -137,13 +137,20 @@ function createForm() //creates mass upload form and returns all input fields
     uploadButtonContainer.setAttribute("class", "col-sm-12 text-right");
 	var uploadButton = uploadButtonContainer.childNodes[1];
 	uploadButton.setAttribute("type", "button");
-	uploadButton.setAttribute("class", "btn btn-danger");
+	uploadButton.setAttribute("class", "btn btn-success");
 	uploadButton.setAttribute("id", "mass_upload_button");
 	uploadButton.childNodes[2].innerHTML = "Mass Upload";
 	uploadButton.addEventListener("click", function(event)
                                             {
                                                 massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, fileField]); //group1Field, 
                                             });
+    var resetButton = uploadButton.cloneNode(true);
+    resetButton.setAttribute("type", "reset");
+    resetButton.setAttribute("id", "mass_reset_button")
+    resetButton.setAttribute("class", "btn btn-warning");
+    resetButton.childNodes[0].setAttribute("class", "fas fa-trash-alt");
+    resetButton.childNodes[2].innerHTML = "Reset Form";
+    uploadButtonContainer.insertBefore(resetButton, uploadButton);
 
     document.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
 }
