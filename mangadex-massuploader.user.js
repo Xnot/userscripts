@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.3.3
+// @version      1.4
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -23,7 +23,8 @@ function createForm() //creates mass upload form and returns all input fields
     + "<li>Select group and language from the standard upload form below the mass upload form</li>"
     + "Hopefully I can care enough to figure these out properly soon"
     + "<li>Click the Mass Upload button</li>"
-    + "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</li></ol>";
+    + "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</li></ol>"
+    + "<br /> Update 1.4: Inputing a single volume value will now use that value for all uploads. Inputing single chapter value will increment it by 1 for every upload.";
     var container = document.getElementById("content");
     container.insertBefore(myUserscriptInfo, container.childNodes[5]);
 
@@ -142,11 +143,15 @@ function createForm() //creates mass upload form and returns all input fields
 function massUpload(event, fields)
 {
     var splitFields = splitInputs(fields);
-    if(splitFields[3].length != splitFields[0].length || splitFields[3].length != splitFields[1].length || splitFields[3].length != splitFields[2].length)
+    if((splitFields[3].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[3].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[3].length == splitFields[2].length || splitFields[2].length ==1))
     {
-        $("#message_container").html("<div class='alert alert-warning text-center' role='alert'><strong>Warning:</strong> The amount of files does not match names, volumes, or chatpers. All files will be uploaded but some may have empty fields</div>.").show().delay(6000).fadeOut();
+        uploadNext(event, splitFields, 0);
     }
-    uploadNext(event, splitFields, 0);
+    else
+    {
+        $("#message_container").html("<div class='alert alert-danger text-center' role='alert'><strong>Warning:</strong> The amount of files does not match names, volumes, or chapters.  See instructions. </div>.").show().delay(4000).fadeOut();
+        console.log(splitFields);
+    }
 }
 
 function splitInputs(fields) // splits the coma separated fields into arrays
@@ -199,30 +204,60 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     var uploadFormData = new FormData(uploadForm); //create old form data to steal group and language inputs
     splitFormData = new FormData(); //create new form data
     splitFormData.append("manga_id", mangaIdField.value);
-    splitFormData.append("chapter_name", chapterNameList[i]); //append split mass inputs
-    if(volumeNumberList.length = 1)
+    if(chapterNameList.length == 1) //no chapter names
+    {
+        splitFormData.append("chapter_name", chapterNameList[0]);
+    }
+    else //yes chapter names
+    {
+        splitFormData.append("chapter_name", chapterNameList[i]); 
+    }
+    
+    if(volumeNumberList.length == 1) //single volume upload
     {
         splitFormData.append("volume_number", volumeNumberList[0]);
     }
-    else
+    else //multi volume upload
     {
         splitFormData.append("volume_number", volumeNumberList[i]);
     }
-    splitFormData.append("chapter_number", chapterNumberList[i]);
+    if(chapterNumberList.length == 1) //sequential chapter upload
+    {
+        splitFormData.append("chapter_number", parseInt(chapterNumberList[0]) + i);
+    }
+    else //listed chapter upload
+    {
+        splitFormData.append("chapter_number", chapterNumberList[i]);
+    }
     splitFormData.append("group_id", uploadFormData.get("group_id")); //steal inputs from old form
     splitFormData.append("lang_id", uploadFormData.get("lang_id"));
     splitFormData.append("file", fileList[i]);
 
-    chapterNameField.value = chapterNameList[i]; //fill in bottom form so uploader can see what's being uploaded
-    if(volumeNumberList.length = 1)
+    //fill in bottom form so uploader can see what's being uploaded
+    if(chapterNameList.length == 1)
+    {
+        chapterNameField.value = chapterNameList[0];
+    }
+    else
+    {
+        chapterNameField.value = chapterNameList[i];
+    }
+    if(volumeNumberList.length == 1)
     {  
         volumeNumberField.value = volumeNumberList[0];
     }
     else
     {
-        splitFormData.append("volume_number", volumeNumberList[i]);
+        volumeNumberField.value = volumeNumberList[i];
     }
-    chapterNumberField.value = chapterNumberList[i];
+    if(chapterNumberList.length == 1)
+    {
+        chapterNumberField.value = parseInt(chapterNumberList[0]) + i;
+    }
+    else
+    {
+        chapterNumberField.value = chapterNumberList[i];
+    }
     fileText.value = fileList[i].name;
 
     var j = i+1; //for printing purposes only
