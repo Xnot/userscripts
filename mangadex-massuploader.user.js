@@ -192,6 +192,7 @@ function splitInputs(fields) // splits the coma separated fields into arrays
 function uploadNext(event, splitFields, i) //definitely not copypasted from holo's upload code
 {
     var uploadForm = document.getElementById("upload_form"); //real upload form
+    var massUploadForm = document.getElementById("mass_upload_form");
 
     var mangaIdField = uploadForm.childNodes[1].childNodes[3].childNodes[3];
     var chapterNameField = uploadForm.childNodes[3].childNodes[3].childNodes[1];
@@ -306,15 +307,19 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
             }
             else {
                 $("#message_container").html(data).show().delay(3000).fadeOut();
-                
             }
-            $("#upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
-            $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
-            i = i + 1;
-                if(i < fileList.length)
-                {
-                    setTimeout(function() { uploadNext(event, splitFields, i); }, 500);
-                }
+            i++;
+            if(i < fileList.length) //upload next after 0.5 seconds
+            {
+                setTimeout(function() { uploadNext(event, splitFields, i); }, 500);
+            }
+            else
+            {
+                $("#upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
+                $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
+                uploadForm.reset();
+                massUploadForm.reset();
+            }
         },
  
         error: function(err) {
