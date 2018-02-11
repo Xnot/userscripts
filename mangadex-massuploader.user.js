@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.3.2
+// @version      1.3.3
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -214,7 +214,14 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     splitFormData.append("file", fileList[i]);
 
     chapterNameField.value = chapterNameList[i]; //fill in bottom form so uploader can see what's being uploaded
-    volumeNumberField.value = volumeNumberList[i];
+    if(volumeNumberList.length = 1)
+    {  
+        volumeNumberField.value = volumeNumberList[0];
+    }
+    else
+    {
+        splitFormData.append("volume_number", volumeNumberList[i]);
+    }
     chapterNumberField.value = chapterNumberList[i];
     fileText.value = fileList[i].name;
 
