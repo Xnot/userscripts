@@ -33,7 +33,8 @@ function createForm() //creates mass upload form and returns all input fields
     + "<li>Leaving empty fields no longer fills them with \"undefined\", now leaves them empty (not that I recommend that)"
     + "<li>To prevent off-by-one errors, uploading will now only trigger if all fields have the same amount of values as the amount of files (or if you are using the just added single/empty chapter/volume/name options)</ul>";
     var container = document.getElementById("content");
-    container.insertBefore(myUserscriptInfo, container.childNodes[5]);
+    var formPanel = document.getElementsByClassName("panel panel-default")[1];
+    container.insertBefore(myUserscriptInfo, formPanel);
 
 
     var uploadForm = document.getElementById("upload_form"); //get real upload form
