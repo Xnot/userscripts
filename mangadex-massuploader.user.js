@@ -11,6 +11,8 @@
 // @grant        none
 // ==/UserScript==
 
+$ = unsafeWindow.$ //jquery doesn't work on greasemonkey without this or something
+
 function createForm() //creates mass upload form and returns all input fields
 {
     var myUserscriptInfo = document.createElement("div");
