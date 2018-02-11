@@ -27,11 +27,14 @@ function createForm() //creates mass upload form and returns all input fields
     + "Hopefully I can care enough to figure these out properly soon"
     + "<li>Click the Mass Upload button"
     + "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>"
-    + "<br />Update 1.4:"
+    + "Update 1.4:"
     + "<ul><li>Inputing a single volume or chapter name value will now use that value for all uploads."
     + "<li>Inputing single chapter value will increment it by 1 for every upload."
     + "<li>Leaving empty fields no longer fills them with \"undefined\", now leaves them empty (not that I recommend that)"
-    + "<li>To prevent off-by-one errors, uploading will now only trigger if all fields have the same amount of values as the amount of files (or if you are using the just added single/empty chapter/volume/name options)</ul>";
+    + "<li>To prevent off-by-one errors, uploading will now only trigger if all fields have the same amount of values as the amount of files (or if you are using the just added single/empty chapter/volume/name options)</ul>"
+    + "Update 1.5:"
+    + "<ul><li>Both forms automatically reset upon completion"
+    + "<li>Added reset button to top form</ul>";
     var container = document.getElementById("content");
     var formPanel = document.getElementsByClassName("panel panel-default")[1];
     container.insertBefore(myUserscriptInfo, formPanel);
