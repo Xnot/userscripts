@@ -200,7 +200,14 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     splitFormData = new FormData(); //create new form data
     splitFormData.append("manga_id", mangaIdField.value);
     splitFormData.append("chapter_name", chapterNameList[i]); //append split mass inputs
-    splitFormData.append("volume_number", volumeNumberList[i]);
+    if(volumeNumberList.length = 1)
+    {
+        splitFormData.append("volume_number", volumeNumberList[0]);
+    }
+    else
+    {
+        splitFormData.append("volume_number", volumeNumberList[i]);
+    }
     splitFormData.append("chapter_number", chapterNumberList[i]);
     splitFormData.append("group_id", uploadFormData.get("group_id")); //steal inputs from old form
     splitFormData.append("lang_id", uploadFormData.get("lang_id"));
