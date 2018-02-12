@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.4
+// @version      1.5
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -16,29 +16,33 @@ function createForm() //creates mass upload form and returns all input fields
     var myUserscriptInfo = document.createElement("div");
     myUserscriptInfo.setAttribute("class", "alert alert-info");
     myUserscriptInfo.setAttribute("role", "alert");
-    myUserscriptInfo.innerHTML = "<h4>You are using (shitty) Mass Upload Userscript For Mangadex™ by Xnot</h4>"
-    + "<ol><li>Insert chapter names,volume numbers, and chapter numbers separated by a dash followed by a coma (-,) into their respective fields"
-    + "<br />Protip: use TEXTJOIN(CONCAT(UNICHAR(45),UNICHAR(44)),0 ,ROWSHERE) on excel"
-    + "<br />Alternatively, inputing a single name/volume will use that for all uploads, and inputing a single chapter will increment it for each upload"
-    + "<br />Obviously only use those options if there is only one volume/if there are no special chapters in your files"
-    + "<li>Click browse and use shift/ctrl so select all files"
-    + "<br />If you hover over the browse button you can check that the order of the files is correct"
-    + "<li>Select group and language from the standard upload form below the mass upload form"
-    + "Hopefully I can care enough to figure these out properly soon"
-    + "<li>Click the Mass Upload button"
-    + "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>"
-    + "<br />Update 1.4:"
-    + "<ul><li>Inputing a single volume or chapter name value will now use that value for all uploads."
-    + "<li>Inputing single chapter value will increment it by 1 for every upload."
-    + "<li>Leaving empty fields no longer fills them with \"undefined\", now leaves them empty (not that I recommend that)"
-    + "<li>To prevent off-by-one errors, uploading will now only trigger if all fields have the same amount of values as the amount of files (or if you are using the just added single/empty chapter/volume/name options)</ul>";
+    myUserscriptInfo.innerHTML = "<h4>You are using (shitty) Mass Upload Userscript For Mangadex™ by Xnot</h4>" +
+    "<ol><li>Insert chapter names,volume numbers, and chapter numbers separated by a dash followed by a coma (-,) into their respective fields" +
+    "<br />Protip: use TEXTJOIN(CONCAT(UNICHAR(45),UNICHAR(44)),0 ,ROWSHERE) on excel" +
+    "<br />Alternatively, inputing a single name/volume will use that for all uploads, and inputing a single chapter will increment it for each upload" +
+    "<br />Obviously only use those options if there is only one volume/if there are no special chapters in your files" +
+    "<li>Click browse and use shift/ctrl so select all files" +
+    "<br />If you hover over the browse button you can check that the order of the files is correct" +
+    "<li>Select group and language from the standard upload form below the mass upload form" +
+    "Hopefully I can care enough to figure these out properly soon" +
+    "<li>Click the Mass Upload button" +
+    "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
+    "Update 1.4:" +
+    "<ul><li>Inputing a single volume or chapter name value will now use that value for all uploads." +
+    "<li>Inputing single chapter value will increment it by 1 for every upload." +
+    "<li>Leaving empty fields no longer fills them with \"undefined\", now leaves them empty (not that I recommend that)" +
+    "<li>To prevent off-by-one errors, uploading will now only trigger if all fields have the same amount of values as the amount of files (or if you are using the just added single/empty chapter/volume/name options)</ul>" +
+    "Update 1.5:" +
+    "<ul><li>Both forms automatically reset upon completion" +
+    "<li>Added reset button to top form</ul>";
     var container = document.getElementById("content");
-    container.insertBefore(myUserscriptInfo, container.childNodes[5]);
+    var formPanel = document.getElementsByClassName("panel panel-default")[1];
+    container.insertBefore(myUserscriptInfo, formPanel);
 
 
     var uploadForm = document.getElementById("upload_form"); //get real upload form
     var massUploadForm = uploadForm.cloneNode(true); //create mass upload form as clone of upload form
-    //uploadForm.style = "margin-top: 15px; display: none"; //hide upload form 
+    //uploadForm.style = "margin-top: 15px; display: none"; //hide upload form
     massUploadForm.id = "mass_upload_form";
 
     var mangaNameGroup = massUploadForm.childNodes[1];
@@ -51,7 +55,7 @@ function createForm() //creates mass upload form and returns all input fields
     var fileGroup = massUploadForm.childNodes[15];
     var buttonsGroup = massUploadForm.childNodes[17];
 
-	//modify chapter name field
+    //modify chapter name field
     var chapterNameLabel = chapterNameGroup.childNodes[1];
     chapterNameLabel.setAttribute("for", "chapter_names");
     chapterNameLabel.innerHTML = "Chapter Names";
@@ -60,8 +64,8 @@ function createForm() //creates mass upload form and returns all input fields
     chapterNameField.setAttribute("name", "chapter_names");
     chapterNameField.setAttribute("placeholder", "nameForCh1-, nameForCh2-, nameForCh3");
 
-	//modify volume field
-	var volumeNumberLabel = volumeNumberGroup.childNodes[1];
+    //modify volume field
+    var volumeNumberLabel = volumeNumberGroup.childNodes[1];
     volumeNumberLabel.setAttribute("for", "volume_numbers");
     volumeNumberLabel.innerHTML = "Volume Numbers";
     var volumeNumberField = volumeNumberGroup.childNodes[3].childNodes[1];
@@ -70,7 +74,7 @@ function createForm() //creates mass upload form and returns all input fields
     volumeNumberField.setAttribute("placeholder", "volumeForCh1-, volumeForCh2-, volumeForCh3");
 
     //modify chapter number field
-	var chapterNumberLabel = chapterNumberGroup.childNodes[1];
+    var chapterNumberLabel = chapterNumberGroup.childNodes[1];
     chapterNumberLabel.setAttribute("for", "chapter_numbers");
     chapterNumberLabel.innerHTML = "Chapter Numbers";
     var chapterNumberField = chapterNumberGroup.childNodes[3].childNodes[1];
@@ -102,7 +106,7 @@ function createForm() //creates mass upload form and returns all input fields
     group2Field.setAttribute("disabled", "");
     group2Field.setAttribute("placeholder", "not implemented by Holo");
 
- 	//modify the language field
+    //modify the language field
     languageGroup.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
     languageGroup = massUploadForm.childNodes[13]; //why doesn't replace funcion update the pointer
     var languageLabel = languageGroup.childNodes[1];
@@ -114,8 +118,8 @@ function createForm() //creates mass upload form and returns all input fields
     languageField.setAttribute("disabled", "");
     languageField.setAttribute("placeholder", "not implemented because it's a pain in the ass and no one mass uploads multiple languages, fill in the language in the bottom form instead");
 
-  	//modify the file field
-  	var fileLabel = fileGroup.childNodes[1];
+    //modify the file field
+    var fileLabel = fileGroup.childNodes[1];
     fileLabel.setAttribute("for", "files");
     fileLabel.innerHTML = "Files";
     var fileText = fileGroup.childNodes[3].childNodes[1].childNodes[1];
@@ -132,17 +136,24 @@ function createForm() //creates mass upload form and returns all input fields
 
     //modify buttons
     buttonsGroup.removeChild(buttonsGroup.childNodes[1]); //delete redundant back button
-    var uploadButtonContainer = buttonsGroup.childNodes[2];
-    uploadButtonContainer.setAttribute("class", "col-sm-12 text-right");
-	var uploadButton = uploadButtonContainer.childNodes[1];
-	uploadButton.setAttribute("type", "button");
-	uploadButton.setAttribute("class", "btn btn-danger");
-	uploadButton.setAttribute("id", "mass_upload_button");
-	uploadButton.childNodes[2].innerHTML = "Mass Upload";
-	uploadButton.addEventListener("click", function(event)
+    var uploadButtonContainer = buttonsGroup.childNodes[2]; //modify upload button
+    uploadButtonContainer.setAttribute("class", "col-sm-12 text-right btn-toolbar");
+    var uploadButton = uploadButtonContainer.childNodes[1];
+    uploadButton.setAttribute("type", "button");
+    uploadButton.setAttribute("class", "pull-right btn btn-success");
+    uploadButton.setAttribute("id", "mass_upload_button");
+    uploadButton.childNodes[2].innerHTML = "Mass Upload";
+    uploadButton.addEventListener("click", function(event)
                                             {
-                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, fileField]); //group1Field, 
+                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, fileField]); //group1Field,
                                             });
+    var resetButton = uploadButton.cloneNode(true);
+    resetButton.setAttribute("type", "reset");
+    resetButton.setAttribute("id", "mass_reset_button");
+    resetButton.setAttribute("class", "pull-right btn btn-warning");
+    resetButton.childNodes[0].setAttribute("class", "fas fa-trash-alt");
+    resetButton.childNodes[2].innerHTML = "Reset Form";
+    uploadButtonContainer.appendChild(resetButton);
 
     document.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
 }
@@ -191,6 +202,7 @@ function splitInputs(fields) // splits the coma separated fields into arrays
 function uploadNext(event, splitFields, i) //definitely not copypasted from holo's upload code
 {
     var uploadForm = document.getElementById("upload_form"); //real upload form
+    var massUploadForm = document.getElementById("mass_upload_form");
 
     var mangaIdField = uploadForm.childNodes[1].childNodes[3].childNodes[3];
     var chapterNameField = uploadForm.childNodes[3].childNodes[3].childNodes[1];
@@ -217,9 +229,8 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     }
     else //yes chapter names
     {
-        splitFormData.append("chapter_name", chapterNameList[i]); 
+        splitFormData.append("chapter_name", chapterNameList[i]);
     }
-    
     if(volumeNumberList.length == 1) //single volume upload
     {
         splitFormData.append("volume_number", volumeNumberList[0]);
@@ -250,7 +261,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
         chapterNameField.value = chapterNameList[i];
     }
     if(volumeNumberList.length == 1)
-    {  
+    {
         volumeNumberField.value = volumeNumberList[0];
     }
     else
@@ -289,7 +300,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
                 myXhr.upload.addEventListener('progress', function(e) {
                     console.log(e);
                     if (e.lengthComputable) {
-                        $('#progressbar').parent().show(); 
+                        $('#progressbar').parent().show();
                         $('#progressbar').width((Math.round(e.loaded/e.total*100) + '%'));
                     }
                 } , false);
@@ -305,15 +316,19 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
             }
             else {
                 $("#message_container").html(data).show().delay(3000).fadeOut();
-                
             }
-            $("#upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
-            $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
-            i = i + 1;
-                if(i < fileList.length)
-                {
-                    setTimeout(function() { uploadNext(event, splitFields, i); }, 500);
-                }
+            i++;
+            if(i < fileList.length) //upload next after 0.5 seconds
+            {
+                setTimeout(function() { uploadNext(event, splitFields, i); }, 500);
+            }
+            else
+            {
+                $("#upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
+                $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
+                uploadForm.reset();
+                massUploadForm.reset();
+            }
         },
  
         error: function(err) {
