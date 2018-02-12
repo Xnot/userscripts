@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.5
+// @version      1.6
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
