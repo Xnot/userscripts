@@ -288,6 +288,14 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     {
         chapterNumberField.value = chapterNumberList[i];
     }
+    if(group1List.length == 1)
+    {
+        document.getElementsByClassName("filter-option pull-left")[0].childNodes[1].data = " id: " + group1List[0];
+    }
+    else
+    {
+        document.getElementsByClassName("filter-option pull-left")[0].childNodes[1].data = " id: " + group1List[i];
+    }
     fileText.value = fileList[i].name;
 
     var j = i+1; //for printing purposes only
