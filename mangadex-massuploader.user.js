@@ -91,8 +91,13 @@ function createForm() //creates mass upload form and returns all input fields
     var group1Field = group1Group.childNodes[3].childNodes[1];
     group1Field.setAttribute("id", "groups_id");
     group1Field.setAttribute("name", "groups_id");
-    group1Field.setAttribute("disabled", "");
-    group1Field.setAttribute("placeholder", "not implemented because it's a pain in the ass, fill in the group in the bottom form instead");
+    //group1Field.setAttribute("disabled", "");
+    group1Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
+    document.getElementById("group_id").addEventListener("change", function()
+                                                                    {
+                                                                        group1Field.value = this.value;
+                                                                        document.getElementsByClassName("filter-option pull-left")[0].childNodes[1].data += " id: " + this.value;
+                                                                    });
 
     //modify the group 2 field
     group2Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
@@ -145,7 +150,7 @@ function createForm() //creates mass upload form and returns all input fields
     uploadButton.childNodes[2].innerHTML = "Mass Upload";
     uploadButton.addEventListener("click", function(event)
                                             {
-                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, fileField]); //group1Field,
+                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, group1Field, fileField]);
                                             });
     var resetButton = uploadButton.cloneNode(true);
     resetButton.setAttribute("type", "reset");
@@ -161,13 +166,14 @@ function createForm() //creates mass upload form and returns all input fields
 function massUpload(event, fields)
 {
     var splitFields = splitInputs(fields);
-    if((splitFields[3].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[3].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[3].length == splitFields[2].length || splitFields[2].length ==1))
+    //this if statement is getting really long
+    if((splitFields[4].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[4].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[4].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[4].length == splitFields[3].length || splitFields[3].length == 1) && !splitFields[3].includes(""))
     {
         uploadNext(event, splitFields, 0);
     }
     else
     {
-        $("#message_container").html("<div class='alert alert-danger text-center' role='alert'><strong>Warning:</strong> The amount of files does not match names, volumes, or chapters.  See instructions. </div>.").show().delay(4000).fadeOut();
+        $("#message_container").html("<div class='alert alert-danger text-center' role='alert'><strong>Warning:</strong> Either the amount of files does not match names, volumes, chapters, or groups, or you left the group field empty. See instructions and try again. </div>.").show().delay(4000).fadeOut();
         console.log(splitFields);
     }
 }
@@ -177,8 +183,8 @@ function splitInputs(fields) // splits the coma separated fields into arrays
     var chapterNameList = fields[0].value.split("-,");
     var volumeNumberList = fields[1].value.split("-,");
     var chapterNumberList = fields[2].value.split("-,");
-    var fileList = fields[3].files;
-    //var group1List = fields[3].value.split(",");
+    var group1List = fields[3].value.split("-,");
+    var fileList = fields[4].files;
     for(let i = 0; i < chapterNameList.length; i++)
     {
         chapterNameList[i] = chapterNameList[i].trim();
@@ -191,12 +197,11 @@ function splitInputs(fields) // splits the coma separated fields into arrays
     {
         chapterNumberList[i] = chapterNumberList[i].trim();
     }
-    // for(let i = 0; i < group1List.length; i++)
-    // {
-    //     group1List[i] = group1List[i].trim();
-    // }
-
-    return [chapterNameList, volumeNumberList, chapterNumberList, fileList];
+    for(let i = 0; i < group1List.length; i++)
+    {
+        group1List[i] = group1List[i].trim();
+    }
+    return [chapterNameList, volumeNumberList, chapterNumberList, group1List, fileList];
 }
 
 function uploadNext(event, splitFields, i) //definitely not copypasted from holo's upload code
@@ -208,7 +213,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     var chapterNameField = uploadForm.childNodes[3].childNodes[3].childNodes[1];
     var volumeNumberField = uploadForm.childNodes[5].childNodes[3].childNodes[1];
     var chapterNumberField = uploadForm.childNodes[7].childNodes[3].childNodes[1];
-    //var group1Field = uploadForm.childNodes[9].childNodes[3].childNodes[1];
+    var group1Field = uploadForm.childNodes[9].childNodes[3].childNodes[1];
     //var languageGroup = uploadForm.childNodes[13];
     var fileField = uploadForm.childNodes[15].childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
     var fileText = uploadForm.childNodes[15].childNodes[3].childNodes[1].childNodes[1];
@@ -217,17 +222,17 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     var chapterNameList = splitFields[0];
     var volumeNumberList = splitFields[1];
     var chapterNumberList = splitFields[2];
-    //var group1List = splitFields[3];
-    var fileList = splitFields[3];
+    var group1List = splitFields[3];
+    var fileList = splitFields[4];
 
     var uploadFormData = new FormData(uploadForm); //create old form data to steal group and language inputs
     splitFormData = new FormData(); //create new form data
     splitFormData.append("manga_id", mangaIdField.value);
-    if(chapterNameList.length == 1) //no chapter names
+    if(chapterNameList.length == 1) //equal chapter names
     {
         splitFormData.append("chapter_name", chapterNameList[0]);
     }
-    else //yes chapter names
+    else //unequal chapter names
     {
         splitFormData.append("chapter_name", chapterNameList[i]);
     }
@@ -247,7 +252,14 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     {
         splitFormData.append("chapter_number", chapterNumberList[i]);
     }
-    splitFormData.append("group_id", uploadFormData.get("group_id")); //steal inputs from old form
+    if(group1List.length == 1) //single group upload
+    {
+        splitFormData.append("group_id", group1List[0]);
+    }
+    else //multi group upload
+    {
+        splitFormData.append("group_id", group1List[i]);
+    }
     splitFormData.append("lang_id", uploadFormData.get("lang_id"));
     splitFormData.append("file", fileList[i]);
 
