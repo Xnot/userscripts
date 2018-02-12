@@ -136,7 +136,8 @@ function createForm() //creates mass upload form and returns all input fields
 
     //modify buttons
     buttonsGroup.removeChild(buttonsGroup.childNodes[1]); //delete redundant back button
-    var uploadButtonContainer = buttonsGroup.childNodes[2];
+    buttonsGroup.setAttribute("class", "form-group btn-toolbar")
+    var uploadButtonContainer = buttonsGroup.childNodes[2]; //modify upload button
     uploadButtonContainer.setAttribute("class", "col-sm-12 text-right");
 	var uploadButton = uploadButtonContainer.childNodes[1];
 	uploadButton.setAttribute("type", "button");
@@ -150,6 +151,7 @@ function createForm() //creates mass upload form and returns all input fields
     var resetButton = uploadButton.cloneNode(true);
     resetButton.setAttribute("type", "reset");
     resetButton.setAttribute("id", "mass_reset_button")
+    resetButton.setAttribute("id", "mass_reset_button");
     resetButton.setAttribute("class", "btn btn-warning");
     resetButton.childNodes[0].setAttribute("class", "fas fa-trash-alt");
     resetButton.childNodes[2].innerHTML = "Reset Form";
