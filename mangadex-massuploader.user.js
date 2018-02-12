@@ -149,7 +149,7 @@ function createForm() //creates mass upload form and returns all input fields
                                             });
     var resetButton = uploadButton.cloneNode(true);
     resetButton.setAttribute("type", "reset");
-    resetButton.setAttribute("id", "mass_reset_button")
+    resetButton.setAttribute("id", "mass_reset_button");
     resetButton.setAttribute("id", "mass_reset_button");
     resetButton.setAttribute("class", "pull-right btn btn-warning");
     resetButton.childNodes[0].setAttribute("class", "fas fa-trash-alt");
