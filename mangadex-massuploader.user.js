@@ -143,14 +143,21 @@ function createForm() //creates mass upload form and returns all input fields
     fileLabel.setAttribute("for", "files");
     fileLabel.innerHTML = "Files";
     var fileText = fileGroup.childNodes[3].childNodes[1].childNodes[1];
-    fileText.setAttribute("placeholder", "Filenames");
+    fileText.setAttribute("placeholder", "No files selected");
     var fileField = fileGroup.childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
     fileField.setAttribute("id", "files");
     fileField.setAttribute("name", "files");
     fileField.setAttribute("multiple", "");
     fileField.addEventListener("change", function()
                                             {
-                                                fileText.value = this.files.length + " file(s) selected";
+                                                if(this.files.length == 1)
+                                                {
+                                                    fileText.value = this.files.length + " file selected";
+                                                }
+                                                else
+                                                {
+                                                    fileText.value = this.files.length + " files selected";
+                                                }
                                                 uploadButton.focus();
                                             });
 
