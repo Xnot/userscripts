@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.61
+// @version      1.62
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -51,8 +51,10 @@ function createForm() //creates mass upload form and returns all input fields
     var chapterNameGroup = massUploadForm.childNodes[3];
     var volumeNumberGroup = massUploadForm.childNodes[5];
     var chapterNumberGroup = massUploadForm.childNodes[7];
+    var delayGroup = massUploadForm.childNodes[9];
     var group1Group = massUploadForm.childNodes[11];
     var group2Group = massUploadForm.childNodes[13];
+    var group3Group = massUploadForm.childNodes[15];
     var languageGroup = massUploadForm.childNodes[17];
     var fileGroup = massUploadForm.childNodes[19];
     var buttonsGroup = massUploadForm.childNodes[21];
@@ -86,7 +88,7 @@ function createForm() //creates mass upload form and returns all input fields
 
     //modify the group 1 field
     group1Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
-    group1Group = massUploadForm.childNodes[9]; //why doesn't replace funcion update the pointer
+    group1Group = massUploadForm.childNodes[11]; //why doesn't replace funcion update the pointer
     var group1Label = group1Group.childNodes[1];
     group1Label.setAttribute("for", "groups_id");
     group1Label.innerHTML = "Groups 1";
@@ -102,7 +104,7 @@ function createForm() //creates mass upload form and returns all input fields
 
     //modify the group 2 field
     group2Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
-    group2Group = massUploadForm.childNodes[11]; //why doesn't replace funcion update the pointer
+    group2Group = massUploadForm.childNodes[13]; //why doesn't replace funcion update the pointer
     var group2Label = group2Group.childNodes[1];
     group2Label.setAttribute("for", "groups_id_2");
     group2Label.innerHTML = "Groups 2";
@@ -112,9 +114,21 @@ function createForm() //creates mass upload form and returns all input fields
     group2Field.setAttribute("disabled", "");
     group2Field.setAttribute("placeholder", "not implemented by Holo");
 
+    //modify the group 3 field
+    group3Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
+    group3Group = massUploadForm.childNodes[15]; //why doesn't replace funcion update the pointer
+    var group3Label = group3Group.childNodes[1];
+    group3Label.setAttribute("for", "groups_id_3");
+    group3Label.innerHTML = "Groups 3";
+    var group3Field = group3Group.childNodes[3].childNodes[1];
+    group3Field.setAttribute("id", "groups_id_3");
+    group3Field.setAttribute("name", "groups_id_3");
+    group3Field.setAttribute("disabled", "");
+    group3Field.setAttribute("placeholder", "not implemented by Holo");
+
     //modify the language field
     languageGroup.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
-    languageGroup = massUploadForm.childNodes[13]; //why doesn't replace funcion update the pointer
+    languageGroup = massUploadForm.childNodes[17]; //why doesn't replace funcion update the pointer
     var languageLabel = languageGroup.childNodes[1];
     languageLabel.setAttribute("for", "langs_id");
     languageLabel.innerHTML = "Languages";
@@ -214,11 +228,11 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     var chapterNameField = uploadForm.childNodes[3].childNodes[3].childNodes[1];
     var volumeNumberField = uploadForm.childNodes[5].childNodes[3].childNodes[1];
     var chapterNumberField = uploadForm.childNodes[7].childNodes[3].childNodes[1];
-    var group1Field = uploadForm.childNodes[9].childNodes[3].childNodes[1];
+    var group1Field = uploadForm.childNodes[11].childNodes[3].childNodes[1];
     //var languageGroup = uploadForm.childNodes[13];
-    var fileField = uploadForm.childNodes[15].childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
-    var fileText = uploadForm.childNodes[15].childNodes[3].childNodes[1].childNodes[1];
-    var uploadButton = uploadForm.childNodes[17].childNodes[3].childNodes[1];
+    var fileField = uploadForm.childNodes[19].childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
+    var fileText = uploadForm.childNodes[19].childNodes[3].childNodes[1].childNodes[1];
+    var uploadButton = uploadForm.childNodes[21].childNodes[3].childNodes[1];
 
     var chapterNameList = splitFields[0];
     var volumeNumberList = splitFields[1];
