@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.64
+// @version      1.65
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -370,6 +370,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
             console.error(err);
             $('#progressbar').parent().hide();
             $("#upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
+            $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
             $("#message_container").html(error_msg).show().delay(3000).fadeOut();
         }
     });
