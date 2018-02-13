@@ -99,7 +99,7 @@ function createForm() //creates mass upload form and returns all input fields
     document.getElementById("group_id").addEventListener("change", function()
                                                                     {
                                                                         group1Field.value = this.value;
-                                                                        document.getElementsByClassName("filter-option pull-left")[0].childNodes[1].data += " id: " + this.value;
+                                                                        document.getElementsByClassName("filter-option pull-left")[1].childNodes[1].data += " id: " + this.value;
                                                                     });
 
     //modify the group 2 field
@@ -305,11 +305,11 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     }
     if(group1List.length == 1)
     {
-        document.getElementsByClassName("filter-option pull-left")[0].childNodes[1].data = " id: " + group1List[0];
+        document.getElementsByClassName("filter-option pull-left")[1].childNodes[1].data = " id: " + group1List[0];
     }
     else
     {
-        document.getElementsByClassName("filter-option pull-left")[0].childNodes[1].data = " id: " + group1List[i];
+        document.getElementsByClassName("filter-option pull-left")[1].childNodes[1].data = " id: " + group1List[i];
     }
     fileText.value = fileList[i].name;
 
