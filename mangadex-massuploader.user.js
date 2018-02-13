@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.6
+// @version      1.6.1
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -51,11 +51,11 @@ function createForm() //creates mass upload form and returns all input fields
     var chapterNameGroup = massUploadForm.childNodes[3];
     var volumeNumberGroup = massUploadForm.childNodes[5];
     var chapterNumberGroup = massUploadForm.childNodes[7];
-    var group1Group = massUploadForm.childNodes[9];
-    var group2Group = massUploadForm.childNodes[11];
-    var languageGroup = massUploadForm.childNodes[13];
-    var fileGroup = massUploadForm.childNodes[15];
-    var buttonsGroup = massUploadForm.childNodes[17];
+    var group1Group = massUploadForm.childNodes[11];
+    var group2Group = massUploadForm.childNodes[13];
+    var languageGroup = massUploadForm.childNodes[17];
+    var fileGroup = massUploadForm.childNodes[19];
+    var buttonsGroup = massUploadForm.childNodes[21];
 
     //modify chapter name field
     var chapterNameLabel = chapterNameGroup.childNodes[1];
@@ -93,7 +93,6 @@ function createForm() //creates mass upload form and returns all input fields
     var group1Field = group1Group.childNodes[3].childNodes[1];
     group1Field.setAttribute("id", "groups_id");
     group1Field.setAttribute("name", "groups_id");
-    //group1Field.setAttribute("disabled", "");
     group1Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
     document.getElementById("group_id").addEventListener("change", function()
                                                                     {
@@ -301,8 +300,8 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     fileText.value = fileList[i].name;
 
     var j = i+1; //for printing purposes only
-    var success_msg = "<div class='alert alert-success text-center' role='alert'><strong>Success:</strong> " + j + "/" + fileList.length + "chapters have been uploaded.</div>";
-    var error_msg = "<div class='alert alert-warning text-center' role='alert'><strong>Warning:</strong> Something went wrong with your upload at " + j + "/" + fileList.length + "files. All previous files have been uploaded.</div>";
+    var success_msg = "<div class='alert alert-success text-center' role='alert'><strong>Success:</strong> " + j + "/" + fileList.length + " chapters have been uploaded.</div>";
+    var error_msg = "<div class='alert alert-warning text-center' role='alert'><strong>Warning:</strong> Something went wrong with your upload at " + j + "/" + fileList.length + " files. All previous files have been uploaded.</div>";
  
     $("#upload_button").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Uploading...").attr("disabled", true);
     $("#mass_upload_button").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Mass Uploading: " + j + "/" + fileList.length).attr("disabled", true);
