@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.65
+// @version      1.67
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -17,26 +17,27 @@ function createForm() //creates mass upload form and returns all input fields
     myUserscriptInfo.setAttribute("class", "alert alert-info");
     myUserscriptInfo.setAttribute("role", "alert");
     myUserscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Uploader™ by Xnot</h4>" +
-    "<ol><li>Insert chapter names,volume numbers, and chapter numbers separated by a dash followed by a coma (-,) into their respective fields" +
+    "<ol><li>Insert chapter names,volume numbers, and chapter numbers, and group IDs separated by a dash followed by a coma (-,) into their respective fields" +
     "<br />Protip: use TEXTJOIN(CONCAT(UNICHAR(45),UNICHAR(44)),0 ,ROWSHERE) on excel" +
-    "<br />Alternatively, inputing a single name/volume will use that for all uploads, and inputing a single chapter will increment it for each upload" +
-    "<br />Obviously only use those options if there is only one volume/if there are no special chapters in your files" +
+    "<br />Alternatively, inputing a single name/volume/groupID will use that for all uploads, and inputing a single chapter will increment it for each upload" +
+    "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
+    "<br />You can find group IDs by selecting the group in dropdown in the bottom or by looking at the URL of that group's page" +
+    "<li>Check the group delay box if you feel so inclined (will apply for all uploads)" +
     "<li>Click browse and use shift/ctrl so select all files" +
     "<br />If you hover over the browse button you can check that the order of the files is correct" +
-    "<li>Select group and language from the standard upload form below the mass upload form" +
-    "Hopefully I can care enough to figure these out properly soon" +
+    "<li>Select language from the standard upload form below the mass upload form" +
     "<li>Click the Mass Upload button" +
     "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
-    "Update 1.5:" +
-    "<ul><li>Both forms automatically reset upon completion" +
-    "<li>Added reset button to top form</ul>" +
+    "If there are any problems @ or pm me on Discord<br />" +
     "Update 1.6:" +
     "<ul><li>Leaving group empty now prevents you from uploading (better than getting Holo's nearly-invisible SQL injection error)" +
     "<li>Muli group is a thing now" +
     "<li>Selecting a group from the bottom dropdown shows that group's id and fills it on top form" +
     "<li>If you want multiple groups you'll have to note the ids and fill in the top form manually. Works in same pattern as the other fields" +
-    "<li>Leaving only one group will use that for all uploads" +
-    "<li>I'll update the instructions above to reflect these changes later, too lazy now</ul>";
+    "<li>Leaving only one group will use that for all uploads</ul>" +
+    "Update 1.67:" +
+    "<ul><li>Added proper support for group delay" +
+    "<li>I don't think it's important enough to warrant a multi field so it'll just apply delay to all uploads</ul>";
     var container = document.getElementById("content");
     var formPanel = document.getElementsByClassName("panel panel-default")[1];
     container.insertBefore(myUserscriptInfo, formPanel);
@@ -87,7 +88,9 @@ function createForm() //creates mass upload form and returns all input fields
     chapterNumberField.setAttribute("placeholder", "ch1-, ch2-, ch3");
 
     //modify delay field
-    //var delayLabel = delayGroup.childNodes[1]; //might need this some day
+    var delayLabel = delayGroup.childNodes[1]; //might need this some day ...and that day was today
+    delayLabel.setAttribute("for", "groups_delay");
+    delayLabel.innerHTML = "Apply groups delay";
     var delayCheckbox = delayGroup.childNodes[3].childNodes[1].childNodes[1].childNodes[0];
     delayCheckbox.setAttribute("id", "groups_delay");
     delayCheckbox.setAttribute("name", "groups_delay");
@@ -258,7 +261,7 @@ function uploadNext(event, splitFields, i)
     var group1List = splitFields[4];
     var fileList = splitFields[5];
 
-    var uploadFormData = new FormData(uploadForm); //create old form data to steal group and language inputs
+    var uploadFormData = new FormData(uploadForm); //create old form data to steal language input
     splitFormData = new FormData(); //create new form data
     splitFormData.append("manga_id", mangaIdField.value);
     if(chapterNameList.length == 1) //equal chapter names
