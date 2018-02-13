@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.65
+// @version      1.67
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -16,27 +16,28 @@ function createForm() //creates mass upload form and returns all input fields
     var myUserscriptInfo = document.createElement("div");
     myUserscriptInfo.setAttribute("class", "alert alert-info");
     myUserscriptInfo.setAttribute("role", "alert");
-    myUserscriptInfo.innerHTML = "<h4>You are using (shitty) Mass Upload Userscript For Mangadex™ by Xnot</h4>" +
-    "<ol><li>Insert chapter names,volume numbers, and chapter numbers separated by a dash followed by a coma (-,) into their respective fields" +
+    myUserscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Uploader™ by Xnot</h4>" +
+    "<ol><li>Insert chapter names,volume numbers, and chapter numbers, and group IDs separated by a dash followed by a coma (-,) into their respective fields" +
     "<br />Protip: use TEXTJOIN(CONCAT(UNICHAR(45),UNICHAR(44)),0 ,ROWSHERE) on excel" +
-    "<br />Alternatively, inputing a single name/volume will use that for all uploads, and inputing a single chapter will increment it for each upload" +
-    "<br />Obviously only use those options if there is only one volume/if there are no special chapters in your files" +
+    "<br />Alternatively, inputing a single name/volume/groupID will use that for all uploads, and inputing a single chapter will increment it for each upload" +
+    "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
+    "<br />You can find group IDs by selecting the group in dropdown in the bottom or by looking at the URL of that group's page" +
+    "<li>Check the group delay box if you feel so inclined (will apply for all uploads)" +
     "<li>Click browse and use shift/ctrl so select all files" +
     "<br />If you hover over the browse button you can check that the order of the files is correct" +
-    "<li>Select group and language from the standard upload form below the mass upload form" +
-    "Hopefully I can care enough to figure these out properly soon" +
+    "<li>Select language from the standard upload form below the mass upload form" +
     "<li>Click the Mass Upload button" +
     "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
-    "Update 1.5:" +
-    "<ul><li>Both forms automatically reset upon completion" +
-    "<li>Added reset button to top form</ul>" +
+    "If there are any problems @ or pm me on Discord<br />" +
     "Update 1.6:" +
     "<ul><li>Leaving group empty now prevents you from uploading (better than getting Holo's nearly-invisible SQL injection error)" +
     "<li>Muli group is a thing now" +
     "<li>Selecting a group from the bottom dropdown shows that group's id and fills it on top form" +
     "<li>If you want multiple groups you'll have to note the ids and fill in the top form manually. Works in same pattern as the other fields" +
-    "<li>Leaving only one group will use that for all uploads" +
-    "<li>I'll update the instructions above to reflect these changes later, too lazy now</ul>";
+    "<li>Leaving only one group will use that for all uploads</ul>" +
+    "Update 1.67:" +
+    "<ul><li>Added proper support for group delay" +
+    "<li>I don't think it's important enough to warrant a multi field so it'll just apply delay to all uploads</ul>";
     var container = document.getElementById("content");
     var formPanel = document.getElementsByClassName("panel panel-default")[1];
     container.insertBefore(myUserscriptInfo, formPanel);
@@ -85,6 +86,14 @@ function createForm() //creates mass upload form and returns all input fields
     chapterNumberField.setAttribute("id", "chapter_numbers");
     chapterNumberField.setAttribute("name", "chapter_numbers");
     chapterNumberField.setAttribute("placeholder", "ch1-, ch2-, ch3");
+
+    //modify delay field
+    var delayLabel = delayGroup.childNodes[1]; //might need this some day ...and that day was today
+    delayLabel.setAttribute("for", "groups_delay");
+    delayLabel.innerHTML = "Apply groups delay";
+    var delayCheckbox = delayGroup.childNodes[3].childNodes[1].childNodes[1].childNodes[0];
+    delayCheckbox.setAttribute("id", "groups_delay");
+    delayCheckbox.setAttribute("name", "groups_delay");
 
     //modify the group 1 field
     group1Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
@@ -143,14 +152,21 @@ function createForm() //creates mass upload form and returns all input fields
     fileLabel.setAttribute("for", "files");
     fileLabel.innerHTML = "Files";
     var fileText = fileGroup.childNodes[3].childNodes[1].childNodes[1];
-    fileText.setAttribute("placeholder", "Filenames");
+    fileText.setAttribute("placeholder", "No files selected");
     var fileField = fileGroup.childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
     fileField.setAttribute("id", "files");
     fileField.setAttribute("name", "files");
     fileField.setAttribute("multiple", "");
     fileField.addEventListener("change", function()
                                             {
-                                                fileText.value = this.files.length + " file(s) selected";
+                                                if(this.files.length == 1)
+                                                {
+                                                    fileText.value = this.files.length + " file selected";
+                                                }
+                                                else
+                                                {
+                                                    fileText.value = this.files.length + " files selected";
+                                                }
                                                 uploadButton.focus();
                                             });
 
@@ -165,7 +181,7 @@ function createForm() //creates mass upload form and returns all input fields
     uploadButton.childNodes[2].innerHTML = "Mass Upload";
     uploadButton.addEventListener("click", function(event)
                                             {
-                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, group1Field, fileField]);
+                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, delayCheckbox, group1Field, fileField]);
                                             });
     var resetButton = uploadButton.cloneNode(true);
     resetButton.setAttribute("type", "reset");
@@ -182,7 +198,7 @@ function massUpload(event, fields)
 {
     var splitFields = splitInputs(fields);
     //this if statement is getting really long
-    if((splitFields[4].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[4].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[4].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[4].length == splitFields[3].length || splitFields[3].length == 1) && !splitFields[3].includes(""))
+    if((splitFields[5].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[5].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[5].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[5].length == splitFields[4].length || splitFields[4].length == 1) && !splitFields[4].includes(""))
     {
         uploadNext(event, splitFields, 0);
     }
@@ -198,8 +214,9 @@ function splitInputs(fields) // splits the coma separated fields into arrays
     var chapterNameList = fields[0].value.split("-,");
     var volumeNumberList = fields[1].value.split("-,");
     var chapterNumberList = fields[2].value.split("-,");
-    var group1List = fields[3].value.split("-,");
-    var fileList = fields[4].files;
+    var delayList = fields[3].checked;
+    var group1List = fields[4].value.split("-,");
+    var fileList = fields[5].files;
     for(let i = 0; i < chapterNameList.length; i++)
     {
         chapterNameList[i] = chapterNameList[i].trim();
@@ -216,10 +233,10 @@ function splitInputs(fields) // splits the coma separated fields into arrays
     {
         group1List[i] = group1List[i].trim();
     }
-    return [chapterNameList, volumeNumberList, chapterNumberList, group1List, fileList];
+    return [chapterNameList, volumeNumberList, chapterNumberList, delayList, group1List, fileList];
 }
 
-function uploadNext(event, splitFields, i) //definitely not copypasted from holo's upload code
+function uploadNext(event, splitFields, i)
 {
     var uploadForm = document.getElementById("upload_form"); //real upload form
     var massUploadForm = document.getElementById("mass_upload_form");
@@ -228,8 +245,11 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     var chapterNameField = uploadForm.childNodes[3].childNodes[3].childNodes[1];
     var volumeNumberField = uploadForm.childNodes[5].childNodes[3].childNodes[1];
     var chapterNumberField = uploadForm.childNodes[7].childNodes[3].childNodes[1];
+    var delayCheckbox = uploadForm.childNodes[9].childNodes[3].childNodes[1].childNodes[1].childNodes[0];
     var group1Field = uploadForm.childNodes[11].childNodes[3].childNodes[1];
-    //var languageGroup = uploadForm.childNodes[13];
+    var group2Field = uploadForm.childNodes[13].childNodes[3].childNodes[1];
+    var group3Field = uploadForm.childNodes[15].childNodes[3].childNodes[1];
+    //var languageGroup = uploadForm.childNodes[17];
     var fileField = uploadForm.childNodes[19].childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
     var fileText = uploadForm.childNodes[19].childNodes[3].childNodes[1].childNodes[1];
     var uploadButton = uploadForm.childNodes[21].childNodes[3].childNodes[1];
@@ -237,10 +257,11 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     var chapterNameList = splitFields[0];
     var volumeNumberList = splitFields[1];
     var chapterNumberList = splitFields[2];
-    var group1List = splitFields[3];
-    var fileList = splitFields[4];
+    var delayList = splitFields[3]
+    var group1List = splitFields[4];
+    var fileList = splitFields[5];
 
-    var uploadFormData = new FormData(uploadForm); //create old form data to steal group and language inputs
+    var uploadFormData = new FormData(uploadForm); //create old form data to steal language input
     splitFormData = new FormData(); //create new form data
     splitFormData.append("manga_id", mangaIdField.value);
     if(chapterNameList.length == 1) //equal chapter names
@@ -267,6 +288,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     {
         splitFormData.append("chapter_number", chapterNumberList[i]);
     }
+    splitFormData.append("group_delay", delayList);
     if(group1List.length == 1) //single group upload
     {
         splitFormData.append("group_id", group1List[0]);
@@ -303,6 +325,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     {
         chapterNumberField.value = chapterNumberList[i];
     }
+    delayCheckbox.checked = delayList;
     if(group1List.length == 1)
     {
         document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group1List[0];
@@ -321,7 +344,7 @@ function uploadNext(event, splitFields, i) //definitely not copypasted from holo
     $("#mass_upload_button").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Mass Uploading: " + j + "/" + fileList.length).attr("disabled", true);
 
     event.preventDefault();
-    $.ajax({
+    $.ajax({ //definitely not copypasted from holo's upload code
         url: "/ajax/actions.ajax.php?function=chapter_upload",
         type: 'POST',
         data: splitFormData,
