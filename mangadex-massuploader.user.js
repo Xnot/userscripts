@@ -86,6 +86,13 @@ function createForm() //creates mass upload form and returns all input fields
     chapterNumberField.setAttribute("name", "chapter_numbers");
     chapterNumberField.setAttribute("placeholder", "ch1-, ch2-, ch3");
 
+    //modify delay field
+    //var delayLabel = delayGroup.childNodes[1]; //might need this some day
+    var delayCheckbox = delayGroup.childNodes[3].childNodes[1].childNodes[1].childNodes[0];
+    delayCheckbox.setAttribute("id", "groups_delay");
+    delayCheckbox.setAttribute("name", "groups_delay");
+    delayCheckbox.setAttribute("value", "0");
+
     //modify the group 1 field
     group1Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
     group1Group = massUploadForm.childNodes[11]; //why doesn't replace funcion update the pointer
