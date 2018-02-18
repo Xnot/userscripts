@@ -120,8 +120,12 @@ function createForm() //creates mass upload form and returns all input fields
     var group2Field = group2Group.childNodes[3].childNodes[1];
     group2Field.setAttribute("id", "groups_id_2");
     group2Field.setAttribute("name", "groups_id_2");
-    group2Field.setAttribute("disabled", "");
-    group2Field.setAttribute("placeholder", "not implemented by Holo");
+    group2Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
+    document.getElementById("group_id_2").addEventListener("change", function()
+                                                                    {
+                                                                        group2Field.value = this.value;
+                                                                        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
+                                                                    });
 
     //modify the group 3 field
     group3Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
@@ -132,8 +136,12 @@ function createForm() //creates mass upload form and returns all input fields
     var group3Field = group3Group.childNodes[3].childNodes[1];
     group3Field.setAttribute("id", "groups_id_3");
     group3Field.setAttribute("name", "groups_id_3");
-    group3Field.setAttribute("disabled", "");
-    group3Field.setAttribute("placeholder", "not implemented by Holo");
+    group3Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
+    document.getElementById("group_id_3").addEventListener("change", function()
+                                                                    {
+                                                                        group3Field.value = this.value;
+                                                                        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
+                                                                    });
 
     //modify the language field
     languageGroup.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
@@ -145,7 +153,7 @@ function createForm() //creates mass upload form and returns all input fields
     languageField.setAttribute("id", "langs_id");
     languageField.setAttribute("name", "langs_id");
     languageField.setAttribute("disabled", "");
-    languageField.setAttribute("placeholder", "not implemented because it's a pain in the ass and no one mass uploads multiple languages, fill in the language in the bottom form instead");
+    languageField.setAttribute("placeholder", "not implemented because no one mass uploads multiple languages, fill in the language in the bottom form instead");
 
     //modify the file field
     var fileLabel = fileGroup.childNodes[1];
@@ -181,7 +189,7 @@ function createForm() //creates mass upload form and returns all input fields
     uploadButton.childNodes[2].innerHTML = "Mass Upload";
     uploadButton.addEventListener("click", function(event)
                                             {
-                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, delayCheckbox, group1Field, fileField]);
+                                                massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, delayCheckbox, group1Field, group2Field, group3Field, fileField]);
                                             });
     var resetButton = uploadButton.cloneNode(true);
     resetButton.setAttribute("type", "reset");
@@ -198,7 +206,7 @@ function massUpload(event, fields)
 {
     var splitFields = splitInputs(fields);
     //this if statement is getting really long
-    if((splitFields[5].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[5].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[5].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[5].length == splitFields[4].length || splitFields[4].length == 1) && !splitFields[4].includes(""))
+    if((splitFields[7].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[7].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[7].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[7].length == splitFields[4].length || splitFields[4].length == 1) && !splitFields[4].includes("") && (splitFields[7].length == splitFields[5].length || splitFields[5].length == 1) && (splitFields[7].length == splitFields[6].length || splitFields[6].length == 1))
     {
         uploadNext(event, splitFields, 0);
     }
@@ -216,7 +224,9 @@ function splitInputs(fields) // splits the coma separated fields into arrays
     var chapterNumberList = fields[2].value.split("-,");
     var delayList = fields[3].checked;
     var group1List = fields[4].value.split("-,");
-    var fileList = fields[5].files;
+    var group2List = fields[5].value.split("-,");
+    var group3List = fields[6].value.split("-,");
+    var fileList = fields[7].files;
     for(let i = 0; i < chapterNameList.length; i++)
     {
         chapterNameList[i] = chapterNameList[i].trim();
@@ -233,7 +243,15 @@ function splitInputs(fields) // splits the coma separated fields into arrays
     {
         group1List[i] = group1List[i].trim();
     }
-    return [chapterNameList, volumeNumberList, chapterNumberList, delayList, group1List, fileList];
+    for(let i = 0; i < group2List.length; i++)
+    {
+        group2List[i] = group2List[i].trim();
+    }
+    for(let i = 0; i < group3List.length; i++)
+    {
+        group3List[i] = group3List[i].trim();
+    }
+    return [chapterNameList, volumeNumberList, chapterNumberList, delayList, group1List, group2List, group3List, fileList];
 }
 
 function uploadNext(event, splitFields, i)
@@ -257,9 +275,11 @@ function uploadNext(event, splitFields, i)
     var chapterNameList = splitFields[0];
     var volumeNumberList = splitFields[1];
     var chapterNumberList = splitFields[2];
-    var delayList = splitFields[3]
+    var delayList = splitFields[3];
     var group1List = splitFields[4];
-    var fileList = splitFields[5];
+    var group2List = splitFields[5];
+    var group3List = splitFields[6];
+    var fileList = splitFields[7];
 
     var uploadFormData = new FormData(uploadForm); //create old form data to steal language input
     splitFormData = new FormData(); //create new form data
@@ -289,13 +309,29 @@ function uploadNext(event, splitFields, i)
         splitFormData.append("chapter_number", chapterNumberList[i]);
     }
     splitFormData.append("group_delay", delayList);
-    if(group1List.length == 1) //single group upload
+    if(group1List.length == 1) //single group1 upload
     {
         splitFormData.append("group_id", group1List[0]);
     }
-    else //multi group upload
+    else //multi group1 upload
     {
         splitFormData.append("group_id", group1List[i]);
+    }
+    if(group2List.length == 1) //single group2 upload
+    {
+        splitFormData.append("group_id_2", group2List[0]);
+    }
+    else //multi group2 upload
+    {
+        splitFormData.append("group_id_2", group2List[i]);
+    }
+    if(group3List.length == 1) //single group3 upload
+    {
+        splitFormData.append("group_id_3", group3List[0]);
+    }
+    else //multi group3 upload
+    {
+        splitFormData.append("group_id_3", group3List[i]);
     }
     splitFormData.append("lang_id", uploadFormData.get("lang_id"));
     splitFormData.append("file", fileList[i]);
@@ -333,6 +369,22 @@ function uploadNext(event, splitFields, i)
     else
     {
         document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group1List[i];
+    }
+    if(group2List.length == 1)
+    {
+        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group2List[0];
+    }
+    else
+    {
+        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group2List[i];
+    }
+    if(group1List.length == 1)
+    {
+        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group3List[0];
+    }
+    else
+    {
+        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group3List[i];
     }
     fileText.value = fileList[i].name;
 
