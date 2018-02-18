@@ -364,27 +364,27 @@ function uploadNext(event, splitFields, i)
     delayCheckbox.checked = delayList;
     if(group1List.length == 1)
     {
-        document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group1List[0];
+        document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group1List[0];
     }
     else
     {
-        document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group1List[i];
+        document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group1List[i];
     }
     if(group2List.length == 1)
     {
-        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group2List[0];
+        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group2List[0];
     }
     else
     {
-        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group2List[i];
+        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group2List[i];
     }
-    if(group1List.length == 1)
+    if(group3List.length == 1)
     {
-        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group3List[0];
+        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group3List[0];
     }
     else
     {
-        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].childNodes[1].data = " id: " + group3List[i];
+        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group3List[i];
     }
     fileText.value = fileList[i].name;
 
