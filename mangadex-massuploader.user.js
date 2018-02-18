@@ -33,7 +33,7 @@ function createForm() //creates mass upload form and returns all input fields
     "Update 1.67:" +
     "<ul><li>Added proper support for group delay" +
     "<li>I don't think it's important enough to warrant a multi field so it'll just apply delay to all uploads</ul>" +
-    "Update 1.6:" +
+    "Update 1.70:" +
     "<ul><li>Added support for joint groups (Group 2 and Group 3 fields)";
     var container = document.getElementById("content");
     var formPanel = document.getElementsByClassName("panel panel-default")[1];
