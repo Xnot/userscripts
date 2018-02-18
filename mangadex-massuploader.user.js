@@ -435,7 +435,7 @@ function uploadNext(event, splitFields, i)
             else
             {
                 $("#upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
-                $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
+                $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Mass Upload").attr("disabled", false);
                 uploadForm.reset();
                 massUploadForm.reset();
             }
@@ -445,7 +445,7 @@ function uploadNext(event, splitFields, i)
             console.error(err);
             $('#progressbar').parent().hide();
             $("#upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
-            $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Upload").attr("disabled", false);
+            $("#mass_upload_button").html("<span class='fas fa-upload fa-fw' aria-hidden='true' title=''></span> Mass Upload").attr("disabled", false);
             $("#message_container").html(error_msg).show().delay(3000).fadeOut();
         }
     });
