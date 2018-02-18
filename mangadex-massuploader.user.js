@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.67
+// @version      1.70
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -14,13 +14,14 @@
 function createForm() //creates mass upload form and returns all input fields
 {
     var myUserscriptInfo = document.createElement("div");
-    myUserscriptInfo.setAttribute("class", "alert alert-info");
+    myUserscriptInfo.classList.add("alert", "alert-info");
     myUserscriptInfo.setAttribute("role", "alert");
     myUserscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Uploader™ by Xnot</h4>" +
     "<ol><li>Insert chapter names,volume numbers, and chapter numbers, and group IDs separated by a dash followed by a coma (-,) into their respective fields" +
     "<br />Protip: use TEXTJOIN(CONCAT(UNICHAR(45),UNICHAR(44)),0 ,ROWSHERE) on excel" +
     "<br />Alternatively, inputing a single name/volume/groupID will use that for all uploads, and inputing a single chapter will increment it for each upload" +
     "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
+    "<br />If you want a chapter to have an empty title or whatever leave an empty value in the respective field (c1-,c2-,-,c4) except for Group 1, every chapter MUST have a Group 1" +
     "<br />You can find group IDs by selecting the group in dropdown in the bottom or by looking at the URL of that group's page" +
     "<li>Check the group delay box if you feel so inclined (will apply for all uploads)" +
     "<li>Click browse and use shift/ctrl so select all files" +
@@ -29,15 +30,11 @@ function createForm() //creates mass upload form and returns all input fields
     "<li>Click the Mass Upload button" +
     "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 1.6:" +
-    "<ul><li>Leaving group empty now prevents you from uploading (better than getting Holo's nearly-invisible SQL injection error)" +
-    "<li>Muli group is a thing now" +
-    "<li>Selecting a group from the bottom dropdown shows that group's id and fills it on top form" +
-    "<li>If you want multiple groups you'll have to note the ids and fill in the top form manually. Works in same pattern as the other fields" +
-    "<li>Leaving only one group will use that for all uploads</ul>" +
     "Update 1.67:" +
     "<ul><li>Added proper support for group delay" +
-    "<li>I don't think it's important enough to warrant a multi field so it'll just apply delay to all uploads</ul>";
+    "<li>I don't think it's important enough to warrant a multi field so it'll just apply delay to all uploads</ul>" +
+    "Update 1.6:" +
+    "<ul><li>Added support for joint groups (Group 2 and Group 3 fields)";
     var container = document.getElementById("content");
     var formPanel = document.getElementsByClassName("panel panel-default")[1];
     container.insertBefore(myUserscriptInfo, formPanel);
@@ -181,10 +178,12 @@ function createForm() //creates mass upload form and returns all input fields
     //modify buttons
     buttonsGroup.removeChild(buttonsGroup.childNodes[1]); //delete redundant back button
     var uploadButtonContainer = buttonsGroup.childNodes[2]; //modify upload button
-    uploadButtonContainer.setAttribute("class", "col-sm-12 text-right btn-toolbar");
+    uploadButtonContainer.classList.replace("col-sm-6", "col-sm-12"); 
+    uploadButtonContainer.classList.add("btn-toolbar");
     var uploadButton = uploadButtonContainer.childNodes[1];
     uploadButton.setAttribute("type", "button");
-    uploadButton.setAttribute("class", "pull-right btn btn-success");
+    uploadButton.classList.replace("btn-default", "btn-success");
+    uploadButton.classList.add("pull-right");
     uploadButton.setAttribute("id", "mass_upload_button");
     uploadButton.childNodes[2].innerHTML = "Mass Upload";
     uploadButton.addEventListener("click", function(event)
@@ -194,8 +193,8 @@ function createForm() //creates mass upload form and returns all input fields
     var resetButton = uploadButton.cloneNode(true);
     resetButton.setAttribute("type", "reset");
     resetButton.setAttribute("id", "mass_reset_button");
-    resetButton.setAttribute("class", "pull-right btn btn-warning");
-    resetButton.childNodes[0].setAttribute("class", "fas fa-trash-alt");
+    resetButton.classList.replace("btn-success", "btn-warning");
+    resetButton.childNodes[0].classList.replace("fa-upload", "fa-trash-alt");
     resetButton.childNodes[2].innerHTML = "Reset Form";
     uploadButtonContainer.appendChild(resetButton);
 
