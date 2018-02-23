@@ -44,10 +44,9 @@ function createForm() //creates mass upload form and returns all input fields
     var massUploadForm = uploadForm.cloneNode(true); //create mass upload form as clone of upload form
     //uploadForm.style = "margin-top: 15px; display: none"; //hide upload form
     massUploadForm.id = "mass_upload_form";
+    document.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
 
-    var mangaNameGroup = massUploadForm.childNodes[1];
-    var chapterNameGroup = massUploadForm.childNodes[3];
-    var volumeNumberGroup = massUploadForm.childNodes[5];
+    //var mangaNameGroup = massUploadForm.childNodes[1];
     var chapterNumberGroup = massUploadForm.childNodes[7];
     var delayGroup = massUploadForm.childNodes[9];
     var group1Group = massUploadForm.childNodes[11];
@@ -58,50 +57,51 @@ function createForm() //creates mass upload form and returns all input fields
     var buttonsGroup = massUploadForm.childNodes[21];
 
     //modify chapter name field
-    var chapterNameLabel = chapterNameGroup.childNodes[1];
-    chapterNameLabel.setAttribute("for", "chapter_names");
-    chapterNameLabel.innerHTML = "Chapter Names";
-    var chapterNameField = chapterNameGroup.childNodes[3].childNodes[1];
+    var chapterNameField = document.getElementById("chapter_name");
     chapterNameField.setAttribute("id", "chapter_names");
     chapterNameField.setAttribute("name", "chapter_names");
     chapterNameField.setAttribute("placeholder", "nameForCh1-, nameForCh2-, nameForCh3");
+    var chapterNameLabel = chapterNameField.parentNode.previousSibling.previousSibling;
+    chapterNameLabel.setAttribute("for", "chapter_names");
+    chapterNameLabel.innerHTML = "Chapter Names";
 
     //modify volume field
-    var volumeNumberLabel = volumeNumberGroup.childNodes[1];
-    volumeNumberLabel.setAttribute("for", "volume_numbers");
-    volumeNumberLabel.innerHTML = "Volume Numbers";
-    var volumeNumberField = volumeNumberGroup.childNodes[3].childNodes[1];
+    var volumeNumberField = document.getElementById("volume_number");
     volumeNumberField.setAttribute("id", "volume_numbers");
     volumeNumberField.setAttribute("name", "volume_numbers");
     volumeNumberField.setAttribute("placeholder", "volumeForCh1-, volumeForCh2-, volumeForCh3");
+    var volumeNumberLabel = volumeNumberField.parentNode.previousSibling.previousSibling;
+    volumeNumberLabel.setAttribute("for", "volume_numbers");
+    volumeNumberLabel.innerHTML = "Volume Numbers";
 
     //modify chapter number field
-    var chapterNumberLabel = chapterNumberGroup.childNodes[1];
-    chapterNumberLabel.setAttribute("for", "chapter_numbers");
-    chapterNumberLabel.innerHTML = "Chapter Numbers";
-    var chapterNumberField = chapterNumberGroup.childNodes[3].childNodes[1];
+    var chapterNumberField = document.getElementById("chapter_number");
     chapterNumberField.setAttribute("id", "chapter_numbers");
     chapterNumberField.setAttribute("name", "chapter_numbers");
     chapterNumberField.setAttribute("placeholder", "ch1-, ch2-, ch3");
+    var chapterNumberLabel = chapterNumberField.parentNode.previousSibling.previousSibling;
+    chapterNumberLabel.setAttribute("for", "chapter_numbers");
+    chapterNumberLabel.innerHTML = "Chapter Numbers";
 
     //modify delay field
-    var delayLabel = delayGroup.childNodes[1]; //might need this some day ...and that day was today
-    delayLabel.setAttribute("for", "groups_delay");
-    delayLabel.innerHTML = "Apply groups delay";
-    var delayCheckbox = delayGroup.childNodes[3].childNodes[1].childNodes[1].childNodes[0];
+    var delayCheckbox = document.getElementById("group_delay");
     delayCheckbox.setAttribute("id", "groups_delay");
     delayCheckbox.setAttribute("name", "groups_delay");
+    var delayLabel = delayCheckbox.parentNode.parentNode.parentNode.previousSibling.previousSibling;
+    delayLabel.setAttribute("for", "groups_delay");
+    delayLabel.innerHTML = "Apply groups delay";
+    
 
     //modify the group 1 field
+    var group1Field = group1Group.childNodes[3].childNodes[1];
     group1Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
+    group1Field.setAttribute("id", "groups_id");
+    group1Field.setAttribute("name", "groups_id");
+    group1Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
     group1Group = massUploadForm.childNodes[11]; //why doesn't replace funcion update the pointer
     var group1Label = group1Group.childNodes[1];
     group1Label.setAttribute("for", "groups_id");
     group1Label.innerHTML = "Groups 1";
-    var group1Field = group1Group.childNodes[3].childNodes[1];
-    group1Field.setAttribute("id", "groups_id");
-    group1Field.setAttribute("name", "groups_id");
-    group1Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
     document.getElementById("group_id").addEventListener("change", function()
                                                                     {
                                                                         group1Field.value = this.value;
@@ -197,8 +197,6 @@ function createForm() //creates mass upload form and returns all input fields
     resetButton.childNodes[0].classList.replace("fa-upload", "fa-trash-alt");
     resetButton.childNodes[2].innerHTML = "Reset Form";
     uploadButtonContainer.appendChild(resetButton);
-
-    document.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
 }
 
 function massUpload(event, fields)
@@ -281,7 +279,7 @@ function uploadNext(event, splitFields, i)
     var fileList = splitFields[7];
 
     splitFormData = new FormData(); //create new form data
-    splitFormData.append("manga_id", mangaIdField.value);
+    splitFormData.append("manga_id", document.getElementById("manga_id").value);
     if(chapterNameList.length == 1) //equal chapter names
     {
         splitFormData.append("chapter_name", chapterNameList[0]);
@@ -337,27 +335,27 @@ function uploadNext(event, splitFields, i)
     //fill in bottom form so uploader can see what's being uploaded
     if(chapterNameList.length == 1)
     {
-        chapterNameField.value = chapterNameList[0];
+        document.getElementById("chapter_name").value = chapterNameList[0];
     }
     else
     {
-        chapterNameField.value = chapterNameList[i];
+        document.getElementById("chapter_name").value = chapterNameList[i];
     }
     if(volumeNumberList.length == 1)
     {
-        volumeNumberField.value = volumeNumberList[0];
+        document.getElementById("volume_number").value = volumeNumberList[0];
     }
     else
     {
-        volumeNumberField.value = volumeNumberList[i];
+        document.getElementById("volume_number").value = volumeNumberList[i];
     }
     if(chapterNumberList.length == 1)
     {
-        chapterNumberField.value = parseInt(chapterNumberList[0]) + i;
+        document.getElementById("chapter_number").value = parseInt(chapterNumberList[0]) + i;
     }
     else
     {
-        chapterNumberField.value = chapterNumberList[i];
+        document.getElementById("chapter_number").value = chapterNumberList[i];
     }
     delayCheckbox.checked = delayList;
     if(group1List.length == 1)
