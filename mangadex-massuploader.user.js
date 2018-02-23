@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.70
+// @version      1.71
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -105,7 +105,7 @@ function createForm() //creates mass upload form and returns all input fields
     document.getElementById("group_id").addEventListener("change", function()
                                                                     {
                                                                         group1Field.value = this.value;
-                                                                        document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
+                                                                        this.previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
                                                                     });
 
     //modify the group 2 field
@@ -121,7 +121,7 @@ function createForm() //creates mass upload form and returns all input fields
     document.getElementById("group_id_2").addEventListener("change", function()
                                                                     {
                                                                         group2Field.value = this.value;
-                                                                        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
+                                                                        this.previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
                                                                     });
 
     //modify the group 3 field
@@ -137,7 +137,7 @@ function createForm() //creates mass upload form and returns all input fields
     document.getElementById("group_id_3").addEventListener("change", function()
                                                                     {
                                                                         group3Field.value = this.value;
-                                                                        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
+                                                                        this.previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
                                                                     });
 
     //modify the language field
@@ -266,7 +266,7 @@ function uploadNext(event, splitFields, i)
     var group1Field = uploadForm.childNodes[11].childNodes[3].childNodes[1];
     var group2Field = uploadForm.childNodes[13].childNodes[3].childNodes[1];
     var group3Field = uploadForm.childNodes[15].childNodes[3].childNodes[1];
-    //var languageGroup = uploadForm.childNodes[17];
+    var languageGroup = uploadForm.childNodes[17];
     var fileField = uploadForm.childNodes[19].childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
     var fileText = uploadForm.childNodes[19].childNodes[3].childNodes[1].childNodes[1];
     var uploadButton = uploadForm.childNodes[21].childNodes[3].childNodes[1];
@@ -280,7 +280,6 @@ function uploadNext(event, splitFields, i)
     var group3List = splitFields[6];
     var fileList = splitFields[7];
 
-    var uploadFormData = new FormData(uploadForm); //create old form data to steal language input
     splitFormData = new FormData(); //create new form data
     splitFormData.append("manga_id", mangaIdField.value);
     if(chapterNameList.length == 1) //equal chapter names
@@ -332,7 +331,7 @@ function uploadNext(event, splitFields, i)
     {
         splitFormData.append("group_id_3", group3List[i]);
     }
-    splitFormData.append("lang_id", uploadFormData.get("lang_id"));
+    splitFormData.append("lang_id", document.getElementById("lang_id").value);
     splitFormData.append("file", fileList[i]);
 
     //fill in bottom form so uploader can see what's being uploaded
