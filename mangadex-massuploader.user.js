@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.71
+// @version      1.72
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -329,7 +329,14 @@ function uploadNext(event, splitFields, i)
     {
         splitFormData.append("group_id_3", group3List[i]);
     }
-    splitFormData.append("lang_id", document.getElementById("lang_id").value);
+    if(document.getElementById("lang_id").value == "")
+    {
+        splitFormData.append("lang_id", "1");
+    }
+    else
+    {
+        splitFormData.append("lang_id", document.getElementById("lang_id").value);
+    }
     splitFormData.append("file", fileList[i]);
 
     //fill in bottom form so uploader can see what's being uploaded
