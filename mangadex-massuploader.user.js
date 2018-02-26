@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.80
+// @version      1.81
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -296,7 +296,10 @@ function uploadNext(event, splitFields, i)
     {
         splitFormData.append("chapter_number", chapterNumberList[i]);
     }
-    splitFormData.append("group_delay", document.getElementById("groups_delay").checked);
+    if(document.getElementById("groups_delay").checked) //if group delay
+    {
+        splitFormData.append("group_delay", "true");
+    }
     if(group1List.length == 1) //single group1 upload
     {
         splitFormData.append("group_id", group1List[0]);
