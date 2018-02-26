@@ -47,11 +47,6 @@ function createForm() //creates mass upload form and returns all input fields
     document.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
 
     //var mangaNameGroup = massUploadForm.childNodes[1];
-    var chapterNumberGroup = massUploadForm.childNodes[7];
-    var delayGroup = massUploadForm.childNodes[9];
-    var group1Group = massUploadForm.childNodes[11];
-    var group2Group = massUploadForm.childNodes[13];
-    var group3Group = massUploadForm.childNodes[15];
     var languageGroup = massUploadForm.childNodes[17];
     var fileGroup = massUploadForm.childNodes[19];
     var buttonsGroup = massUploadForm.childNodes[21];
@@ -63,7 +58,7 @@ function createForm() //creates mass upload form and returns all input fields
     chapterNameField.setAttribute("placeholder", "nameForCh1-, nameForCh2-, nameForCh3");
     var chapterNameLabel = chapterNameField.parentNode.previousSibling.previousSibling;
     chapterNameLabel.setAttribute("for", "chapter_names");
-    chapterNameLabel.innerHTML = "Chapter Names";
+    chapterNameLabel.innerText = "Chapter Names";
 
     //modify volume field
     var volumeNumberField = document.getElementById("volume_number");
@@ -72,7 +67,7 @@ function createForm() //creates mass upload form and returns all input fields
     volumeNumberField.setAttribute("placeholder", "volumeForCh1-, volumeForCh2-, volumeForCh3");
     var volumeNumberLabel = volumeNumberField.parentNode.previousSibling.previousSibling;
     volumeNumberLabel.setAttribute("for", "volume_numbers");
-    volumeNumberLabel.innerHTML = "Volume Numbers";
+    volumeNumberLabel.innerText = "Volume Numbers";
 
     //modify chapter number field
     var chapterNumberField = document.getElementById("chapter_number");
@@ -81,7 +76,7 @@ function createForm() //creates mass upload form and returns all input fields
     chapterNumberField.setAttribute("placeholder", "ch1-, ch2-, ch3");
     var chapterNumberLabel = chapterNumberField.parentNode.previousSibling.previousSibling;
     chapterNumberLabel.setAttribute("for", "chapter_numbers");
-    chapterNumberLabel.innerHTML = "Chapter Numbers";
+    chapterNumberLabel.innerText = "Chapter Numbers";
 
     //modify delay field
     var delayCheckbox = document.getElementById("group_delay");
@@ -89,19 +84,18 @@ function createForm() //creates mass upload form and returns all input fields
     delayCheckbox.setAttribute("name", "groups_delay");
     var delayLabel = delayCheckbox.parentNode.parentNode.parentNode.previousSibling.previousSibling;
     delayLabel.setAttribute("for", "groups_delay");
-    delayLabel.innerHTML = "Apply groups delay";
+    delayLabel.innerText = "Apply groups delay";
     
 
     //modify the group 1 field
-    var group1Field = group1Group.childNodes[3].childNodes[1];
-    group1Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
+    var group1Field = chapterNumberField.cloneNode(true); //clone a non-dropdown because fuck that
+    document.getElementById("group_id").parentNode.replaceWith(group1Field);
     group1Field.setAttribute("id", "groups_id");
     group1Field.setAttribute("name", "groups_id");
     group1Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
-    group1Group = massUploadForm.childNodes[11]; //why doesn't replace funcion update the pointer
-    var group1Label = group1Group.childNodes[1];
+    var group1Label = group1Field.parentNode.previousSibling.previousSibling;
     group1Label.setAttribute("for", "groups_id");
-    group1Label.innerHTML = "Groups 1";
+    group1Label.innerText = "Groups 1";
     document.getElementById("group_id").addEventListener("change", function()
                                                                     {
                                                                         group1Field.value = this.value;
@@ -109,15 +103,14 @@ function createForm() //creates mass upload form and returns all input fields
                                                                     });
 
     //modify the group 2 field
-    group2Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
-    group2Group = massUploadForm.childNodes[13]; //why doesn't replace funcion update the pointer
-    var group2Label = group2Group.childNodes[1];
-    group2Label.setAttribute("for", "groups_id_2");
-    group2Label.innerHTML = "Groups 2";
-    var group2Field = group2Group.childNodes[3].childNodes[1];
+    var group2Field = chapterNumberField.cloneNode(true); //clone a non-dropdown because fuck that
+    document.getElementById("group_id_2").parentNode.replaceWith(group2Field);
     group2Field.setAttribute("id", "groups_id_2");
     group2Field.setAttribute("name", "groups_id_2");
     group2Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
+    var group2Label = group2Field.parentNode.previousSibling.previousSibling;
+    group2Label.setAttribute("for", "groups_id_2");
+    group2Label.innerText = "Groups 2";
     document.getElementById("group_id_2").addEventListener("change", function()
                                                                     {
                                                                         group2Field.value = this.value;
@@ -125,15 +118,14 @@ function createForm() //creates mass upload form and returns all input fields
                                                                     });
 
     //modify the group 3 field
-    group3Group.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
-    group3Group = massUploadForm.childNodes[15]; //why doesn't replace funcion update the pointer
-    var group3Label = group3Group.childNodes[1];
-    group3Label.setAttribute("for", "groups_id_3");
-    group3Label.innerHTML = "Groups 3";
-    var group3Field = group3Group.childNodes[3].childNodes[1];
+    var group3Field = chapterNumberField.cloneNode(true); //clone a non-dropdown because fuck that
+    document.getElementById("group_id_3").parentNode.replaceWith(group3Field);
     group3Field.setAttribute("id", "groups_id_3");
     group3Field.setAttribute("name", "groups_id_3");
     group3Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
+    var group3Label = group3Field.parentNode.previousSibling.previousSibling;
+    group3Label.setAttribute("for", "groups_id_3");
+    group3Label.innerText = "Groups 3";
     document.getElementById("group_id_3").addEventListener("change", function()
                                                                     {
                                                                         group3Field.value = this.value;
@@ -141,51 +133,51 @@ function createForm() //creates mass upload form and returns all input fields
                                                                     });
 
     //modify the language field
-    languageGroup.replaceWith(chapterNumberGroup.cloneNode(true)); //clone a non-dropdown because fuck that
-    languageGroup = massUploadForm.childNodes[17]; //why doesn't replace funcion update the pointer
-    var languageLabel = languageGroup.childNodes[1];
-    languageLabel.setAttribute("for", "langs_id");
-    languageLabel.innerHTML = "Languages";
-    var languageField = languageGroup.childNodes[3].childNodes[1];
+    var languageField = chapterNumberField.cloneNode(true); //clone a non-dropdown because fuck that
+    document.getElementById("lang_id").parentNode.replaceWith(languageField);
     languageField.setAttribute("id", "langs_id");
     languageField.setAttribute("name", "langs_id");
     languageField.setAttribute("disabled", "");
     languageField.setAttribute("placeholder", "not implemented because no one mass uploads multiple languages, fill in the language in the bottom form instead");
+    var languageLabel = languageField.parentNode.previousSibling.previousSibling;
+    languageLabel.setAttribute("for", "langs_id");
+    languageLabel.innerText = "Languages";
+    
 
     //modify the file field
-    var fileLabel = fileGroup.childNodes[1];
-    fileLabel.setAttribute("for", "files");
-    fileLabel.innerHTML = "Files";
-    var fileText = fileGroup.childNodes[3].childNodes[1].childNodes[1];
-    fileText.setAttribute("placeholder", "No files selected");
-    var fileField = fileGroup.childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
+    var fileField = document.getElementById("file");
     fileField.setAttribute("id", "files");
     fileField.setAttribute("name", "files");
     fileField.setAttribute("multiple", "");
+    var fileText = fileField.parentNode.parentNode.previousSibling.previousSibling;
+    fileText.setAttribute("placeholder", "No files selected");
+    var fileLabel = fileField.parentNode.parentNode.parentNode.parentNode.previousSibling.previousSibling;
+    fileLabel.setAttribute("for", "files");
+    fileLabel.innerText = "Files";
     fileField.addEventListener("change", function()
+                                        {
+                                            if(this.files.length == 1)
                                             {
-                                                if(this.files.length == 1)
-                                                {
-                                                    fileText.value = this.files.length + " file selected";
-                                                }
-                                                else
-                                                {
-                                                    fileText.value = this.files.length + " files selected";
-                                                }
-                                                uploadButton.focus();
-                                            });
+                                                fileText.value = this.files.length + " file selected";
+                                            }
+                                            else
+                                            {
+                                                fileText.value = this.files.length + " files selected";
+                                            }
+                                            uploadButton.focus();
+                                        });
 
     //modify buttons
-    buttonsGroup.removeChild(buttonsGroup.childNodes[1]); //delete redundant back button
-    var uploadButtonContainer = buttonsGroup.childNodes[2]; //modify upload button
-    uploadButtonContainer.classList.replace("col-sm-6", "col-sm-12"); 
-    uploadButtonContainer.classList.add("btn-toolbar");
-    var uploadButton = uploadButtonContainer.childNodes[1];
+    var uploadButton = document.getElementById("upload_button");
+    var uploadButtonContainer = uploadButton.parentNode;
+    uploadButtonContainer.parentNode.removeChild(uploadButtonContainer.previousSibling.previousSibling); //delete redundant back button
+    uploadButtonContainer.classList.replace("col-sm-6", "col-sm-12"); //make upload button container occupy space previously occupied by back button container
+    uploadButtonContainer.classList.add("btn-toolbar"); //need muh button spacing
     uploadButton.setAttribute("type", "button");
     uploadButton.classList.replace("btn-default", "btn-success");
     uploadButton.classList.add("pull-right");
     uploadButton.setAttribute("id", "mass_upload_button");
-    uploadButton.childNodes[2].innerHTML = "Mass Upload";
+    uploadButton.childNodes[2].innerText = "Mass Upload";
     uploadButton.addEventListener("click", function(event)
                                             {
                                                 massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, delayCheckbox, group1Field, group2Field, group3Field, fileField]);
@@ -195,7 +187,7 @@ function createForm() //creates mass upload form and returns all input fields
     resetButton.setAttribute("id", "mass_reset_button");
     resetButton.classList.replace("btn-success", "btn-warning");
     resetButton.childNodes[0].classList.replace("fa-upload", "fa-trash-alt");
-    resetButton.childNodes[2].innerHTML = "Reset Form";
+    resetButton.childNodes[2].innerText = "Reset Form";
     uploadButtonContainer.appendChild(resetButton);
 }
 
@@ -329,7 +321,7 @@ function uploadNext(event, splitFields, i)
     {
         splitFormData.append("group_id_3", group3List[i]);
     }
-    if(document.getElementById("lang_id").value == "")
+    if(document.getElementById("lang_id").value == "") //I wouldn't need this if else statement if not for fucking Safari
     {
         splitFormData.append("lang_id", "1");
     }
