@@ -11,12 +11,12 @@
 // @grant        none
 // ==/UserScript==
 
-function createForm() //creates mass upload form and returns all input fields
+function createForm() //creates mass upload form
 {
-    var myUserscriptInfo = document.createElement("div");
-    myUserscriptInfo.classList.add("alert", "alert-info");
-    myUserscriptInfo.setAttribute("role", "alert");
-    myUserscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Uploader™ by Xnot</h4>" +
+    var userscriptInfo = document.createElement("div"); //info panel with userscript instructions
+    userscriptInfo.classList.add("alert", "alert-info");
+    userscriptInfo.setAttribute("role", "alert");
+    userscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Uploader™ by Xnot</h4>" +
     "<ol><li>Insert chapter names,volume numbers, and chapter numbers, and group IDs separated by a dash followed by a coma (-,) into their respective fields" +
     "<br />Protip: use TEXTJOIN(CONCAT(UNICHAR(45),UNICHAR(44)),0 ,ROWSHERE) on excel" +
     "<br />Alternatively, inputing a single name/volume/groupID will use that for all uploads, and inputing a single chapter will increment it for each upload" +
@@ -36,23 +36,17 @@ function createForm() //creates mass upload form and returns all input fields
     "Update 1.70:" +
     "<ul><li>Added support for joint groups (Group 2 and Group 3 fields)";
     var container = document.getElementById("content");
-    var formPanel = document.getElementsByClassName("panel panel-default")[1];
-    container.insertBefore(myUserscriptInfo, formPanel);
-
+    container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
     var uploadForm = document.getElementById("upload_form"); //get real upload form
     var massUploadForm = uploadForm.cloneNode(true); //create mass upload form as clone of upload form
-    //uploadForm.style = "margin-top: 15px; display: none"; //hide upload form
     massUploadForm.id = "mass_upload_form";
-    document.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
-
-    //var mangaNameGroup = massUploadForm.childNodes[1];
-    var languageGroup = massUploadForm.childNodes[17];
-    var fileGroup = massUploadForm.childNodes[19];
-    var buttonsGroup = massUploadForm.childNodes[21];
+    container.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
 
     //modify chapter name field
-    var chapterNameField = document.getElementById("chapter_name");
+    var chapterNameField = document.createElement("textarea");
+    document.getElementById("chapter_name").replaceWith(chapterNameField);
+    chapterNameField.classList.add("form-control");
     chapterNameField.setAttribute("id", "chapter_names");
     chapterNameField.setAttribute("name", "chapter_names");
     chapterNameField.setAttribute("placeholder", "nameForCh1-, nameForCh2-, nameForCh3");
@@ -208,7 +202,7 @@ function massUpload(event, fields)
 
 function splitInputs(fields) // splits the coma separated fields into arrays
 {
-    var chapterNameList = fields[0].value.split("-,");
+    var chapterNameList = fields[0].value.split("\n");
     var volumeNumberList = fields[1].value.split("-,");
     var chapterNumberList = fields[2].value.split("-,");
     var delayList = fields[3].checked;
@@ -248,16 +242,7 @@ function uploadNext(event, splitFields, i)
     var uploadForm = document.getElementById("upload_form"); //real upload form
     var massUploadForm = document.getElementById("mass_upload_form");
 
-    var mangaIdField = uploadForm.childNodes[1].childNodes[3].childNodes[3];
-    var chapterNameField = uploadForm.childNodes[3].childNodes[3].childNodes[1];
-    var volumeNumberField = uploadForm.childNodes[5].childNodes[3].childNodes[1];
-    var chapterNumberField = uploadForm.childNodes[7].childNodes[3].childNodes[1];
     var delayCheckbox = uploadForm.childNodes[9].childNodes[3].childNodes[1].childNodes[1].childNodes[0];
-    var group1Field = uploadForm.childNodes[11].childNodes[3].childNodes[1];
-    var group2Field = uploadForm.childNodes[13].childNodes[3].childNodes[1];
-    var group3Field = uploadForm.childNodes[15].childNodes[3].childNodes[1];
-    var languageGroup = uploadForm.childNodes[17];
-    var fileField = uploadForm.childNodes[19].childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[5];
     var fileText = uploadForm.childNodes[19].childNodes[3].childNodes[1].childNodes[1];
     var uploadButton = uploadForm.childNodes[21].childNodes[3].childNodes[1];
 
