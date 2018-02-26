@@ -143,6 +143,7 @@ function createForm() //creates mass upload form
     //modify the language field
     var languageField = document.createElement("textarea"); //clone a non-dropdown because fuck that
     document.getElementById("lang_id").parentNode.replaceWith(languageField);
+    languageField.classList.add("form-control");
     languageField.setAttribute("id", "langs_id");
     languageField.setAttribute("name", "langs_id");
     languageField.setAttribute("disabled", "true");
