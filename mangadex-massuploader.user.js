@@ -141,11 +141,11 @@ function createForm() //creates mass upload form
                                                                     });
 
     //modify the language field
-    var languageField = chapterNumberField.cloneNode(true); //clone a non-dropdown because fuck that
+    var languageField = document.createElement("textarea"); //clone a non-dropdown because fuck that
     document.getElementById("lang_id").parentNode.replaceWith(languageField);
     languageField.setAttribute("id", "langs_id");
     languageField.setAttribute("name", "langs_id");
-    languageField.setAttribute("disabled", "");
+    languageField.setAttribute("disabled", "true");
     languageField.setAttribute("placeholder", "not implemented because no one mass uploads multiple languages, fill in the language in the bottom form instead");
     var languageLabel = languageField.parentNode.previousSibling.previousSibling;
     languageLabel.setAttribute("for", "langs_id");
