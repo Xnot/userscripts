@@ -210,7 +210,7 @@ function massUpload(event, fields)
     }
     else
     {
-        document.getElementById("message_container").innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Error:</strong> Either the amount of files does not match names, volumes, chapters, or groups, or you left the group field empty. See instructions and try again. </div>.";        
+        document.getElementById("message_container").innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Error:</strong> Either the amount of files does not match names, volumes, chapters, or groups, or you left the group field empty. See instructions and try again. </div>.";
         console.log(splitFields);
     }
 }
@@ -356,7 +356,7 @@ function uploadNext(event, splitFields, i)
         }
         else
         {
-            document.getElementById("chapter_number").value = parseInt(chapterNumberList[0]) + i;
+            document.getElementById("chapter_number").value = parseFloat(chapterNumberList[0]) + i;
         }
     }
     else
