@@ -104,8 +104,8 @@ function createForm() //creates mass upload form
     group1Label.innerText = "Groups 1";
     document.getElementById("group_id").addEventListener("change", function()
                                                                     {
-                                                                        group1Field.value = this.value;
-                                                                        this.previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.value;
+                                                                        group1Field.value = this.options[this.selectedIndex].value;
+                                                                        this.previousSibling.previousSibling.childNodes[0].childNodes[1].data += " id: " + this.options[this.selectedIndex].value;
                                                                     });
 
     //modify the group 2 field
