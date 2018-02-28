@@ -35,7 +35,8 @@ function createForm() //creates mass upload form
     "<li>All messages are no longer on a timer and are manually dismissable (messages from Holo are still on a timer)" +
     "<li>Attempting to use chapter auto-increment with a non-numerical chapter number will just use that value for all uploads instead of making all uploads NaN</ul>" +
     "Update 1.85:" +
-    "<ul><li>Remade the entire form creation code to create form from scratch instead of ripping off Holo's form. Hopefully this fixes shit for certain people for who the last update was broken. Also now it won't break when Holo changes the form. Probably.</ul>";
+    "<ul><li>Remade the entire form creation code to create form from scratch instead of ripping off Holo's form. Hopefully this fixes shit for certain people for who the last update was broken. Also now it won't break when Holo changes the form. Probably." + 
+    "<li>The progress bar is now at the bottom</ul>";
     var container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
@@ -44,7 +45,7 @@ function createForm() //creates mass upload form
     var uploadForm = document.getElementById("upload_form"); //get real upload form
 
     //create form
-    var massUploadForm = document.createElement("div");
+    var massUploadForm = document.createElement("form");
     massUploadForm.setAttribute("id", "mass_upload_form");
     massUploadForm.classList.add("form-horizontal");
     massUploadForm.style.marginTop = "15px";
