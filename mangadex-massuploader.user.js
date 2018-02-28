@@ -464,7 +464,7 @@ function uploadNext(event, splitFields, i)
     {
         splitFormData.append("group_id_3", group3List[i]);
     }
-    if(document.getElementById("lang_id").value == "") //I wouldn't need this if else statement if not for fucking Safari
+    if(document.getElementById("lang_id").options[document.getElementById("lang_id").selectedIndex].value == "") //I wouldn't need this if else statement if not for fucking Safari
     {
         splitFormData.append("lang_id", "1");
     }
