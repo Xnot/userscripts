@@ -42,14 +42,12 @@ function createForm() //creates mass upload form
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
 
-    var uploadForm = document.getElementById("upload_form"); //get real upload form
-
     //create form
     var massUploadForm = document.createElement("form");
     massUploadForm.setAttribute("id", "mass_upload_form");
     massUploadForm.classList.add("form-horizontal");
     massUploadForm.style.marginTop = "15px";
-    container.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, uploadForm); //insert mass upload form
+    container.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, document.getElementById("upload_form")); //insert mass upload form
 
     //create mango field
     var mangaContainer = document.createElement("div");
