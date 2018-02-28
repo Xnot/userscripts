@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.81
+// @version      1.85
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -18,7 +18,7 @@ function createForm() //creates mass upload form
     userscriptInfo.setAttribute("role", "alert");
     userscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Uploader™ by Xnot</h4>" +
     "<ol><li>Insert chapter names,volume numbers, chapter numbers, and group IDs into their respective fields. Each line is one chapter" +
-    "<br />Alternatively, inputing a single name/volume/groupID/non-numerical ch.number will use that for all uploads, and inputing a single numerical chapter will increment it for each upload" +
+    "<br />Alternatively, inputting a single name/volume/groupID/non-numerical ch.number will use that for all uploads, and inputing a single numerical chapter will increment it for each upload" +
     "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
     "<br />If you want a chapter to have an empty title or whatever leave an empty line in the respective field. Except for Group 1, every chapter MUST have a Group 1" +
     "<br />Selecting a group in the dropdown in the bottom form will give you the group IDs" +
@@ -29,13 +29,13 @@ function createForm() //creates mass upload form
     "<li>Click the Mass Upload button" +
     "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 1.70:" +
-    "<ul><li>Added support for joint groups (Group 2 and Group 3 fields)</ul>" +
     "Update 1.80:" +
     "<ul><li>Changed a bunch of code from when I didn't know what I was doing (not that I do now) so that it hopefully breaks less when Holo changes stuff" +
     "<li>All fields are now textareas and are split by line instead of -," +
     "<li>All messages are no longer on a timer and are manually dismissable (messages from Holo are still on a timer)" +
-    "<li>Attempting to use chapter auto-increment with a non-numerical chapter number will just use that value for all uploads instead of making all uploads NaN";
+    "<li>Attempting to use chapter auto-increment with a non-numerical chapter number will just use that value for all uploads instead of making all uploads NaN</ul>" +
+    "Update 1.85:" +
+    "<ul><li>Remade the entire form creation code to create form from scratch instead of ripping off Holo's form. Hopefully this fixes shit for certain people for who the last update was broken. Also now it won't break when Holo changes the form. Probably.</ul>";
     var container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
@@ -157,7 +157,6 @@ function createForm() //creates mass upload form
                                                             document.getElementById("group_delay").checked = this.checked;
                                                         });
 
-    
     //create group1 field
     var group1Container = document.createElement("div");
     group1Container.classList.add("form-group");
@@ -349,7 +348,7 @@ function massUpload(event, fields)
     if((splitFields[6].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[6].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[6].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[6].length == splitFields[3].length || splitFields[3].length == 1) && !splitFields[3].includes("") && (splitFields[6].length == splitFields[4].length || splitFields[4].length == 1) && (splitFields[6].length == splitFields[5].length || splitFields[5].length == 1))
     {
         uploadNext(event, splitFields, 0);
-   }
+    }
     else
     {
         document.getElementById("message_container").innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Error:</strong> Either the amount of files does not match names, volumes, chapters, or groups, or you left the group field empty. See instructions and try again. </div>.";
@@ -537,7 +536,7 @@ function uploadNext(event, splitFields, i)
     var j = i+1; //for printing purposes only
     var success_msg = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Success:</strong> " + j + "/" + fileList.length + " chapters have been uploaded.</div>";
     var error_msg = "<div class='alert alert-warning text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Warning:</strong> Something went wrong with your upload at " + j + "/" + fileList.length + " files. All previous files have been uploaded.</div>";
- 
+
     var uploadButton = document.getElementById("upload_button"); //disable buttons
     uploadButton.childNodes[0].classList.replace("fa-upload", "fa-spinner");
     uploadButton.childNodes[0].classList.replace("fa-fw", "fa-pulse");
@@ -595,12 +594,13 @@ function uploadNext(event, splitFields, i)
                 uploadButton.removeAttribute("disabled");
                 massUploadButton.childNodes[0].classList.replace("fa-spinner", "fa-upload");
                 massUploadButton.childNodes[0].classList.replace("fa-pulse", "fa-fw");
+                massUploadButton.childNodes[1].innerText = "Mass Upload";
                 massUploadButton.removeAttribute("disabled");
                 document.getElementById("upload_form").reset(); //self explanatory
                 document.getElementById("mass_upload_form").reset();
             }
         },
- 
+
         error: function(err) {
             console.error(err);
             $('#progressbar').parent().hide();
