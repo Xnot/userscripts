@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.86
+// @version      1.87
 // @icon         https://mangadex.com/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -17,26 +17,26 @@ function createForm() //creates mass upload form
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
     userscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Uploader™ by Xnot</h4>" +
-    "<ol><li>Insert chapter names,volume numbers, chapter numbers, and group IDs into their respective fields. Each line is one chapter" +
-    "<br />Alternatively, inputting a single name/volume/groupID/non-numerical ch.number will use that for all uploads, and inputing a single numerical chapter will increment it for each upload" +
-    "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
-    "<br />If you want a chapter to have an empty title or whatever leave an empty line in the respective field. Except for Group 1, every chapter MUST have a Group 1" +
-    "<br />Selecting a group in the dropdown in the bottom form will give you the group IDs" +
-    "<li>Check the group delay box if you feel so inclined (will apply for all uploads)" +
-    "<li>Click browse and use shift/ctrl so select all files" +
-    "<br />If you hover over the browse button you can check if the files are in the expected order" +
-    "<li>Select language from the standard upload form below the mass upload form" +
-    "<li>Click the Mass Upload button" +
-    "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
+        "<ol><li>Insert chapter names,volume numbers, chapter numbers, and group IDs into their respective fields. Each line is one chapter" +
+        "<br />Alternatively, inputting a single name/volume/groupID/non-numerical ch.number will use that for all uploads, and inputing a single numerical chapter will increment it for each upload" +
+        "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
+        "<br />If you want a chapter to have an empty title or whatever leave an empty line in the respective field. Except for Group 1, every chapter MUST have a Group 1" +
+        "<br />Selecting a group in the dropdown in the bottom form will give you the group IDs" +
+        "<li>Check the group delay box if you feel so inclined (will apply for all uploads)" +
+        "<li>Click browse and use shift/ctrl so select all files" +
+        "<br />If you hover over the browse button you can check if the files are in the expected order" +
+        "<li>Select language from the standard upload form below the mass upload form" +
+        "<li>Click the Mass Upload button" +
+        "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
     "Update 1.80:" +
-    "<ul><li>Changed a bunch of code from when I didn't know what I was doing (not that I do now) so that it hopefully breaks less when Holo changes stuff" +
-    "<li>All fields are now textareas and are split by line instead of -," +
-    "<li>All messages are no longer on a timer and are manually dismissable (messages from Holo are still on a timer)" +
-    "<li>Attempting to use chapter auto-increment with a non-numerical chapter number will just use that value for all uploads instead of making all uploads NaN</ul>" +
+        "<ul><li>Changed a bunch of code from when I didn't know what I was doing (not that I do now) so that it hopefully breaks less when Holo changes stuff" +
+        "<li>All fields are now textareas and are split by line instead of -," +
+        "<li>All messages are no longer on a timer and are manually dismissable (messages from Holo are still on a timer)" +
+        "<li>Attempting to use chapter auto-increment with a non-numerical chapter number will just use that value for all uploads instead of making all uploads NaN</ul>" +
     "Update 1.85:" +
-    "<ul><li>Remade the entire form creation code to create form from scratch instead of ripping off Holo's form. Hopefully this fixes shit for certain people for who the last update was broken. Also now it won't break when Holo changes the form. Probably." + 
-    "<li>The progress bar is now at the bottom</ul>";
+        "<ul><li>Remade the entire form creation code to create form from scratch instead of ripping off Holo's form. Hopefully this fixes shit for certain people for who the last update was broken. Also now it won't break when Holo changes the form. Probably." + 
+        "<li>The progress bar is now at the bottom</ul>";
     var container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
@@ -302,6 +302,7 @@ function createForm() //creates mass upload form
                                             uploadButton.focus();
                                         });
 
+    //create buttons
     var buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("form-group");
     massUploadForm.appendChild(buttonsContainer);
@@ -581,9 +582,9 @@ function uploadNext(event, splitFields, i)
                 document.getElementById("message_container").innerHTML = data;
             }
             i++;
-            if(i < fileList.length) //upload next after 0.5 seconds
+            if(i < fileList.length) //upload next after 0.0 seconds fuck you eva
             {
-                setTimeout(function(){uploadNext(event, splitFields, i);}, 500);
+                uploadNext(event, splitFields, i);
             }
             else
             {
