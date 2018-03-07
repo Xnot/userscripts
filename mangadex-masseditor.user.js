@@ -2,7 +2,7 @@
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
 // @version      0.35
-// @icon         https://mangadex.com/favicon.ico
+// @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js

@@ -2,7 +2,7 @@
 // @name         Mangadex (shitty) Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
 // @version      1.87
-// @icon         https://mangadex.com/favicon.ico
+// @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-massuploader.user.js
