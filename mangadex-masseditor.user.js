@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.35
+// @version      0.36
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -29,13 +29,15 @@ function createForm()
     userscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass <strike>Uploader</strike> Editor™ ßeta by Xnot with <strike>a lot of</strike> some code ripped off of bcvxy</h4>" +
         "<ol><li>Insert chapter numbers to edit and the new titles in respective fields. Each line is one chapter" +
         "<li>Click the Mass Upload button" +
-        "<br />Enlgish is hardcoded for now, if you want some other language change the ID on line 230" +
-        "<br />It only matches by chapter number for now so probably don't use this on manga which resets chapter counts or with multiple uploads of the same chapter" +
+        "<br />It only matches by chapter number for now so probably don't use this on manga which resets chapter count by volume or with multiple uploads of the same chapter" +
         "<br />Editing stuff other than titles soon™</ol>" + 
     "If there are any problems @ or pm me on Discord<br />" +
     "Update 0.35:" +
-        "<ul><li>Fixed bcvxy's script so that it works after the multi group update" +
-        "<li>It has a UI now</ul>";
+        "<ul><li>Fixed bcvxy's script so that it properly processes multi groups" +
+        "<li>It has a UI now</ul>" +
+    "Update 0.36:" +
+        "<ul><li>Used latest version of bcvxy's script to add language processing" +
+        "<li>Now only pushes chapters that will get changed to prevent some unnecessary processing</ul>";
     var container = document.getElementById("content");
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
@@ -158,6 +160,43 @@ function arraysEqual(a, b) {
 async function massEdit(fields) {
     'use strict';
 
+    const langs =
+    {
+        "English":"1",
+        "Japanese":"2",
+        "Polish":"3",
+        "Serbo-Croatian":"4",
+        "Dutch":"5",
+        "Italian":"6",
+        "Russian":"7",
+        "German":"8",
+        "Hungarian":"9",
+        "French":"10",
+        "Finnish":"11",
+        "Vietnamese":"12",
+        "Greek":"13",
+        "Bulgarian":"14",
+        "Spanish (Spain)":"15",
+        "Portuguese (Brazil)":"16",
+        "Portuguese (Portugal)":"17",
+        "Swedish":"18",
+        "Arabic":"19",
+        "Danish":"20",
+        "Chinese":"21",
+        "Bengali":"22",
+        "Romanian":"23",
+        "Czech":"24",
+        "Mongolian":"25",
+        "Turkish":"26",
+        "Indonesian":"27",
+        "Korean":"28",
+        "Spanish (LATAM)":"29",
+        "Persian":"30",
+        "Malaysian":"31",
+        "Thai":"32",
+        "Catalan":"33"
+    };
+
     const manga = (/\/(\d+)/g).exec(window.location.href)[1];
 
 	//List of chapters to edit
@@ -172,11 +211,12 @@ async function massEdit(fields) {
     $('a[href*="/chapter/"').each(function (chapter)
                                     {
 
-                                        const chapId = $(this).get(0).href.match(/(\d+)/)[0];
-                                        if(fields[0].includes(parseInt(chapId))); //only push chapters in list
+                                        
+                                        const chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        if(fields[0].includes(chapNum)) //only push chapters in list
                                         {
+                                            const chapId = $(this).get(0).href.match(/(\d+)/)[0];
                                             const volNum = $(this).get(0).getAttribute('data-volume-num');
-                                            const chapNum = $(this).get(0).getAttribute('data-chapter-num');
                                             const title = $(this).get(0).getAttribute('data-chapter-name');
                                             const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
                                             var group2Id = 0;
@@ -189,19 +229,20 @@ async function massEdit(fields) {
                                             {
                                                 group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
                                             }
-                                            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id]);
+                                            const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
+                                            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle]);
                                         }
                                     });
     toEdit = toEdit.reverse();
     for (let i = 0, len = toEdit.length; i < len; i++)
     {
         console.log("Processing chapter #" + (i+1) + " of " + len);
-        // data format 0:chapId 1:volNum 2:chapNum 3:title 4:groupId 5:group2Id 6:group3Id 7:file(optional)
+        // data format 0:chapId 1:volNum 2:chapNum 3:title 4:groupId 5:group2Id 6:group3Id 7:langTitle 8:file(optional)
         var oldData = toEdit[i];
         var newData = oldData.slice(0);
 
         // oldData holds the current information for the chapter. Don't change it
-        // make your changes to newData, which is a copy of oldData by default
+        // make your changes to newData, which is a clone of oldData by default
         // --- CHANGES TO DATA HERE ---
         newData[3] = titles[oldData[2]] || oldData[3];
 
@@ -224,8 +265,8 @@ async function massEdit(fields) {
         formData.append('group_id', newData[4]);
         formData.append('group_id_2', newData[5]);
         formData.append('group_id_3', newData[6]);
-        formData.append('lang_id', '1');
-        formData.append('file', newData[7]);
+        formData.append('lang_id', langs[newData[7]]);
+        formData.append('file', newData[8]);
 
         const headers = new Headers();
         headers.append("x-requested-with", "XMLHttpRequest");
@@ -248,5 +289,5 @@ async function massEdit(fields) {
             console.error('Error:', e);
         }
     }
-    console.log("%call cool and good :ok_hand:", "color:green");
+    console.log("%call cool and good 👌", "color:green");
 }
