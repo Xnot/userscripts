@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.36
+// @version      0.37
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -14,10 +14,10 @@
 function createForm()
 {
 
-    //create form
+    //create mass edit form
     var massEditForm = document.createElement("form");
     massEditForm.setAttribute("id", "mass_edit_form");
-    massEditForm.classList.add("form-horizontal");
+    massEditForm.classList.add("form-horizontal", "panel-body");
     massEditForm.style.display = "none";
     var container = document.getElementById("content").getElementsByClassName("panel panel-default")[0];
     var mangaInfo = container.getElementsByClassName("row edit")[0];
@@ -32,12 +32,13 @@ function createForm()
         "<br />It only matches by chapter number for now so probably don't use this on manga which resets chapter count by volume or with multiple uploads of the same chapter" +
         "<br />Editing stuff other than titles soon™</ol>" + 
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.35:" +
-        "<ul><li>Fixed bcvxy's script so that it properly processes multi groups" +
-        "<li>It has a UI now</ul>" +
     "Update 0.36:" +
         "<ul><li>Used latest version of bcvxy's script to add language processing" +
-        "<li>Now only pushes chapters that will get changed to prevent some unnecessary processing</ul>";
+        "<li>Now only pushes chapters that will get changed to prevent some unnecessary processing</ul>" + 
+    "Update 0.37:" +
+        "<ul><li>Changed some icons and colors <strike>so that it doesn't look like I copy-pasted everything from my other script</strike>" +
+        "<li>Text areas are somewhat larger by default</ul>" + 
+        "<li>Form container now has some margins that makes it look better</ul>" ;
     var container = document.getElementById("content");
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
@@ -58,6 +59,7 @@ function createForm()
     chapterNumberToEditField.setAttribute("name", "mass_chapter_number_to_edit");
     chapterNumberToEditField.setAttribute("placeholder", "1\n2\n3");
     chapterNumberToEditField.classList.add("form-control");
+    chapterNumberToEditField.style.height = "120px";
     chapterNumberToEditFieldContainer.appendChild(chapterNumberToEditField);
 
     //create new chapter title field
@@ -77,6 +79,7 @@ function createForm()
     newChapterTitleField.setAttribute("name", "mass_new_chapter_title");
     newChapterTitleField.setAttribute("placeholder", "title1\ntitle2\ntitle3");
     newChapterTitleField.classList.add("form-control");
+    newChapterTitleField.style.height = "120px";
     newChapterTitleFieldContainer.appendChild(newChapterTitleField);
 
     //create buttons
@@ -92,20 +95,20 @@ function createForm()
     editButton.classList.add("btn", "btn-success", "pull-right");
     buttonsDiv.appendChild(editButton);
     var editButtonIcon = document.createElement("span");
-    editButtonIcon.classList.add("fas", "fa-upload", "fa-fw");
+    editButtonIcon.classList.add("fas", "fa-save", "fa-fw");
     editButtonIcon.style.marginRight = "3px";
     editButton.appendChild(editButtonIcon);
     var editButtonText = document.createElement("span");
     editButtonText.classList.add("span-1280");
-    editButtonText.innerText = "Mass Edit";
+    editButtonText.innerText = "Apply Edit";
     editButton.appendChild(editButtonText);
     var cancelButton = document.createElement("button");
     cancelButton.setAttribute("id", "mass_edit_cancel_button");
     cancelButton.setAttribute("type", "button");
-    cancelButton.classList.add("btn", "btn-warning", "pull-right");
+    cancelButton.classList.add("btn", "btn-danger", "pull-right");
     buttonsDiv.appendChild(cancelButton);
     var cancelButtonIcon = document.createElement("span");
-    cancelButtonIcon.classList.add("fas", "fa-trash-alt", "fa-fw");
+    cancelButtonIcon.classList.add("fas", "fa-ban", "fa-fw");
     cancelButtonIcon.style.marginRight = "3px";
     cancelButton.appendChild(cancelButtonIcon);
     var cancelButtonText = document.createElement("span");
@@ -124,14 +127,16 @@ function createForm()
                                                 mangaInfo.style.display =  "block";
                                             });
 
+    //add mass edit button to open form
     var actionsContainer = document.getElementById("upload_button").parentNode;
+    actionsContainer.classList.add("btn-toolbar");
     var openEditButton = document.createElement("button");
     openEditButton.setAttribute("id", "mass_edit_open_button");
     openEditButton.setAttribute("type", "button");
     openEditButton.classList.add("btn", "btn-success", "pull-right");
     actionsContainer.appendChild(openEditButton);
     var openEditButtonIcon = document.createElement("span");
-    openEditButtonIcon.classList.add("fas", "fa-upload", "fa-fw");
+    openEditButtonIcon.classList.add("fas", "fa-edit", "fa-fw");
     openEditButtonIcon.style.marginRight = "3px";
     openEditButton.appendChild(openEditButtonIcon);
     var openEditButtonText = document.createElement("span");
