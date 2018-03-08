@@ -37,7 +37,7 @@ function createForm()
         "<li>Now only pushes chapters that will get changed to prevent some unnecessary processing</ul>" + 
     "Update 0.37:" +
         "<ul><li>Changed some icons and colors <strike>so that it doesn't look like I copy-pasted everything from my other script</strike>" +
-        "<li>Text areas are somewhat larger by default</ul>" + 
+        "<li>Text areas are somewhat larger by default" + 
         "<li>Form container now has some margins that makes it look better</ul>" ;
     var container = document.getElementById("content");
     massEditForm.appendChild(userscriptInfo); //insert info panel
