@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Mangadex (shitty) Mass Uploader
+// @name         Mangadex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.87
+// @version      1.88
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -16,7 +16,7 @@ function createForm() //creates mass upload form
     var userscriptInfo = document.createElement("div"); //info panel with userscript instructions
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
-    userscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Uploader™ by Xnot</h4>" +
+    userscriptInfo.innerHTML = "<h4>You are using Mangadex Mass Uploader by Xnot</h4>" +
         "<ol><li>Insert chapter names,volume numbers, chapter numbers, and group IDs into their respective fields. Each line is one chapter" +
         "<br />Alternatively, inputting a single name/volume/groupID/non-numerical ch.number will use that for all uploads, and inputing a single numerical chapter will increment it for each upload" +
         "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
@@ -29,14 +29,14 @@ function createForm() //creates mass upload form
         "<li>Click the Mass Upload button" +
         "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 1.80:" +
-        "<ul><li>Changed a bunch of code from when I didn't know what I was doing (not that I do now) so that it hopefully breaks less when Holo changes stuff" +
-        "<li>All fields are now textareas and are split by line instead of -," +
-        "<li>All messages are no longer on a timer and are manually dismissable (messages from Holo are still on a timer)" +
-        "<li>Attempting to use chapter auto-increment with a non-numerical chapter number will just use that value for all uploads instead of making all uploads NaN</ul>" +
     "Update 1.85:" +
         "<ul><li>Remade the entire form creation code to create form from scratch instead of ripping off Holo's form. Hopefully this fixes shit for certain people for who the last update was broken. Also now it won't break when Holo changes the form. Probably." + 
-        "<li>The progress bar is now at the bottom</ul>";
+        "<li>The progress bar is now at the bottom</ul>" + 
+    "Update 1.88:" +
+        "<ul><li>Uploading now gets canceled on some errors that return a success code (locked groups, invalid files, etc)" +
+        "<li>Error messages from such errors now have a close button" +
+        "<li>Removed (shitty) from the name since it's pretty decent now :^)" +
+        "<li>The file field now only accepts .zip and .cbz</ul>";
     var container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
@@ -288,6 +288,7 @@ function createForm() //creates mass upload form
     fileField.setAttribute("type", "file");
     fileField.setAttribute("name", "file");
     fileField.setAttribute("multiple", "true");
+    fileField.setAttribute("accept", ".zip,.cbz");
     fileButton.appendChild(fileField);
     fileField.addEventListener("change", function()
                                         {
@@ -576,15 +577,25 @@ function uploadNext(event, splitFields, i)
             if (!data)
             {
                 document.getElementById("message_container").innerHTML = success_msg;
-            }
-            else
-            {
-                document.getElementById("message_container").innerHTML = data;
-            }
-            i++;
-            if(i < fileList.length) //upload next after 0.0 seconds fuck you eva
-            {
-                uploadNext(event, splitFields, i);
+
+                i++;
+                if(i < fileList.length) //upload next after 0.0 seconds fuck you eva
+                {
+                    uploadNext(event, splitFields, i);
+                }
+                else
+                {
+                    uploadButton.childNodes[0].classList.replace("fa-spinner", "fa-upload"); //enable buttons
+                    uploadButton.childNodes[0].classList.replace("fa-pulse", "fa-fw");
+                    uploadButton.childNodes[2].innerText = "Upload";
+                    uploadButton.removeAttribute("disabled");
+                    massUploadButton.childNodes[0].classList.replace("fa-spinner", "fa-upload");
+                    massUploadButton.childNodes[0].classList.replace("fa-pulse", "fa-fw");
+                    massUploadButton.childNodes[1].innerText = "Mass Upload";
+                    massUploadButton.removeAttribute("disabled");
+                    document.getElementById("upload_form").reset(); //self explanatory
+                    document.getElementById("mass_upload_form").reset();
+                }
             }
             else
             {
@@ -596,8 +607,10 @@ function uploadNext(event, splitFields, i)
                 massUploadButton.childNodes[0].classList.replace("fa-pulse", "fa-fw");
                 massUploadButton.childNodes[1].innerText = "Mass Upload";
                 massUploadButton.removeAttribute("disabled");
-                document.getElementById("upload_form").reset(); //self explanatory
-                document.getElementById("mass_upload_form").reset();
+                document.getElementById("message_container").innerHTML = data;
+                document.getElementById("message_container").childNodes[0].style.pointerEvents = "auto";
+                document.getElementById("message_container").childNodes[0].innerHTML += "<a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>";
+                document.getElementById("message_container").innerHTML += error_msg;
             }
         },
 
