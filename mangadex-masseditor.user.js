@@ -115,9 +115,21 @@ function createForm()
     cancelButtonText.classList.add("span-1280");
     cancelButtonText.innerText = "Cancel";
     cancelButton.appendChild(cancelButtonText);
+    var previewButton = document.createElement("button");
+    previewButton.setAttribute("id", "mass_edit_preview_button");
+    previewButton.setAttribute("type", "button");
+    previewButton.classList.add("btn", "btn-info", "pull-right");
+    buttonsDiv.appendChild(previewButton);
+    var previewButtonIcon = document.createElement("span");
+    previewButtonIcon.classList.add("fas", "fa-eye", "fa-fw");
+    previewButtonIcon.style.marginRight = "3px";
+    previewButton.appendChild(previewButtonIcon);
+    var previewButtonText = document.createElement("span");
+    previewButtonText.classList.add("span-1280");
+    previewButtonText.innerText = "Preview Edit";
+    previewButton.appendChild(previewButtonText);
     editButton.addEventListener("click", function(event)
                                         {
-                                            event.preventDefault();
                                             massEdit([chapterNumberToEditField.value.split("\n"), newChapterTitleField.value.split("\n")]);
                                         });
     cancelButton.addEventListener("click", function()
@@ -126,6 +138,20 @@ function createForm()
                                                 massEditForm.style.display = "none";
                                                 mangaInfo.style.display =  "block";
                                             });
+    previewButton.addEventListener("click", function(event)
+                                        {
+                                            previewEdit([chapterNumberToEditField.value.split("\n"), newChapterTitleField.value.split("\n")]);
+                                        });
+
+    //add preview table
+    var editPreviewTable = document.createElement("table");
+    editPreviewTable.classList.add("table", "table-hover", "table-condensed");
+    massEditForm.appendChild(editPreviewTable);
+    var editPreviewTableBody = document.createElement("tbody");
+    editPreviewTableBody.id = "edit_preview";
+    editPreviewTable.appendChild(editPreviewTableBody);
+    
+    //editPreviewTable.appendChild(document.createElement("tbody"));
 
     //add mass edit button to open form
     var actionsContainer = document.getElementById("upload_button").parentNode;
@@ -150,6 +176,25 @@ function createForm()
                                             });
 }
 createForm();
+
+function previewEdit(fields)
+{
+    var previewTable = document.getElementById("edit_preview");
+    $('a[href*="/chapter/"').each(function (chapter)
+                                    { 
+                                        const chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        if(fields[0].includes(chapNum)) //only push chapters in list
+                                        {
+                                            var editPreviewOld = this.parentNode.parentNode.cloneNode(true);
+                                            editPreviewOld.classList.add("bg-primary");
+                                            previewTable.appendChild(editPreviewOld);
+                                            var editPreviewNew = this.parentNode.parentNode.cloneNode(true);
+                                            editPreviewNew.classList.add("bg-success");
+                                            editPreviewNew.childNodes[3].childNodes[0].setAttribute("data-chapter-name", fields[1][fields[0].indexOf($(this).get(0).getAttribute('data-chapter-num'))]);
+                                            previewTable.appendChild(editPreviewNew);
+                                        }
+                                    });
+}
 
 function arraysEqual(a, b) {
     if (a === b) return true;
