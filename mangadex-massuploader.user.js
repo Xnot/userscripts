@@ -31,7 +31,7 @@ function createForm() //creates mass upload form
     "If there are any problems @ or pm me on Discord<br />" +
     "Update 1.85:" +
         "<ul><li>Remade the entire form creation code to create form from scratch instead of ripping off Holo's form. Hopefully this fixes shit for certain people for who the last update was broken. Also now it won't break when Holo changes the form. Probably." + 
-        "<li>The progress bar is now at the bottom</ul>" + 
+        "<li>The progress bar is now at the bottom</ul>" +
     "Update 1.88:" +
         "<ul><li>Uploading now gets canceled on some errors that return a success code (locked groups, invalid files, etc)" +
         "<li>Error messages from such errors now have a close button" +
