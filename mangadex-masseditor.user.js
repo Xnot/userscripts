@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.37
+// @version      0.60
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -26,21 +26,66 @@ function createForm()
     var userscriptInfo = document.createElement("div"); //info panel with userscript instructions
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
-    userscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass <strike>Uploader</strike> Editor™ ßeta by Xnot with <strike>a lot of</strike> some code ripped off of bcvxy</h4>" +
-        "<ol><li>Insert chapter numbers to edit and the new titles in respective fields. Each line is one chapter" +
-        "<li>Click the Mass Upload button" +
-        "<br />It only matches by chapter number for now so probably don't use this on manga which resets chapter count by volume or with multiple uploads of the same chapter" +
-        "<br />Editing stuff other than titles soon™</ol>" + 
+    userscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Editor ßeta by Xnot with some code borrowed from bcvxy</h4>" +
+        "<ol><li>Use the 'to edit' fields to grab the chapters you want. Each line is one value" +
+        "<br />Filling in multiple 'to edit' fields will grab chapters that match both. For example filling titles with 'Read Online' and volume with '4' and '2' will grab all chapters titled 'Read Online' in volumes 4 and 2" +
+        "<br />Filling in only some 'to edit' fields will ignore the others" +
+        "<li>The 'new' fields determine the new values for the grabbed chapters top to bottom" +
+        "<li>Just use the preview button and figure it out because it's pretty confusing <strike>and these instructions are shit</strike>" +
+        "<li>Press the Apply Edit button and wait an undetermined amount of time because I haven't added any sort of progress tracking yet (there is some in the console though thx bcvxy)" +
+        "<li>Refresh after every edit so you aren't editing based on outdated information. Auto-refresh soon™" + 
+        "<li>Editing <strike>stuff other than titles</strike> groups, languages and files soon™ maybe</ol>" + 
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.36:" +
-        "<ul><li>Used latest version of bcvxy's script to add language processing" +
-        "<li>Now only pushes chapters that will get changed to prevent some unnecessary processing</ul>" + 
     "Update 0.37:" +
         "<ul><li>Changed some icons and colors <strike>so that it doesn't look like I copy-pasted everything from my other script</strike>" +
         "<li>Text areas are somewhat larger by default" + 
-        "<li>Form container now has some margins that makes it look better</ul>" ;
-    var container = document.getElementById("content");
+        "<li>Form container now has some margins that makes it look better</ul>" +
+    "Update 0.60:" +
+        "<ul><li>Added a bunch of other fields to match chapters with" +
+        "<li>Added a bunch of other fields to edit chapters with" + 
+        "<li>Added a preview button <strike>because the new fields are a mess</strike>" + 
+        "<li><strike>Hopefully I didn't fuck anything up and the preview actually matches the results</strike></ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
+
+    //create chapter title to edit field
+    var chapterTitleToEditContainer = document.createElement("div");
+    chapterTitleToEditContainer.classList.add("form-group");
+    massEditForm.appendChild(chapterTitleToEditContainer);
+    var chapterTitleToEditLabel = document.createElement("label");
+    chapterTitleToEditLabel.setAttribute("for","mass_chapter_title_to_edit");
+    chapterTitleToEditLabel.classList.add("col-sm-3", "control-label");
+    chapterTitleToEditLabel.innerText = "Chapter titles to edit";
+    chapterTitleToEditContainer.appendChild(chapterTitleToEditLabel);
+    var chapterTitleToEditFieldContainer = document.createElement("div");
+    chapterTitleToEditFieldContainer.classList.add("col-sm-9");
+    chapterTitleToEditContainer.appendChild(chapterTitleToEditFieldContainer);
+    var chapterTitleToEditField = document.createElement("textarea");
+    chapterTitleToEditField.setAttribute("id", "mass_chapter_title_to_edit");
+    chapterTitleToEditField.setAttribute("name", "mass_chapter_title_to_edit");
+    chapterTitleToEditField.setAttribute("placeholder", "Read Online\nRead Offline\nPlaceholder3");
+    chapterTitleToEditField.classList.add("form-control");
+    chapterTitleToEditField.style.height = "120px";
+    chapterTitleToEditFieldContainer.appendChild(chapterTitleToEditField);
+
+    //create volume number to edit field
+    var volumeNumberToEditContainer = document.createElement("div");
+    volumeNumberToEditContainer.classList.add("form-group");
+    massEditForm.appendChild(volumeNumberToEditContainer);
+    var volumeNumberToEditLabel = document.createElement("label");
+    volumeNumberToEditLabel.setAttribute("for","mass_volume_number_to_edit");
+    volumeNumberToEditLabel.classList.add("col-sm-3", "control-label");
+    volumeNumberToEditLabel.innerText = "Volume numbers to edit";
+    volumeNumberToEditContainer.appendChild(volumeNumberToEditLabel);
+    var volumeNumberToEditFieldContainer = document.createElement("div");
+    volumeNumberToEditFieldContainer.classList.add("col-sm-9");
+    volumeNumberToEditContainer.appendChild(volumeNumberToEditFieldContainer);
+    var volumeNumberToEditField = document.createElement("textarea");
+    volumeNumberToEditField.setAttribute("id", "mass_volume_number_to_edit");
+    volumeNumberToEditField.setAttribute("name", "mass_volume_number_to_edit");
+    volumeNumberToEditField.setAttribute("placeholder", "1\n2\n3");
+    volumeNumberToEditField.classList.add("form-control");
+    volumeNumberToEditField.style.height = "120px";
+    volumeNumberToEditFieldContainer.appendChild(volumeNumberToEditField);
 
     //create chapter number to edit field
     var chapterNumberToEditContainer = document.createElement("div");
@@ -69,7 +114,7 @@ function createForm()
     var newChapterTitleLabel = document.createElement("label");
     newChapterTitleLabel.setAttribute("for","mass_new_chapter_title");
     newChapterTitleLabel.classList.add("col-sm-3", "control-label");
-    newChapterTitleLabel.innerText = "New Chapter Titles";
+    newChapterTitleLabel.innerText = "New chapter titles";
     newChapterTitleContainer.appendChild(newChapterTitleLabel);
     var newChapterTitleFieldContainer = document.createElement("div");
     newChapterTitleFieldContainer.classList.add("col-sm-9");
@@ -81,6 +126,46 @@ function createForm()
     newChapterTitleField.classList.add("form-control");
     newChapterTitleField.style.height = "120px";
     newChapterTitleFieldContainer.appendChild(newChapterTitleField);
+
+    //create new volume number field
+    var newVolumeNumberContainer = document.createElement("div");
+    newVolumeNumberContainer.classList.add("form-group");
+    massEditForm.appendChild(newVolumeNumberContainer);
+    var newVolumeNumberLabel = document.createElement("label");
+    newVolumeNumberLabel.setAttribute("for","mass_new_volume_number");
+    newVolumeNumberLabel.classList.add("col-sm-3", "control-label");
+    newVolumeNumberLabel.innerText = "New volume numbers";
+    newVolumeNumberContainer.appendChild(newVolumeNumberLabel);
+    var newVolumeNumberFieldContainer = document.createElement("div");
+    newVolumeNumberFieldContainer.classList.add("col-sm-9");
+    newVolumeNumberContainer.appendChild(newVolumeNumberFieldContainer);
+    var newVolumeNumberField = document.createElement("textarea");
+    newVolumeNumberField.setAttribute("id", "mass_new_volume_number");
+    newVolumeNumberField.setAttribute("name", "mass_new_volume_number");
+    newVolumeNumberField.setAttribute("placeholder", "volume1\nvolume2\nvolume3");
+    newVolumeNumberField.classList.add("form-control");
+    newVolumeNumberField.style.height = "120px";
+    newVolumeNumberFieldContainer.appendChild(newVolumeNumberField);
+
+    //create new chapter number field
+    var newChapterNumberContainer = document.createElement("div");
+    newChapterNumberContainer.classList.add("form-group");
+    massEditForm.appendChild(newChapterNumberContainer);
+    var newChapterNumberLabel = document.createElement("label");
+    newChapterNumberLabel.setAttribute("for","mass_new_chapter_number");
+    newChapterNumberLabel.classList.add("col-sm-3", "control-label");
+    newChapterNumberLabel.innerText = "New chapter numbers";
+    newChapterNumberContainer.appendChild(newChapterNumberLabel);
+    var newChapterNumberFieldContainer = document.createElement("div");
+    newChapterNumberFieldContainer.classList.add("col-sm-9");
+    newChapterNumberContainer.appendChild(newChapterNumberFieldContainer);
+    var newChapterNumberField = document.createElement("textarea");
+    newChapterNumberField.setAttribute("id", "mass_new_chapter_number");
+    newChapterNumberField.setAttribute("name", "mass_new_chapter_number");
+    newChapterNumberField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
+    newChapterNumberField.classList.add("form-control");
+    newChapterNumberField.style.height = "120px";
+    newChapterNumberFieldContainer.appendChild(newChapterNumberField);
 
     //create buttons
     var buttonsContainer = document.createElement("div");
@@ -130,7 +215,7 @@ function createForm()
     previewButton.appendChild(previewButtonText);
     editButton.addEventListener("click", function(event)
                                         {
-                                            massEdit([chapterNumberToEditField.value.split("\n"), newChapterTitleField.value.split("\n")]);
+                                            massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value]);
                                         });
     cancelButton.addEventListener("click", function()
                                             {
@@ -140,12 +225,12 @@ function createForm()
                                             });
     previewButton.addEventListener("click", function(event)
                                         {
-                                            previewEdit([chapterNumberToEditField.value.split("\n"), newChapterTitleField.value.split("\n")]);
+                                            previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value]);
                                         });
 
     //add preview table
     var editPreviewTable = document.createElement("table");
-    editPreviewTable.classList.add("table", "table-hover", "table-condensed");
+    editPreviewTable.classList.add("table", "table-hover", "table-striped", "table-condensed");
     massEditForm.appendChild(editPreviewTable);
     var editPreviewTableBody = document.createElement("tbody");
     editPreviewTableBody.id = "edit_preview";
@@ -179,19 +264,86 @@ createForm();
 
 function previewEdit(fields)
 {
-    var previewTable = document.getElementById("edit_preview");
+    const oldChapterTitles = fields[0].split("\n");
+    const oldVolumeNumbers = fields[1].split("\n");
+    const oldChapterNumbers = fields[2].split("\n");
+    const newChapterTitles = fields[3].split("\n");
+    const newVolumeNumbers = fields[4].split("\n");
+    const newChapterNumbers = fields[5].split("\n");
+
+    const previewTable = document.getElementById("edit_preview");
+
+    while (previewTable.firstChild) //delete current preview
+    {
+        previewTable.removeChild(previewTable.firstChild);
+    }
+
+    var i = 0;
     $('a[href*="/chapter/"').each(function (chapter)
                                     { 
+                                        var title = "";
+                                        if ($(this).get(0).getAttribute('data-chapter-name') == "")
+                                        {
+                                            title = "Read Online";
+                                        }
+                                        else
+                                        {
+                                            title = $(this).get(0).getAttribute('data-chapter-name');
+                                        }
+                                        const volNum = $(this).get(0).getAttribute('data-volume-num');
                                         const chapNum = $(this).get(0).getAttribute('data-chapter-num');
-                                        if(fields[0].includes(chapNum)) //only push chapters in list
+                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] == "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] == "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] == ""))) //only push chapters in list
                                         {
                                             var editPreviewOld = this.parentNode.parentNode.cloneNode(true);
-                                            editPreviewOld.classList.add("bg-primary");
+                                            editPreviewOld.childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
                                             previewTable.appendChild(editPreviewOld);
                                             var editPreviewNew = this.parentNode.parentNode.cloneNode(true);
-                                            editPreviewNew.classList.add("bg-success");
-                                            editPreviewNew.childNodes[3].childNodes[0].setAttribute("data-chapter-name", fields[1][fields[0].indexOf($(this).get(0).getAttribute('data-chapter-num'))]);
+                                            editPreviewNew.childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title=''></span>";
+                                            var chapterTitlePreview;
+                                            if(newChapterTitles.length == 1 && newChapterTitles[0] == "")
+                                            {
+                                                chapterTitlePreview = title;
+                                            }
+                                            else
+                                            {
+                                                chapterTitlePreview = newChapterTitles[i] || title;
+                                            }
+                                            var volumeNumberPreview;
+                                            if(newVolumeNumbers.length == 1 && newVolumeNumbers[0] == "")
+                                            {
+                                                volumeNumberPreview = volNum;
+                                            }
+                                            else
+                                            {
+                                                volumeNumberPreview = newVolumeNumbers[i] || volNum;
+                                            }
+                                            var chapterNumberPreview;
+                                            if(newChapterNumbers.length == 1 && newChapterNumbers == "")
+                                            {
+                                                chapterNumberPreview = chapNum;
+                                            }
+                                            else
+                                            {
+                                                chapterNumberPreview = newChapterNumbers[i] || chapNum;
+                                            }
+
+                                            //fill in new preview
+                                            editPreviewNew.childNodes[3].innerText = "";
+                                            if(volumeNumberPreview != "")
+                                            {
+                                                editPreviewNew.childNodes[3].innerText += "Vol. " +  volumeNumberPreview;
+                                            }
+                                            if(chapterNumberPreview != "")
+                                            {
+                                                editPreviewNew.childNodes[3].innerText += " Ch. " + chapterNumberPreview;
+                                            }
+                                            if(editPreviewNew.childNodes[3].innerText != "")
+                                            {
+                                                editPreviewNew.childNodes[3].innerText +=  " - ";
+                                            }
+                                            editPreviewNew.childNodes[3].innerText += chapterTitlePreview;
                                             previewTable.appendChild(editPreviewNew);
+                                            i++;
                                         }
                                     });
 }
@@ -253,21 +405,29 @@ async function massEdit(fields) {
     let toEdit = [];
 
     // good place to put some data:
-    const titles = {};
-    for(let i = 0; i < fields[0].length; i++)
+    const oldChapterTitles = fields[0].split("\n");
+    const oldVolumeNumbers = fields[1].split("\n");
+    const oldChapterNumbers = fields[2].split("\n");
+    const newChapterTitles = fields[3].split("\n");
+    const newVolumeNumbers = fields[4].split("\n");
+    const newChapterNumbers = fields[5].split("\n");
+
+    const previewTable = document.getElementById("edit_preview");
+
+    while (previewTable.firstChild) //delete current preview because function below will get it and submit everything twice so probably fix this properly later
     {
-        titles[fields[0][i]] = fields[1][i];
+        previewTable.removeChild(previewTable.firstChild);
     }
+
     $('a[href*="/chapter/"').each(function (chapter)
                                     {
 
-                                        
+                                        const title = $(this).get(0).getAttribute('data-chapter-name');
+                                        const volNum = $(this).get(0).getAttribute('data-volume-num');
                                         const chapNum = $(this).get(0).getAttribute('data-chapter-num');
-                                        if(fields[0].includes(chapNum)) //only push chapters in list
+                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] == "") || (title == "" && oldChapterTitles.includes("Read Online"))) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] == "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] == ""))) //only push chapters in list
                                         {
                                             const chapId = $(this).get(0).href.match(/(\d+)/)[0];
-                                            const volNum = $(this).get(0).getAttribute('data-volume-num');
-                                            const title = $(this).get(0).getAttribute('data-chapter-name');
                                             const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
                                             var group2Id = 0;
                                             var group3Id = 0;
@@ -283,7 +443,6 @@ async function massEdit(fields) {
                                             toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle]);
                                         }
                                     });
-    toEdit = toEdit.reverse();
     for (let i = 0, len = toEdit.length; i < len; i++)
     {
         console.log("Processing chapter #" + (i+1) + " of " + len);
@@ -294,7 +453,31 @@ async function massEdit(fields) {
         // oldData holds the current information for the chapter. Don't change it
         // make your changes to newData, which is a clone of oldData by default
         // --- CHANGES TO DATA HERE ---
-        newData[3] = titles[oldData[2]] || oldData[3];
+        //if there are no new values use old
+        if(newVolumeNumbers.length == 1 && newVolumeNumbers[0] == "")
+        {
+            newData[1] = oldData[1];
+        }
+        else
+        {
+            newData[1] = newVolumeNumbers[i] || oldData[1];
+        }
+        if(newChapterNumbers.length == 1 && newChapterNumbers[0] == "")
+        {
+            newData[2] = oldData[2];
+        }
+        else
+        {
+            newData[2] = newChapterNumbers[i] || oldData[2];
+        }
+        if(newChapterTitles.length == 1 && newChapterTitles[0] == "")
+        {
+            newData[3] = oldData[1];
+        }
+        else
+        {
+            newData[3] = newChapterTitles[i] || oldData[3];
+        }
 
         // check for either volume or chapter present
         if ((x => y => x || y)(newData[2], newData[1]));
