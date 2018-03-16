@@ -11,10 +11,8 @@
 // @grant        none
 // ==/UserScript==
 
-function createForm()
+function createForm() //creates mass edit form
 {
-
-    //create mass edit form
     var massEditForm = document.createElement("form");
     massEditForm.setAttribute("id", "mass_edit_form");
     massEditForm.classList.add("form-horizontal", "panel-body");
@@ -33,17 +31,17 @@ function createForm()
         "<li>The 'new' fields determine the new values for the grabbed chapters top to bottom" +
         "<li>Just use the preview button and figure it out because it's pretty confusing <strike>and these instructions are shit</strike>" +
         "<li>Press the Apply Edit button and wait an undetermined amount of time because I haven't added any sort of progress tracking yet (there is some in the console though thx bcvxy)" +
-        "<li>Refresh after every edit so you aren't editing based on outdated information. Auto-refresh soon™" + 
-        "<li>Editing <strike>stuff other than titles</strike> groups, languages and files soon™ maybe</ol>" + 
+        "<li>Refresh after every edit so you aren't editing based on outdated information. Auto-refresh soon™" +
+        "<li>Editing <strike>stuff other than titles</strike> groups, languages and files soon™ maybe</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
     "Update 0.37:" +
         "<ul><li>Changed some icons and colors <strike>so that it doesn't look like I copy-pasted everything from my other script</strike>" +
-        "<li>Text areas are somewhat larger by default" + 
+        "<li>Text areas are somewhat larger by default" +
         "<li>Form container now has some margins that makes it look better</ul>" +
     "Update 0.60:" +
         "<ul><li>Added a bunch of other fields to match chapters with" +
-        "<li>Added a bunch of other fields to edit chapters with" + 
-        "<li>Added a preview button <strike>because the new fields are a mess</strike>" + 
+        "<li>Added a bunch of other fields to edit chapters with" +
+        "<li>Added a preview button <strike>because the new fields are a mess</strike>" +
         "<li><strike>Hopefully I didn't fuck anything up and the preview actually matches the results</strike></ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
@@ -107,6 +105,86 @@ function createForm()
     chapterNumberToEditField.style.height = "120px";
     chapterNumberToEditFieldContainer.appendChild(chapterNumberToEditField);
 
+    //create language to edit field
+    var languageToEditContainer = document.createElement("div");
+    languageToEditContainer.classList.add("form-group");
+    massEditForm.appendChild(languageToEditContainer);
+    var languageToEditLabel = document.createElement("label");
+    languageToEditLabel.setAttribute("for","mass_language_to_edit");
+    languageToEditLabel.classList.add("col-sm-3", "control-label");
+    languageToEditLabel.innerText = "Languages to edit";
+    languageToEditContainer.appendChild(languageToEditLabel);
+    var languageToEditFieldContainer = document.createElement("div");
+    languageToEditFieldContainer.classList.add("col-sm-9");
+    languageToEditContainer.appendChild(languageToEditFieldContainer);
+    var languageToEditField = document.createElement("textarea");
+    languageToEditField.setAttribute("id", "mass_language_to_edit");
+    languageToEditField.setAttribute("name", "mass_language_to_edit");
+    languageToEditField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
+    languageToEditField.classList.add("form-control");
+    languageToEditField.style.height = "120px";
+    languageToEditFieldContainer.appendChild(languageToEditField);
+
+    //create groupid to edit field
+    var groupIdToEditContainer = document.createElement("div");
+    groupIdToEditContainer.classList.add("form-group");
+    massEditForm.appendChild(groupIdToEditContainer);
+    var groupIdToEditLabel = document.createElement("label");
+    groupIdToEditLabel.setAttribute("for","mass_group_id_to_edit");
+    groupIdToEditLabel.classList.add("col-sm-3", "control-label");
+    groupIdToEditLabel.innerText = "Group IDs to edit";
+    groupIdToEditContainer.appendChild(groupIdToEditLabel);
+    var groupIdToEditFieldContainer = document.createElement("div");
+    groupIdToEditFieldContainer.classList.add("col-sm-9");
+    groupIdToEditContainer.appendChild(groupIdToEditFieldContainer);
+    var groupIdToEditField = document.createElement("textarea");
+    groupIdToEditField.setAttribute("id", "mass_group_id_to_edit");
+    groupIdToEditField.setAttribute("name", "mass_group_id_to_edit");
+    groupIdToEditField.setAttribute("placeholder", "1\n2\n3");
+    groupIdToEditField.classList.add("form-control");
+    groupIdToEditField.style.height = "120px";
+    groupIdToEditFieldContainer.appendChild(groupIdToEditField);
+
+    //create group2id to edit field
+    var group2IdToEditContainer = document.createElement("div");
+    group2IdToEditContainer.classList.add("form-group");
+    massEditForm.appendChild(group2IdToEditContainer);
+    var group2IdToEditLabel = document.createElement("label");
+    group2IdToEditLabel.setAttribute("for","mass_group_2_id_to_edit");
+    group2IdToEditLabel.classList.add("col-sm-3", "control-label");
+    group2IdToEditLabel.innerText = "Group 2 IDs to edit";
+    group2IdToEditContainer.appendChild(group2IdToEditLabel);
+    var group2IdToEditFieldContainer = document.createElement("div");
+    group2IdToEditFieldContainer.classList.add("col-sm-9");
+    group2IdToEditContainer.appendChild(group2IdToEditFieldContainer);
+    var group2IdToEditField = document.createElement("textarea");
+    group2IdToEditField.setAttribute("id", "mass_group_2_id_to_edit");
+    group2IdToEditField.setAttribute("name", "mass_group_2_id_to_edit");
+    group2IdToEditField.setAttribute("placeholder", "1\n2\n3");
+    group2IdToEditField.classList.add("form-control");
+    group2IdToEditField.style.height = "120px";
+    group2IdToEditFieldContainer.appendChild(group2IdToEditField);
+
+    //create group3id to edit field
+    var group3IdToEditContainer = document.createElement("div");
+    group3IdToEditContainer.classList.add("form-group");
+    massEditForm.appendChild(group3IdToEditContainer);
+    var group3IdToEditLabel = document.createElement("label");
+    group3IdToEditLabel.setAttribute("for","mass_group_3_id_to_edit");
+    group3IdToEditLabel.classList.add("col-sm-3", "control-label");
+    group3IdToEditLabel.innerText = "Group 3 IDs to edit";
+    group3IdToEditContainer.appendChild(group3IdToEditLabel);
+    var group3IdToEditFieldContainer = document.createElement("div");
+    group3IdToEditFieldContainer.classList.add("col-sm-9");
+    group3IdToEditContainer.appendChild(group3IdToEditFieldContainer);
+    var group3IdToEditField = document.createElement("textarea");
+    group3IdToEditField.setAttribute("id", "mass_group_3_id_to_edit");
+    group3IdToEditField.setAttribute("name", "mass_group_3_id_to_edit");
+    group3IdToEditField.setAttribute("placeholder", "1\n2\n3");
+    group3IdToEditField.classList.add("form-control");
+    group3IdToEditField.style.height = "120px";
+    group3IdToEditFieldContainer.appendChild(group3IdToEditField);
+
     //create new chapter title field
     var newChapterTitleContainer = document.createElement("div");
     newChapterTitleContainer.classList.add("form-group");
@@ -167,6 +245,86 @@ function createForm()
     newChapterNumberField.style.height = "120px";
     newChapterNumberFieldContainer.appendChild(newChapterNumberField);
 
+    //create new language field
+    var newLanguageContainer = document.createElement("div");
+    newLanguageContainer.classList.add("form-group");
+    massEditForm.appendChild(newLanguageContainer);
+    var newLanguageLabel = document.createElement("label");
+    newLanguageLabel.setAttribute("for","mass_new_chapter_number");
+    newLanguageLabel.classList.add("col-sm-3", "control-label");
+    newLanguageLabel.innerText = "New languages";
+    newLanguageContainer.appendChild(newLanguageLabel);
+    var newLanguageFieldContainer = document.createElement("div");
+    newLanguageFieldContainer.classList.add("col-sm-9");
+    newLanguageContainer.appendChild(newLanguageFieldContainer);
+    var newLanguageField = document.createElement("textarea");
+    newLanguageField.setAttribute("id", "mass_new_chapter_number");
+    newLanguageField.setAttribute("name", "mass_new_chapter_number");
+    newLanguageField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
+    newLanguageField.classList.add("form-control");
+    newLanguageField.style.height = "120px";
+    newLanguageFieldContainer.appendChild(newLanguageField);
+
+    //create new groupid field
+    var newGroupIdContainer = document.createElement("div");
+    newGroupIdContainer.classList.add("form-group");
+    massEditForm.appendChild(newGroupIdContainer);
+    var newGroupIdLabel = document.createElement("label");
+    newGroupIdLabel.setAttribute("for","mass_new_group_id");
+    newGroupIdLabel.classList.add("col-sm-3", "control-label");
+    newGroupIdLabel.innerText = "New group IDs";
+    newGroupIdContainer.appendChild(newGroupIdLabel);
+    var newGroupIdFieldContainer = document.createElement("div");
+    newGroupIdFieldContainer.classList.add("col-sm-9");
+    newGroupIdContainer.appendChild(newGroupIdFieldContainer);
+    var newGroupIdField = document.createElement("textarea");
+    newGroupIdField.setAttribute("id", "mass_new_chapter_number");
+    newGroupIdField.setAttribute("name", "mass_new_chapter_number");
+    newGroupIdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
+    newGroupIdField.classList.add("form-control");
+    newGroupIdField.style.height = "120px";
+    newGroupIdFieldContainer.appendChild(newGroupIdField);
+
+    //create new group2id field
+    var newGroup2IdContainer = document.createElement("div");
+    newGroup2IdContainer.classList.add("form-group");
+    massEditForm.appendChild(newGroup2IdContainer);
+    var newGroup2IdLabel = document.createElement("label");
+    newGroup2IdLabel.setAttribute("for","mass_new_group_2_id");
+    newGroup2IdLabel.classList.add("col-sm-3", "control-label");
+    newGroup2IdLabel.innerText = "New group 2 IDs";
+    newGroup2IdContainer.appendChild(newGroup2IdLabel);
+    var newGroup2IdFieldContainer = document.createElement("div");
+    newGroup2IdFieldContainer.classList.add("col-sm-9");
+    newGroup2IdContainer.appendChild(newGroup2IdFieldContainer);
+    var newGroup2IdField = document.createElement("textarea");
+    newGroup2IdField.setAttribute("id", "mass_new_group_2_id");
+    newGroup2IdField.setAttribute("name", "mass_new_group_2_id");
+    newGroup2IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
+    newGroup2IdField.classList.add("form-control");
+    newGroup2IdField.style.height = "120px";
+    newGroup2IdFieldContainer.appendChild(newGroup2IdField);
+
+    //create new group3id field
+    var newGroup3IdContainer = document.createElement("div");
+    newGroup3IdContainer.classList.add("form-group");
+    massEditForm.appendChild(newGroup3IdContainer);
+    var newGroup3IdLabel = document.createElement("label");
+    newGroup3IdLabel.setAttribute("for","mass_new_group_3_id");
+    newGroup3IdLabel.classList.add("col-sm-3", "control-label");
+    newGroup3IdLabel.innerText = "New group 3 IDs";
+    newGroup3IdContainer.appendChild(newGroup3IdLabel);
+    var newGroup3IdFieldContainer = document.createElement("div");
+    newGroup3IdFieldContainer.classList.add("col-sm-9");
+    newGroup3IdContainer.appendChild(newGroup3IdFieldContainer);
+    var newGroup3IdField = document.createElement("textarea");
+    newGroup3IdField.setAttribute("id", "mass_new_group_3_id");
+    newGroup3IdField.setAttribute("name", "mass_new_group_3_id");
+    newGroup3IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
+    newGroup3IdField.classList.add("form-control");
+    newGroup3IdField.style.height = "120px";
+    newGroup3IdFieldContainer.appendChild(newGroup3IdField);
+
     //create buttons
     var buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("form-group");
@@ -215,7 +373,7 @@ function createForm()
     previewButton.appendChild(previewButtonText);
     editButton.addEventListener("click", function(event)
                                         {
-                                            massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value]);
+                                            massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value]);
                                         });
     cancelButton.addEventListener("click", function()
                                             {
@@ -225,7 +383,7 @@ function createForm()
                                             });
     previewButton.addEventListener("click", function(event)
                                         {
-                                            previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value]);
+                                            previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value]);
                                         });
 
     //add preview table
@@ -235,8 +393,6 @@ function createForm()
     var editPreviewTableBody = document.createElement("tbody");
     editPreviewTableBody.id = "edit_preview";
     editPreviewTable.appendChild(editPreviewTableBody);
-    
-    //editPreviewTable.appendChild(document.createElement("tbody"));
 
     //add mass edit button to open form
     var actionsContainer = document.getElementById("upload_button").parentNode;
@@ -264,12 +420,59 @@ createForm();
 
 function previewEdit(fields)
 {
+    const flags =
+    {
+        "English":"gb",
+        "Japanese":"jp",
+        "Polish":"po",
+        "Serbo-Croatian":"rs",
+        "Dutch":"nl",
+        "Italian":"it",
+        "Russian":"ru",
+        "German":"de",
+        "Hungarian":"hu",
+        "French":"fr",
+        "Finnish":"fi",
+        "Vietnamese":"vn",
+        "Greek":"gr",
+        "Bulgarian":"bg",
+        "Spanish (Es)":"es",
+        "Portuguese (Br)":"br",
+        "Portuguese (Pt)":"pt",
+        "Swedish":"se",
+        "Arabic":"sa",
+        "Danish":"dk",
+        "Chinese (Simp)":"cn",
+        "Bengali":"bd",
+        "Romanian":"ro",
+        "Czech":"cz",
+        "Mongolian":"mn",
+        "Turkish":"tr",
+        "Indonesian":"id",
+        "Korean":"kr",
+        "Spanish (LATAM)":"mx",
+        "Persian":"ir",
+        "Malaysian":"my",
+        "Thai":"th",
+        "Catalan":"ct",
+        "Filipino":"ph",
+        "Chinese (Trad)":"hk"
+    };
+
     const oldChapterTitles = fields[0].split("\n");
     const oldVolumeNumbers = fields[1].split("\n");
     const oldChapterNumbers = fields[2].split("\n");
-    const newChapterTitles = fields[3].split("\n");
-    const newVolumeNumbers = fields[4].split("\n");
-    const newChapterNumbers = fields[5].split("\n");
+    const oldLanguages = fields[3].split("\n");
+    const oldGroups = fields[4].split("\n");
+    const oldGroups2 = fields[5].split("\n");
+    const oldGroups3 = fields[6].split("\n");
+    const newChapterTitles = fields[7].split("\n");
+    const newVolumeNumbers = fields[8].split("\n");
+    const newChapterNumbers = fields[9].split("\n");
+    const newLanguages = fields[10].split("\n");
+    const newGroups = fields[11].split("\n");
+    const newGroups2 = fields[12].split("\n");
+    const newGroups3 = fields[13].split("\n");
 
     const previewTable = document.getElementById("edit_preview");
 
@@ -280,7 +483,7 @@ function previewEdit(fields)
 
     var i = 0;
     $('a[href*="/chapter/"').each(function (chapter)
-                                    { 
+                                    {
                                         var title = "";
                                         if ($(this).get(0).getAttribute('data-chapter-name') == "")
                                         {
@@ -292,7 +495,19 @@ function previewEdit(fields)
                                         }
                                         const volNum = $(this).get(0).getAttribute('data-volume-num');
                                         const chapNum = $(this).get(0).getAttribute('data-chapter-num');
-                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] == "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] == "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] == ""))) //only push chapters in list
+                                        const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
+                                        const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
+                                        var group2Id = "0";
+                                        var group3Id = "0";
+                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
+                                        {
+                                            group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
+                                        }
+                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
+                                        {
+                                            group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
+                                        }
+                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] == "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] == "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] == "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] == "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] == "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] == "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] == ""))) //only push chapters in list
                                         {
                                             var editPreviewOld = this.parentNode.parentNode.cloneNode(true);
                                             editPreviewOld.childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
@@ -326,6 +541,42 @@ function previewEdit(fields)
                                             {
                                                 chapterNumberPreview = newChapterNumbers[i] || chapNum;
                                             }
+                                            var languagePreview;
+                                            if(newLanguages.length == 1 && newLanguages[0] == "")
+                                            {
+                                                languagePreview = langTitle;
+                                            }
+                                            else
+                                            {
+                                                languagePreview = newLanguages[i] || langTitle;
+                                            }
+                                            var groupPreview;
+                                            if(newGroups.length == 1 && newGroups[0] == "")
+                                            {
+                                                groupPreview = groupId;
+                                            }
+                                            else
+                                            {
+                                                groupPreview = newGroups[i] || groupId;
+                                            }
+                                            var group2Preview;
+                                            if(newGroups2.length == 1 && newGroups2[0] == "")
+                                            {
+                                                group2Preview = group2Id;
+                                            }
+                                            else
+                                            {
+                                                group2Preview = newGroups2[i] || group2Id;
+                                            }
+                                            var group3Preview;
+                                            if(newGroups3.length == 1 && newGroups3[0] == "")
+                                            {
+                                                group3Preview = group3Id;
+                                            }
+                                            else
+                                            {
+                                                group3Preview = newGroups3[i] || group3Id;
+                                            }
 
                                             //fill in new preview
                                             editPreviewNew.childNodes[3].innerText = "";
@@ -341,7 +592,20 @@ function previewEdit(fields)
                                             {
                                                 editPreviewNew.childNodes[3].innerText +=  " - ";
                                             }
-                                            editPreviewNew.childNodes[3].innerText += chapterTitlePreview;
+                                            editPreviewNew.childNodes[5].childNodes[0].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
+                                            editPreviewNew.childNodes[5].childNodes[0].setAttribute("alt", languagePreview);
+                                            editPreviewNew.childNodes[5].childNodes[0].setAttribute("title", languagePreview);
+                                            editPreviewNew.childNodes[7].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
+                                            if(group2Preview != "" && group2Preview != 0)
+                                            {
+                                                editPreviewNew.childNodes[7].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
+                                            }
+                                            if(group3Preview != "" && group3Preview != 0)
+                                            {
+                                                editPreviewNew.childNodes[7].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
+                                            }
+
+
                                             previewTable.appendChild(editPreviewNew);
                                             i++;
                                         }
@@ -378,13 +642,13 @@ async function massEdit(fields) {
         "Vietnamese":"12",
         "Greek":"13",
         "Bulgarian":"14",
-        "Spanish (Spain)":"15",
-        "Portuguese (Brazil)":"16",
-        "Portuguese (Portugal)":"17",
+        "Spanish (Es)":"15",
+        "Portuguese (Br)":"16",
+        "Portuguese (Pt)":"17",
         "Swedish":"18",
         "Arabic":"19",
         "Danish":"20",
-        "Chinese":"21",
+        "Chinese (Simp)":"21",
         "Bengali":"22",
         "Romanian":"23",
         "Czech":"24",
@@ -396,7 +660,9 @@ async function massEdit(fields) {
         "Persian":"30",
         "Malaysian":"31",
         "Thai":"32",
-        "Catalan":"33"
+        "Catalan":"33",
+        "Filipino":"34",
+        "Chinese (Trad)":"35"
     };
 
     const manga = (/\/(\d+)/g).exec(window.location.href)[1];
@@ -408,9 +674,13 @@ async function massEdit(fields) {
     const oldChapterTitles = fields[0].split("\n");
     const oldVolumeNumbers = fields[1].split("\n");
     const oldChapterNumbers = fields[2].split("\n");
-    const newChapterTitles = fields[3].split("\n");
-    const newVolumeNumbers = fields[4].split("\n");
-    const newChapterNumbers = fields[5].split("\n");
+    const oldLanguages = fields[3].split("\n");
+    const oldGroups = fields[4].split("\n");
+    const newChapterTitles = fields[5].split("\n");
+    const newVolumeNumbers = fields[6].split("\n");
+    const newChapterNumbers = fields[7].split("\n");
+    const newLanguages = fields[8].split("\n");
+    const newGroups = fields[9].split("\n");
 
     const previewTable = document.getElementById("edit_preview");
 
