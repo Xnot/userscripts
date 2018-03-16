@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.60
+// @version      0.61
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -378,13 +378,13 @@ async function massEdit(fields) {
         "Vietnamese":"12",
         "Greek":"13",
         "Bulgarian":"14",
-        "Spanish (Spain)":"15",
-        "Portuguese (Brazil)":"16",
-        "Portuguese (Portugal)":"17",
+        "Spanish (Es)":"15",
+        "Portuguese (Br)":"16",
+        "Portuguese (Pt)":"17",
         "Swedish":"18",
         "Arabic":"19",
         "Danish":"20",
-        "Chinese":"21",
+        "Chinese (Simp)":"21",
         "Bengali":"22",
         "Romanian":"23",
         "Czech":"24",
@@ -396,7 +396,9 @@ async function massEdit(fields) {
         "Persian":"30",
         "Malaysian":"31",
         "Thai":"32",
-        "Catalan":"33"
+        "Catalan":"33",
+        "Filipino":"34",
+        "Chinese (Trad)":"35"
     };
 
     const manga = (/\/(\d+)/g).exec(window.location.href)[1];
@@ -472,7 +474,7 @@ async function massEdit(fields) {
         }
         if(newChapterTitles.length == 1 && newChapterTitles[0] == "")
         {
-            newData[3] = oldData[1];
+            newData[3] = oldData[3];
         }
         else
         {
