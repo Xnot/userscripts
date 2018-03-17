@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.60
+// @version      0.61
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -742,7 +742,7 @@ async function massEdit(fields) {
         }
         if(newChapterTitles.length == 1 && newChapterTitles[0] == "")
         {
-            newData[3] = oldData[1];
+            newData[3] = oldData[3];
         }
         else
         {
