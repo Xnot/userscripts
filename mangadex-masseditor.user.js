@@ -598,15 +598,14 @@ function previewEdit(fields)
                                             editPreviewNew.childNodes[5].childNodes[0].setAttribute("alt", languagePreview);
                                             editPreviewNew.childNodes[5].childNodes[0].setAttribute("title", languagePreview);
                                             editPreviewNew.childNodes[7].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
-                                            if(group2Preview !== "")
+                                            if(group2Preview != "0")
                                             {
                                                 editPreviewNew.childNodes[7].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
                                             }
-                                            if(group3Preview !== "")
+                                            if(group3Preview != "0")
                                             {
                                                 editPreviewNew.childNodes[7].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
                                             }
-
 
                                             previewTable.appendChild(editPreviewNew);
                                             i++;
