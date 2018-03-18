@@ -581,11 +581,11 @@ function previewEdit(fields)
 
                                             //fill in new preview
                                             editPreviewNew.childNodes[3].innerText = "";
-                                            if(volumeNumberPreview != "")
+                                            if(volumeNumberPreview !== "")
                                             {
                                                 editPreviewNew.childNodes[3].innerText += "Vol. " +  volumeNumberPreview;
                                             }
-                                            if(chapterNumberPreview != "")
+                                            if(chapterNumberPreview !== "")
                                             {
                                                 editPreviewNew.childNodes[3].innerText += " Ch. " + chapterNumberPreview;
                                             }
@@ -593,15 +593,16 @@ function previewEdit(fields)
                                             {
                                                 editPreviewNew.childNodes[3].innerText +=  " - ";
                                             }
+                                            editPreviewNew.childNodes[3].innerText += chapterTitlePreview;
                                             editPreviewNew.childNodes[5].childNodes[0].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
                                             editPreviewNew.childNodes[5].childNodes[0].setAttribute("alt", languagePreview);
                                             editPreviewNew.childNodes[5].childNodes[0].setAttribute("title", languagePreview);
                                             editPreviewNew.childNodes[7].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
-                                            if(group2Preview != "" && group2Preview != 0)
+                                            if(group2Preview !== "")
                                             {
                                                 editPreviewNew.childNodes[7].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
                                             }
-                                            if(group3Preview != "" && group3Preview != 0)
+                                            if(group3Preview !== "")
                                             {
                                                 editPreviewNew.childNodes[7].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
                                             }
