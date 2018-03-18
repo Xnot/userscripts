@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.65
+// @version      0.66
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -62,7 +62,7 @@ function createForm() //creates mass edit form
     chapterTitleToEditField.setAttribute("name", "mass_chapter_title_to_edit");
     chapterTitleToEditField.setAttribute("placeholder", "Read Online\nRead Offline\nPlaceholder3");
     chapterTitleToEditField.classList.add("form-control");
-    chapterTitleToEditField.style.height = "120px";
+    chapterTitleToEditField.style.height = "80px";
     chapterTitleToEditFieldContainer.appendChild(chapterTitleToEditField);
 
     //create volume number to edit field
@@ -82,7 +82,7 @@ function createForm() //creates mass edit form
     volumeNumberToEditField.setAttribute("name", "mass_volume_number_to_edit");
     volumeNumberToEditField.setAttribute("placeholder", "1\n2\n3");
     volumeNumberToEditField.classList.add("form-control");
-    volumeNumberToEditField.style.height = "120px";
+    volumeNumberToEditField.style.height = "80px";
     volumeNumberToEditFieldContainer.appendChild(volumeNumberToEditField);
 
     //create chapter number to edit field
@@ -102,7 +102,7 @@ function createForm() //creates mass edit form
     chapterNumberToEditField.setAttribute("name", "mass_chapter_number_to_edit");
     chapterNumberToEditField.setAttribute("placeholder", "1\n2\n3");
     chapterNumberToEditField.classList.add("form-control");
-    chapterNumberToEditField.style.height = "120px";
+    chapterNumberToEditField.style.height = "80px";
     chapterNumberToEditFieldContainer.appendChild(chapterNumberToEditField);
 
     //create language to edit field
@@ -122,7 +122,7 @@ function createForm() //creates mass edit form
     languageToEditField.setAttribute("name", "mass_language_to_edit");
     languageToEditField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
     languageToEditField.classList.add("form-control");
-    languageToEditField.style.height = "120px";
+    languageToEditField.style.height = "35px";
     languageToEditFieldContainer.appendChild(languageToEditField);
 
     //create groupid to edit field
@@ -142,7 +142,7 @@ function createForm() //creates mass edit form
     groupIdToEditField.setAttribute("name", "mass_group_id_to_edit");
     groupIdToEditField.setAttribute("placeholder", "1\n2\n3");
     groupIdToEditField.classList.add("form-control");
-    groupIdToEditField.style.height = "120px";
+    groupIdToEditField.style.height = "80px";
     groupIdToEditFieldContainer.appendChild(groupIdToEditField);
 
     //create group2id to edit field
@@ -162,7 +162,7 @@ function createForm() //creates mass edit form
     group2IdToEditField.setAttribute("name", "mass_group_2_id_to_edit");
     group2IdToEditField.setAttribute("placeholder", "1\n2\n3");
     group2IdToEditField.classList.add("form-control");
-    group2IdToEditField.style.height = "120px";
+    group2IdToEditField.style.height = "35px";
     group2IdToEditFieldContainer.appendChild(group2IdToEditField);
 
     //create group3id to edit field
@@ -182,7 +182,7 @@ function createForm() //creates mass edit form
     group3IdToEditField.setAttribute("name", "mass_group_3_id_to_edit");
     group3IdToEditField.setAttribute("placeholder", "1\n2\n3");
     group3IdToEditField.classList.add("form-control");
-    group3IdToEditField.style.height = "120px";
+    group3IdToEditField.style.height = "35px";
     group3IdToEditFieldContainer.appendChild(group3IdToEditField);
 
     //create new chapter title field
@@ -202,7 +202,7 @@ function createForm() //creates mass edit form
     newChapterTitleField.setAttribute("name", "mass_new_chapter_title");
     newChapterTitleField.setAttribute("placeholder", "title1\ntitle2\ntitle3");
     newChapterTitleField.classList.add("form-control");
-    newChapterTitleField.style.height = "120px";
+    newChapterTitleField.style.height = "80px";
     newChapterTitleFieldContainer.appendChild(newChapterTitleField);
 
     //create new volume number field
@@ -222,7 +222,7 @@ function createForm() //creates mass edit form
     newVolumeNumberField.setAttribute("name", "mass_new_volume_number");
     newVolumeNumberField.setAttribute("placeholder", "volume1\nvolume2\nvolume3");
     newVolumeNumberField.classList.add("form-control");
-    newVolumeNumberField.style.height = "120px";
+    newVolumeNumberField.style.height = "80px";
     newVolumeNumberFieldContainer.appendChild(newVolumeNumberField);
 
     //create new chapter number field
@@ -242,7 +242,7 @@ function createForm() //creates mass edit form
     newChapterNumberField.setAttribute("name", "mass_new_chapter_number");
     newChapterNumberField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
     newChapterNumberField.classList.add("form-control");
-    newChapterNumberField.style.height = "120px";
+    newChapterNumberField.style.height = "80px";
     newChapterNumberFieldContainer.appendChild(newChapterNumberField);
 
     //create new language field
@@ -262,7 +262,7 @@ function createForm() //creates mass edit form
     newLanguageField.setAttribute("name", "mass_new_chapter_number");
     newLanguageField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
     newLanguageField.classList.add("form-control");
-    newLanguageField.style.height = "120px";
+    newLanguageField.style.height = "35px";
     newLanguageFieldContainer.appendChild(newLanguageField);
 
     //create new groupid field
@@ -282,7 +282,7 @@ function createForm() //creates mass edit form
     newGroupIdField.setAttribute("name", "mass_new_chapter_number");
     newGroupIdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
     newGroupIdField.classList.add("form-control");
-    newGroupIdField.style.height = "120px";
+    newGroupIdField.style.height = "80px";
     newGroupIdFieldContainer.appendChild(newGroupIdField);
 
     //create new group2id field
@@ -302,7 +302,7 @@ function createForm() //creates mass edit form
     newGroup2IdField.setAttribute("name", "mass_new_group_2_id");
     newGroup2IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
     newGroup2IdField.classList.add("form-control");
-    newGroup2IdField.style.height = "120px";
+    newGroup2IdField.style.height = "35px";
     newGroup2IdFieldContainer.appendChild(newGroup2IdField);
 
     //create new group3id field
@@ -322,7 +322,7 @@ function createForm() //creates mass edit form
     newGroup3IdField.setAttribute("name", "mass_new_group_3_id");
     newGroup3IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
     newGroup3IdField.classList.add("form-control");
-    newGroup3IdField.style.height = "120px";
+    newGroup3IdField.style.height = "35px";
     newGroup3IdFieldContainer.appendChild(newGroup3IdField);
 
     //create buttons
