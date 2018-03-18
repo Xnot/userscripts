@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.88
+// @version      1.89
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -29,14 +29,13 @@ function createForm() //creates mass upload form
         "<li>Click the Mass Upload button" +
         "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 1.85:" +
-        "<ul><li>Remade the entire form creation code to create form from scratch instead of ripping off Holo's form. Hopefully this fixes shit for certain people for who the last update was broken. Also now it won't break when Holo changes the form. Probably." + 
-        "<li>The progress bar is now at the bottom</ul>" +
     "Update 1.88:" +
         "<ul><li>Uploading now gets canceled on some errors that return a success code (locked groups, invalid files, etc)" +
         "<li>Error messages from such errors now have a close button" +
         "<li>Removed (shitty) from the name since it's pretty decent now :^)" +
-        "<li>The file field now only accepts .zip and .cbz</ul>";
+        "<li>The file field now only accepts .zip and .cbz</ul>" +
+    "Update 1.89:" +
+        "<ul><li>Groups now don't reset on completion";
     var container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
@@ -595,6 +594,9 @@ function uploadNext(event, splitFields, i)
                     massUploadButton.removeAttribute("disabled");
                     document.getElementById("upload_form").reset(); //self explanatory
                     document.getElementById("mass_upload_form").reset();
+                    document.getElementById("mass_group_id").value = group1List.join("\n");
+                    document.getElementById("mass_group_id_2").value = group2List.join("\n");
+                    document.getElementById("mass_group_id_3").value = group3List.join("\n");
                 }
             }
             else
