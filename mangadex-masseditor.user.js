@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.61
+// @version      0.65
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -32,17 +32,17 @@ function createForm() //creates mass edit form
         "<li>Just use the preview button and figure it out because it's pretty confusing <strike>and these instructions are shit</strike>" +
         "<li>Press the Apply Edit button and wait an undetermined amount of time because I haven't added any sort of progress tracking yet (there is some in the console though thx bcvxy)" +
         "<li>Refresh after every edit so you aren't editing based on outdated information. Auto-refresh soon™" +
-        "<li>Editing <strike>stuff other than titles</strike> groups, languages and files soon™ maybe</ol>" +
+        "<li>Editing <strike>groups, languages and</strike> files soon™ maybe</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.37:" +
-        "<ul><li>Changed some icons and colors <strike>so that it doesn't look like I copy-pasted everything from my other script</strike>" +
-        "<li>Text areas are somewhat larger by default" +
-        "<li>Form container now has some margins that makes it look better</ul>" +
     "Update 0.60:" +
         "<ul><li>Added a bunch of other fields to match chapters with" +
         "<li>Added a bunch of other fields to edit chapters with" +
         "<li>Added a preview button <strike>because the new fields are a mess</strike>" +
-        "<li><strike>Hopefully I didn't fuck anything up and the preview actually matches the results</strike></ul>";
+        "<li><strike>Hopefully I didn't fuck anything up and the preview actually matches the results</strike></ul>" +
+    "Update 0.65:" +
+        "<ul><li>Added group and language editing" +
+        "<li>You have to use groups by ID" +
+        "<li>Use group ID 0 if you want to exclude/delete groups 2 and 3</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     //create chapter title to edit field
@@ -485,7 +485,7 @@ function previewEdit(fields)
     $('a[href*="/chapter/"').each(function (chapter)
                                     {
                                         var title = "";
-                                        if ($(this).get(0).getAttribute('data-chapter-name') == "")
+                                        if ($(this).get(0).getAttribute('data-chapter-name') === "")
                                         {
                                             title = "Read Online";
                                         }
@@ -507,7 +507,8 @@ function previewEdit(fields)
                                         {
                                             group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
                                         }
-                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] == "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] == "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] == "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] == "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] == "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] == "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] == ""))) //only push chapters in list
+
+                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
                                             var editPreviewOld = this.parentNode.parentNode.cloneNode(true);
                                             editPreviewOld.childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
@@ -515,7 +516,7 @@ function previewEdit(fields)
                                             var editPreviewNew = this.parentNode.parentNode.cloneNode(true);
                                             editPreviewNew.childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title=''></span>";
                                             var chapterTitlePreview;
-                                            if(newChapterTitles.length == 1 && newChapterTitles[0] == "")
+                                            if(newChapterTitles.length == 1 && newChapterTitles[0] === "")
                                             {
                                                 chapterTitlePreview = title;
                                             }
@@ -524,7 +525,7 @@ function previewEdit(fields)
                                                 chapterTitlePreview = newChapterTitles[i] || title;
                                             }
                                             var volumeNumberPreview;
-                                            if(newVolumeNumbers.length == 1 && newVolumeNumbers[0] == "")
+                                            if(newVolumeNumbers.length == 1 && newVolumeNumbers[0] === "")
                                             {
                                                 volumeNumberPreview = volNum;
                                             }
@@ -533,7 +534,7 @@ function previewEdit(fields)
                                                 volumeNumberPreview = newVolumeNumbers[i] || volNum;
                                             }
                                             var chapterNumberPreview;
-                                            if(newChapterNumbers.length == 1 && newChapterNumbers == "")
+                                            if(newChapterNumbers.length == 1 && newChapterNumbers === "")
                                             {
                                                 chapterNumberPreview = chapNum;
                                             }
@@ -542,7 +543,7 @@ function previewEdit(fields)
                                                 chapterNumberPreview = newChapterNumbers[i] || chapNum;
                                             }
                                             var languagePreview;
-                                            if(newLanguages.length == 1 && newLanguages[0] == "")
+                                            if(newLanguages.length == 1 && newLanguages[0] === "")
                                             {
                                                 languagePreview = langTitle;
                                             }
@@ -551,7 +552,7 @@ function previewEdit(fields)
                                                 languagePreview = newLanguages[i] || langTitle;
                                             }
                                             var groupPreview;
-                                            if(newGroups.length == 1 && newGroups[0] == "")
+                                            if(newGroups.length == 1 && newGroups[0] === "")
                                             {
                                                 groupPreview = groupId;
                                             }
@@ -560,7 +561,7 @@ function previewEdit(fields)
                                                 groupPreview = newGroups[i] || groupId;
                                             }
                                             var group2Preview;
-                                            if(newGroups2.length == 1 && newGroups2[0] == "")
+                                            if(newGroups2.length == 1 && newGroups2[0] === "")
                                             {
                                                 group2Preview = group2Id;
                                             }
@@ -569,7 +570,7 @@ function previewEdit(fields)
                                                 group2Preview = newGroups2[i] || group2Id;
                                             }
                                             var group3Preview;
-                                            if(newGroups3.length == 1 && newGroups3[0] == "")
+                                            if(newGroups3.length == 1 && newGroups3[0] === "")
                                             {
                                                 group3Preview = group3Id;
                                             }
@@ -676,11 +677,15 @@ async function massEdit(fields) {
     const oldChapterNumbers = fields[2].split("\n");
     const oldLanguages = fields[3].split("\n");
     const oldGroups = fields[4].split("\n");
-    const newChapterTitles = fields[5].split("\n");
-    const newVolumeNumbers = fields[6].split("\n");
-    const newChapterNumbers = fields[7].split("\n");
-    const newLanguages = fields[8].split("\n");
-    const newGroups = fields[9].split("\n");
+    const oldGroups2 = fields[5].split("\n");
+    const oldGroups3 = fields[6].split("\n");
+    const newChapterTitles = fields[7].split("\n");
+    const newVolumeNumbers = fields[8].split("\n");
+    const newChapterNumbers = fields[9].split("\n");
+    const newLanguages = fields[10].split("\n");
+    const newGroups = fields[11].split("\n");
+    const newGroups2 = fields[12].split("\n");
+    const newGroups3 = fields[13].split("\n");
 
     const previewTable = document.getElementById("edit_preview");
 
@@ -695,21 +700,22 @@ async function massEdit(fields) {
                                         const title = $(this).get(0).getAttribute('data-chapter-name');
                                         const volNum = $(this).get(0).getAttribute('data-volume-num');
                                         const chapNum = $(this).get(0).getAttribute('data-chapter-num');
-                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] == "") || (title == "" && oldChapterTitles.includes("Read Online"))) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] == "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] == ""))) //only push chapters in list
+                                        const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
+                                        const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
+                                        var group2Id = "0";
+                                        var group3Id = "0";
+                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
+                                        {
+                                            group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
+                                        }
+                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
+                                        {
+                                            group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
+                                        }
+
+                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
                                             const chapId = $(this).get(0).href.match(/(\d+)/)[0];
-                                            const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
-                                            var group2Id = 0;
-                                            var group3Id = 0;
-                                            if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
-                                            {
-                                                group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
-                                            }
-                                            if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
-                                            {
-                                                group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
-                                            }
-                                            const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
                                             toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle]);
                                         }
                                     });
@@ -724,7 +730,7 @@ async function massEdit(fields) {
         // make your changes to newData, which is a clone of oldData by default
         // --- CHANGES TO DATA HERE ---
         //if there are no new values use old
-        if(newVolumeNumbers.length == 1 && newVolumeNumbers[0] == "")
+        if(newVolumeNumbers.length == 1 && newVolumeNumbers[0] === "")
         {
             newData[1] = oldData[1];
         }
@@ -732,7 +738,7 @@ async function massEdit(fields) {
         {
             newData[1] = newVolumeNumbers[i] || oldData[1];
         }
-        if(newChapterNumbers.length == 1 && newChapterNumbers[0] == "")
+        if(newChapterNumbers.length == 1 && newChapterNumbers[0] === "")
         {
             newData[2] = oldData[2];
         }
@@ -740,13 +746,45 @@ async function massEdit(fields) {
         {
             newData[2] = newChapterNumbers[i] || oldData[2];
         }
-        if(newChapterTitles.length == 1 && newChapterTitles[0] == "")
+        if(newChapterTitles.length == 1 && newChapterTitles[0] === "")
         {
             newData[3] = oldData[3];
         }
         else
         {
             newData[3] = newChapterTitles[i] || oldData[3];
+        }
+        if(newGroups.length == 1 && newGroups[0] === "")
+        {
+            newData[4] = oldData[4];
+        }
+        else
+        {
+            newData[4] = newGroups[i] || oldData[4];
+        }
+        if(newGroups2.length == 1 && newGroups2[0] === "")
+        {
+            newData[5] = oldData[5];
+        }
+        else
+        {
+            newData[5] = newGroups2[i] || oldData[5];
+        }
+        if(newGroups3.length == 1 && newGroups3[0] === "")
+        {
+            newData[6] = oldData[6];
+        }
+        else
+        {
+            newData[6] = newGroups3[i] || oldData[6];
+        }
+        if(newLanguages.length == 1 && newLanguages[0] === "")
+        {
+            newData[7] = oldData[7];
+        }
+        else
+        {
+            newData[7] = newLanguages[i] || oldData[7];
         }
 
         // check for either volume or chapter present
