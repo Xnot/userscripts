@@ -592,11 +592,13 @@ function uploadNext(event, splitFields, i)
                     massUploadButton.childNodes[0].classList.replace("fa-pulse", "fa-fw");
                     massUploadButton.childNodes[1].innerText = "Mass Upload";
                     massUploadButton.removeAttribute("disabled");
+                    const prevLang = document.getElementById("lang_id").selectedIndex //restore lang
                     document.getElementById("upload_form").reset(); //self explanatory
                     document.getElementById("mass_upload_form").reset();
                     document.getElementById("mass_group_id").value = group1List.join("\n");
                     document.getElementById("mass_group_id_2").value = group2List.join("\n");
                     document.getElementById("mass_group_id_3").value = group3List.join("\n");
+                    document.getElementById("lang_id").selectedIndex = prevLang;
                 }
             }
             else
