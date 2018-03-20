@@ -5,8 +5,8 @@
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
-// @updateURL    https://raw.githubusercontent.com/LucasPratas/userscripts/master/mangadex-massuploader.meta.js
-// @downloadURL  https://raw.githubusercontent.com/LucasPratas/userscripts/master/mangadex-massuploader.user.js
+// @updateURL    https://raw.githubusercontent.com/LucasPratas/userscripts/main/mangadex-massuploader.meta.js
+// @downloadURL  https://raw.githubusercontent.com/LucasPratas/userscripts/main/mangadex-massuploader.user.js
 // @match        https://mangadex.org/upload/*
 // @require      http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @grant        none
