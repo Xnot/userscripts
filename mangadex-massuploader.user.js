@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mangadex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.90
+// @version      1.91
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -30,13 +30,11 @@ function createForm() //creates mass upload form
         "<li>Click the Mass Upload button" +
         "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 1.88:" +
-        "<ul><li>Uploading now gets canceled on some errors that return a success code (locked groups, invalid files, etc)" +
-        "<li>Error messages from such errors now have a close button" +
-        "<li>Removed (shitty) from the name since it's pretty decent now :^)" +
-        "<li>The file field now only accepts .zip and .cbz</ul>" +
     "Update 1.89:" +
-        "<ul><li>Groups now don't reset on completion";
+        "<ul><li>Groups now don't reset on completion</ul>" +
+    "Update 1.91:" +
+        "<ul><li>Language now doesn't reset on completion" +
+        "<li>Now works with Greasemonkey</ul>";
     var container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
