@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Mangadex Mass Uploader
+// @name         MangaDex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
 // @version      1.91
 // @icon         https://mangadex.org/favicon.ico
@@ -17,7 +17,7 @@ function createForm() //creates mass upload form
     var userscriptInfo = document.createElement("div"); //info panel with userscript instructions
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
-    userscriptInfo.innerHTML = "<h4>You are using Mangadex Mass Uploader by Xnot</h4>" +
+    userscriptInfo.innerHTML = "<h4>You are using MangaDex Mass Uploader by Xnot</h4>" +
         "<ol><li>Insert chapter names,volume numbers, chapter numbers, and group IDs into their respective fields. Each line is one chapter" +
         "<br />Alternatively, inputting a single name/volume/groupID/non-numerical ch.number will use that for all uploads, and inputing a single numerical chapter will increment it for each upload" +
         "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +

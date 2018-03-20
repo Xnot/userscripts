@@ -8,6 +8,7 @@
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
 // @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
 // @match        https://mangadex.org/manga/*
+// @require      http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @grant        none
 // ==/UserScript==
 
@@ -24,7 +25,7 @@ function createForm() //creates mass edit form
     var userscriptInfo = document.createElement("div"); //info panel with userscript instructions
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
-    userscriptInfo.innerHTML = "<h4>You are using Mangadex (shitty) Mass Editor ßeta by Xnot with some code borrowed from bcvxy</h4>" +
+    userscriptInfo.innerHTML = "<h4>You are using MangaDex (shitty) Mass Editor ßeta by Xnot with some code borrowed from bcvxy</h4>" +
         "<ol><li>Use the 'to edit' fields to grab the chapters you want. Each line is one value" +
         "<br />Filling in multiple 'to edit' fields will grab chapters that match both. For example filling titles with 'Read Online' and volume with '4' and '2' will grab all chapters titled 'Read Online' in volumes 4 and 2" +
         "<br />Filling in only some 'to edit' fields will ignore the others" +
