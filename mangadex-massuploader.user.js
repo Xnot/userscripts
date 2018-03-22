@@ -1,14 +1,13 @@
 // ==UserScript==
 // @name         MangaDex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.91
+// @version      1.92
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-massuploader.user.js
 // @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-massuploader.user.js
 // @match        https://mangadex.org/upload/*
-// @require      http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @grant        none
 // ==/UserScript==
 
@@ -34,7 +33,7 @@ function createForm() //creates mass upload form
         "<ul><li>Groups now don't reset on completion</ul>" +
     "Update 1.91:" +
         "<ul><li>Language now doesn't reset on completion" +
-        "<li>Now works with Greasemonkey</ul>";
+        "<li><strike>Now works with Greasemonkey</strike> Adding Greasemonkey compatibility breaks random things unpredictably so fuck Greasemonkey</ul>";
     var container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
