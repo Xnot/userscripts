@@ -1,14 +1,13 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.66
+// @version      0.67
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
 // @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
 // @match        https://mangadex.org/manga/*
-// @require      http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @grant        none
 // ==/UserScript==
 
@@ -669,7 +668,7 @@ async function massEdit(fields) {
 
     const manga = (/\/(\d+)/g).exec(window.location.href)[1];
 
-	//List of chapters to edit
+    //List of chapters to edit
     let toEdit = [];
 
     // good place to put some data:
@@ -697,8 +696,16 @@ async function massEdit(fields) {
 
     $('a[href*="/chapter/"').each(function (chapter)
                                     {
-
                                         const title = $(this).get(0).getAttribute('data-chapter-name');
+                                        var tempTitle;
+                                        if (title === "")
+                                        {
+                                            tempTitle = "Read Online";
+                                        }
+                                        else
+                                        {
+                                            tempTitle = title;
+                                        }
                                         const volNum = $(this).get(0).getAttribute('data-volume-num');
                                         const chapNum = $(this).get(0).getAttribute('data-chapter-num');
                                         const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
@@ -714,7 +721,7 @@ async function massEdit(fields) {
                                             group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
                                         }
 
-                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
+                                        if((oldChapterTitles.includes(tempTitle) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
                                             const chapId = $(this).get(0).href.match(/(\d+)/)[0];
                                             toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle]);
