@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.92
+// @version      1.93
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -13,7 +13,7 @@
 
 function createForm() //creates mass upload form
 {
-    var userscriptInfo = document.createElement("div"); //info panel with userscript instructions
+    const userscriptInfo = document.createElement("div"); //info panel with userscript instructions
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
     userscriptInfo.innerHTML = "<h4>You are using MangaDex Mass Uploader by Xnot</h4>" +
@@ -34,31 +34,31 @@ function createForm() //creates mass upload form
     "Update 1.91:" +
         "<ul><li>Language now doesn't reset on completion" +
         "<li><strike>Now works with Greasemonkey</strike> Adding Greasemonkey compatibility breaks random things unpredictably so fuck Greasemonkey</ul>";
-    var container = document.getElementById("content");
+    const container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
 
     //create form
-    var massUploadForm = document.createElement("form");
+    const massUploadForm = document.createElement("form");
     massUploadForm.setAttribute("id", "mass_upload_form");
     massUploadForm.classList.add("form-horizontal");
     massUploadForm.style.marginTop = "15px";
     container.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, document.getElementById("upload_form")); //insert mass upload form
 
     //create mango field
-    var mangaContainer = document.createElement("div");
+    const mangaContainer = document.createElement("div");
     mangaContainer.classList.add("form-group");
     massUploadForm.appendChild(mangaContainer);
-    var mangaLabel = document.createElement("label");
+    const mangaLabel = document.createElement("label");
     mangaLabel.setAttribute("for","mass_manga_id");
     mangaLabel.classList.add("col-sm-3", "control-label");
     mangaLabel.innerText = "Manga name";
     mangaContainer.appendChild(mangaLabel);
-    var mangaFieldContainer = document.createElement("div");
+    const mangaFieldContainer = document.createElement("div");
     mangaFieldContainer.classList.add("col-sm-9");
     mangaContainer.appendChild(mangaFieldContainer);
-    var mangaField = document.createElement("input");
+    const mangaField = document.createElement("input");
     mangaField.setAttribute("id", "mass_manga_id");
     mangaField.setAttribute("type", "text");
     mangaField.setAttribute("title", "To change the manga, go to the manga page.");
@@ -68,85 +68,88 @@ function createForm() //creates mass upload form
     mangaFieldContainer.appendChild(mangaField);
 
     //create chapter name field
-    var chapterNameContainer = document.createElement("div");
+    const chapterNameContainer = document.createElement("div");
     chapterNameContainer.classList.add("form-group");
     massUploadForm.appendChild(chapterNameContainer);
-    var chapterNameLabel = document.createElement("label");
+    const chapterNameLabel = document.createElement("label");
     chapterNameLabel.setAttribute("for","mass_chapter_name");
     chapterNameLabel.classList.add("col-sm-3", "control-label");
     chapterNameLabel.innerText = "Chapter names";
     chapterNameContainer.appendChild(chapterNameLabel);
-    var chapterNameFieldContainer = document.createElement("div");
+    const chapterNameFieldContainer = document.createElement("div");
     chapterNameFieldContainer.classList.add("col-sm-9");
     chapterNameContainer.appendChild(chapterNameFieldContainer);
-    var chapterNameField = document.createElement("textarea");
+    const chapterNameField = document.createElement("textarea");
     chapterNameField.setAttribute("id", "mass_chapter_name");
     chapterNameField.setAttribute("name", "mass_chapter_name");
     chapterNameField.setAttribute("placeholder", "nameForCh1\nnameForCh2\nnameForCh3");
     chapterNameField.classList.add("form-control");
+    chapterNameField.style.height = "80px";
     chapterNameFieldContainer.appendChild(chapterNameField);
 
     //create volume number field
-    var volumeNumberContainer = document.createElement("div");
+    const volumeNumberContainer = document.createElement("div");
     volumeNumberContainer.classList.add("form-group");
     massUploadForm.appendChild(volumeNumberContainer);
-    var volumeNumberLabel = document.createElement("label");
+    const volumeNumberLabel = document.createElement("label");
     volumeNumberLabel.setAttribute("for","mass_chapter_name");
     volumeNumberLabel.classList.add("col-sm-3", "control-label");
     volumeNumberLabel.innerText = "Volume numbers";
     volumeNumberContainer.appendChild(volumeNumberLabel);
-    var volumeNumberFieldContainer = document.createElement("div");
+    const volumeNumberFieldContainer = document.createElement("div");
     volumeNumberFieldContainer.classList.add("col-sm-9");
     volumeNumberContainer.appendChild(volumeNumberFieldContainer);
-    var volumeNumberField = document.createElement("textarea");
+    const volumeNumberField = document.createElement("textarea");
     volumeNumberField.setAttribute("id", "mass_volume_number");
     volumeNumberField.setAttribute("name", "mass_volume_number");
     volumeNumberField.setAttribute("placeholder", "volumeForCh1\nvolumeForCh2\nvolumeForCh3");
     volumeNumberField.classList.add("form-control");
+    volumeNumberField.style.height = "80px";
     volumeNumberFieldContainer.appendChild(volumeNumberField);
 
     //create chapter number field
-    var chapterNumberContainer = document.createElement("div");
+    const chapterNumberContainer = document.createElement("div");
     chapterNumberContainer.classList.add("form-group");
     massUploadForm.appendChild(chapterNumberContainer);
-    var chapterNumberLabel = document.createElement("label");
+    const chapterNumberLabel = document.createElement("label");
     chapterNumberLabel.setAttribute("for","mass_chapter_number");
     chapterNumberLabel.classList.add("col-sm-3", "control-label");
     chapterNumberLabel.innerText = "Chapter numbers";
     chapterNumberContainer.appendChild(chapterNumberLabel);
-    var chapterNumberFieldContainer = document.createElement("div");
+    const chapterNumberFieldContainer = document.createElement("div");
     chapterNumberFieldContainer.classList.add("col-sm-9");
     chapterNumberContainer.appendChild(chapterNumberFieldContainer);
-    var chapterNumberField = document.createElement("textarea");
+    const chapterNumberField = document.createElement("textarea");
     chapterNumberField.setAttribute("id", "mass_chapter_number");
     chapterNumberField.setAttribute("name", "mass_chapter_number");
     chapterNumberField.setAttribute("placeholder", "1\n2\n3");
     chapterNumberField.classList.add("form-control");
+    chapterNumberField.style.height = "80px";
     chapterNumberFieldContainer.appendChild(chapterNumberField);
 
     //create delay field
-    var groupDelayContainer = document.createElement("div");
+    const groupDelayContainer = document.createElement("div");
     groupDelayContainer.classList.add("form-group");
     massUploadForm.appendChild(groupDelayContainer);
-    var groupDelayLabel = document.createElement("label");
+    const groupDelayLabel = document.createElement("label");
     groupDelayLabel.setAttribute("for","mass_group_delay");
     groupDelayLabel.classList.add("col-sm-3", "control-label");
     groupDelayLabel.innerText = "Apply group delays";
     groupDelayContainer.appendChild(groupDelayLabel);
-    var groupDelayCheckboxContainer = document.createElement("div");
+    const groupDelayCheckboxContainer = document.createElement("div");
     groupDelayCheckboxContainer.classList.add("col-sm-9");
     groupDelayContainer.appendChild(groupDelayCheckboxContainer);
-    var groupDelayCheckboxDiv = document.createElement("div");
+    const groupDelayCheckboxDiv = document.createElement("div");
     groupDelayCheckboxDiv.classList.add("checkbox");
     groupDelayCheckboxContainer.appendChild(groupDelayCheckboxDiv);
-    var groupDelayCheckbox = document.createElement("label");
+    const groupDelayCheckbox = document.createElement("label");
     groupDelayCheckboxDiv.appendChild(groupDelayCheckbox);
-    var groupDelayCheckboxField = document.createElement("input");
+    const groupDelayCheckboxField = document.createElement("input");
     groupDelayCheckboxField.setAttribute("id", "mass_group_delay");
     groupDelayCheckboxField.setAttribute("name", "mass_group_delay");
     groupDelayCheckboxField.setAttribute("type", "checkbox");
     groupDelayCheckbox.appendChild(groupDelayCheckboxField);
-    var groupDelayCheckboxText = document.createTextNode("Will apply to all uploads.");
+    const groupDelayCheckboxText = document.createTextNode("Will apply to all uploads.");
     groupDelayCheckbox.appendChild(groupDelayCheckboxText);
     groupDelayCheckboxField.addEventListener("click", function()
                                                         {
@@ -154,22 +157,23 @@ function createForm() //creates mass upload form
                                                         });
 
     //create group1 field
-    var group1Container = document.createElement("div");
+    const group1Container = document.createElement("div");
     group1Container.classList.add("form-group");
     massUploadForm.appendChild(group1Container);
-    var group1Label = document.createElement("label");
+    const group1Label = document.createElement("label");
     group1Label.setAttribute("for","mass_group_id");
     group1Label.classList.add("col-sm-3", "control-label");
     group1Label.innerText = "Groups 1";
     group1Container.appendChild(group1Label);
-    var group1FieldContainer = document.createElement("div");
+    const group1FieldContainer = document.createElement("div");
     group1FieldContainer.classList.add("col-sm-9");
     group1Container.appendChild(group1FieldContainer);
-    var group1Field = document.createElement("textarea");
+    const group1Field = document.createElement("textarea");
     group1Field.setAttribute("id", "mass_group_id");
     group1Field.setAttribute("name", "mass_group_id");
     group1Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
     group1Field.classList.add("form-control");
+    group1Field.style.height = "80px";
     group1FieldContainer.appendChild(group1Field);
     document.getElementById("group_id").addEventListener("change", function()
                                                                     {
@@ -178,22 +182,23 @@ function createForm() //creates mass upload form
                                                                     });
 
     //create group2 field
-    var group2Container = document.createElement("div");
+    const group2Container = document.createElement("div");
     group2Container.classList.add("form-group");
     massUploadForm.appendChild(group2Container);
-    var group2Label = document.createElement("label");
+    const group2Label = document.createElement("label");
     group2Label.setAttribute("for","mass_group_id_2");
     group2Label.classList.add("col-sm-3", "control-label");
     group2Label.innerText = "Groups 2";
     group2Container.appendChild(group2Label);
-    var group2FieldContainer = document.createElement("div");
+    const group2FieldContainer = document.createElement("div");
     group2FieldContainer.classList.add("col-sm-9");
     group2Container.appendChild(group2FieldContainer);
-    var group2Field = document.createElement("textarea");
+    const group2Field = document.createElement("textarea");
     group2Field.setAttribute("id", "mass_group_id_2");
     group2Field.setAttribute("name", "mass_group_id_2");
     group2Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
     group2Field.classList.add("form-control");
+    group2Field.style.height = "80px";
     group2FieldContainer.appendChild(group2Field);
     document.getElementById("group_id_2").addEventListener("change", function()
                                                                     {
@@ -202,22 +207,23 @@ function createForm() //creates mass upload form
                                                                     });
 
     //create group3 field
-    var group3Container = document.createElement("div");
+    const group3Container = document.createElement("div");
     group3Container.classList.add("form-group");
     massUploadForm.appendChild(group3Container);
-    var group3Label = document.createElement("label");
+    const group3Label = document.createElement("label");
     group3Label.setAttribute("for","mass_group_id_3");
     group3Label.classList.add("col-sm-3", "control-label");
     group3Label.innerText = "Groups 3";
     group3Container.appendChild(group3Label);
-    var group3FieldContainer = document.createElement("div");
+    const group3FieldContainer = document.createElement("div");
     group3FieldContainer.classList.add("col-sm-9");
     group3Container.appendChild(group3FieldContainer);
-    var group3Field = document.createElement("textarea");
+    const group3Field = document.createElement("textarea");
     group3Field.setAttribute("id", "mass_group_id_3");
     group3Field.setAttribute("name", "mass_group_id_3");
     group3Field.setAttribute("placeholder", "Use dropdown in the bottom form or insert group IDs (NOT NAME) here");
     group3Field.classList.add("form-control");
+    group3Field.style.height = "80px";
     group3FieldContainer.appendChild(group3Field);
     document.getElementById("group_id_3").addEventListener("change", function()
                                                                     {
@@ -226,18 +232,18 @@ function createForm() //creates mass upload form
                                                                     });
 
     //create language field
-    var languageContainer = document.createElement("div");
+    const languageContainer = document.createElement("div");
     languageContainer.classList.add("form-group");
     massUploadForm.appendChild(languageContainer);
-    var languageLabel = document.createElement("label");
+    const languageLabel = document.createElement("label");
     languageLabel.setAttribute("for","mass_lang_id");
     languageLabel.classList.add("col-sm-3", "control-label");
     languageLabel.innerText = "Languages";
     languageContainer.appendChild(languageLabel);
-    var languageFieldContainer = document.createElement("div");
+    const languageFieldContainer = document.createElement("div");
     languageFieldContainer.classList.add("col-sm-9");
     languageContainer.appendChild(languageFieldContainer);
-    var languageField = document.createElement("textarea");
+    const languageField = document.createElement("textarea");
     languageField.setAttribute("id", "mass_lang_id");
     languageField.setAttribute("name", "mass_lang_id");
     languageField.setAttribute("placeholder", "Not implemented because no one mass uploads multiple languages, use language dropdown in the bottom form instead");
@@ -246,41 +252,41 @@ function createForm() //creates mass upload form
     languageFieldContainer.appendChild(languageField);
 
     //create file field
-    var fileContainer = document.createElement("div");
+    const fileContainer = document.createElement("div");
     fileContainer.classList.add("form-group");
     massUploadForm.appendChild(fileContainer);
-    var fileLabel = document.createElement("label");
+    const fileLabel = document.createElement("label");
     fileLabel.setAttribute("for","files");
     fileLabel.classList.add("col-sm-3", "control-label");
     fileLabel.innerText = "Files";
     fileContainer.appendChild(fileLabel);
-    var fileFieldContainer = document.createElement("div");
+    const fileFieldContainer = document.createElement("div");
     fileFieldContainer.classList.add("col-sm-9");
     fileContainer.appendChild(fileFieldContainer);
-    var fileInputGroup = document.createElement("div");
+    const fileInputGroup = document.createElement("div");
     fileInputGroup.classList.add("input-group");
     fileFieldContainer.appendChild(fileInputGroup);
-    var fileText = document.createElement("input");
+    const fileText = document.createElement("input");
     fileText.classList.add("form-control");
     fileText.setAttribute("type", "text");
     fileText.setAttribute("placeholder", "No files selected");
     fileText.setAttribute("disabled", "true");
     fileInputGroup.appendChild(fileText);
-    var fileButtonGroup = document.createElement("span");
+    const fileButtonGroup = document.createElement("span");
     fileButtonGroup.classList.add("input-group-btn");
     fileInputGroup.appendChild(fileButtonGroup);
-    var fileButton = document.createElement("span");
+    const fileButton = document.createElement("span");
     fileButton.classList.add("btn", "btn-default", "btn-file");
     fileButtonGroup.appendChild(fileButton);
-    var fileButtonIcon = document.createElement("span");
+    const fileButtonIcon = document.createElement("span");
     fileButtonIcon.classList.add("far", "fa-folder-open", "fa-fw");
     fileButtonIcon.style.marginRight = "3px";
     fileButton.appendChild(fileButtonIcon);
-    var fileButtonText = document.createElement("span");
+    const fileButtonText = document.createElement("span");
     fileButtonText.classList.add("span-1280");
     fileButtonText.innerText = "Browse";
     fileButton.appendChild(fileButtonText);
-    var fileField = document.createElement("input");
+    const fileField = document.createElement("input");
     fileField.setAttribute("id", "mass_file");
     fileField.setAttribute("type", "file");
     fileField.setAttribute("name", "file");
@@ -301,35 +307,35 @@ function createForm() //creates mass upload form
                                         });
 
     //create buttons
-    var buttonsContainer = document.createElement("div");
+    const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("form-group");
     massUploadForm.appendChild(buttonsContainer);
-    var buttonsDiv = document.createElement("div");
+    const buttonsDiv = document.createElement("div");
     buttonsDiv.classList.add("col-sm-12", "text-right", "btn-toolbar");
     buttonsContainer.appendChild(buttonsDiv);
-    var uploadButton = document.createElement("button");
+    const uploadButton = document.createElement("button");
     uploadButton.setAttribute("id", "mass_upload_button");
     uploadButton.setAttribute("type", "button");
     uploadButton.classList.add("btn", "btn-success", "pull-right");
     buttonsDiv.appendChild(uploadButton);
-    var uploadButtonIcon = document.createElement("span");
+    const uploadButtonIcon = document.createElement("span");
     uploadButtonIcon.classList.add("fas", "fa-upload", "fa-fw");
     uploadButtonIcon.style.marginRight = "3px";
     uploadButton.appendChild(uploadButtonIcon);
-    var uploadButtonText = document.createElement("span");
+    const uploadButtonText = document.createElement("span");
     uploadButtonText.classList.add("span-1280");
     uploadButtonText.innerText = "Mass Upload";
     uploadButton.appendChild(uploadButtonText);
-        var resetButton = document.createElement("button");
+    const resetButton = document.createElement("button");
     resetButton.setAttribute("id", "mass_reset_button");
     resetButton.setAttribute("type", "reset");
     resetButton.classList.add("btn", "btn-warning", "pull-right");
     buttonsDiv.appendChild(resetButton);
-    var resetButtonIcon = document.createElement("span");
+    const resetButtonIcon = document.createElement("span");
     resetButtonIcon.classList.add("fas", "fa-trash-alt", "fa-fw");
     resetButtonIcon.style.marginRight = "3px";
     resetButton.appendChild(resetButtonIcon);
-    var resetButtonText = document.createElement("span");
+    const resetButtonText = document.createElement("span");
     resetButtonText.classList.add("span-1280");
     resetButtonText.innerText = "Reset Form";
     resetButton.appendChild(resetButtonText);
@@ -341,7 +347,7 @@ function createForm() //creates mass upload form
 
 function massUpload(event, fields)
 {
-    var splitFields = splitInputs(fields);
+    const splitFields = splitInputs(fields);
     //this if statement is getting really long
     if((splitFields[6].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[6].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[6].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[6].length == splitFields[3].length || splitFields[3].length == 1) && !splitFields[3].includes("") && (splitFields[6].length == splitFields[4].length || splitFields[4].length == 1) && (splitFields[6].length == splitFields[5].length || splitFields[5].length == 1))
     {
@@ -394,13 +400,15 @@ function uploadNext(event, splitFields, i)
 {
     event.preventDefault();
 
-    var chapterNameList = splitFields[0];
-    var volumeNumberList = splitFields[1];
-    var chapterNumberList = splitFields[2];
-    var group1List = splitFields[3];
-    var group2List = splitFields[4];
-    var group3List = splitFields[5];
-    var fileList = splitFields[6];
+    const messageContainer = document.getElementById("message_container");
+
+    const chapterNameList = splitFields[0];
+    const volumeNumberList = splitFields[1];
+    const chapterNumberList = splitFields[2];
+    const group1List = splitFields[3];
+    const group2List = splitFields[4];
+    const group3List = splitFields[5];
+    const fileList = splitFields[6];
 
     splitFormData = new FormData(); //create new form data
     splitFormData.append("manga_id", document.getElementById("manga_id").value);
@@ -531,16 +539,16 @@ function uploadNext(event, splitFields, i)
     }
     document.getElementById("file").parentNode.parentNode.previousSibling.previousSibling.value = fileList[i].name;
 
-    var j = i+1; //for printing purposes only
-    var success_msg = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Success:</strong> " + j + "/" + fileList.length + " chapters have been uploaded.</div>";
-    var error_msg = "<div class='alert alert-warning text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Warning:</strong> Something went wrong with your upload at " + j + "/" + fileList.length + " files. All previous files have been uploaded.</div>";
+    const j = i+1; //for printing purposes only
+    const success_msg = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Success:</strong> " + j + "/" + fileList.length + " chapters have been uploaded.</div>";
+    const error_msg = "<div class='alert alert-warning text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Warning:</strong> Something went wrong with your upload at " + j + "/" + fileList.length + " files. All previous files have been uploaded.</div>";
 
-    var uploadButton = document.getElementById("upload_button"); //disable buttons
+    const uploadButton = document.getElementById("upload_button"); //disable buttons
     uploadButton.childNodes[0].classList.replace("fa-upload", "fa-spinner");
     uploadButton.childNodes[0].classList.replace("fa-fw", "fa-pulse");
     uploadButton.childNodes[2].innerText = "Uploading...";
     uploadButton.setAttribute("disabled", "true");
-    var massUploadButton = document.getElementById("mass_upload_button");
+    const massUploadButton = document.getElementById("mass_upload_button");
     massUploadButton.childNodes[0].classList.replace("fa-upload", "fa-spinner");
     massUploadButton.childNodes[0].classList.replace("fa-fw", "fa-pulse");
     massUploadButton.childNodes[1].innerText = "Mass Uploading: " + j + "/" + fileList.length;
@@ -573,7 +581,7 @@ function uploadNext(event, splitFields, i)
             $('#progressbar').width('0%');
             if (!data)
             {
-                document.getElementById("message_container").innerHTML = success_msg;
+                messageContainer.innerHTML = success_msg;
 
                 i++;
                 if(i < fileList.length) //upload next after 0.0 seconds fuck you eva
@@ -609,10 +617,10 @@ function uploadNext(event, splitFields, i)
                 massUploadButton.childNodes[0].classList.replace("fa-pulse", "fa-fw");
                 massUploadButton.childNodes[1].innerText = "Mass Upload";
                 massUploadButton.removeAttribute("disabled");
-                document.getElementById("message_container").innerHTML = data;
-                document.getElementById("message_container").childNodes[0].style.pointerEvents = "auto";
-                document.getElementById("message_container").childNodes[0].innerHTML += "<a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>";
-                document.getElementById("message_container").innerHTML += error_msg;
+                messageContainer.innerHTML = data;
+                messageContainer.childNodes[0].style.pointerEvents = "auto";
+                messageContainer.childNodes[0].innerHTML += "<a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>";
+                messageContainer.innerHTML += error_msg;
             }
         },
 
@@ -627,7 +635,7 @@ function uploadNext(event, splitFields, i)
             massUploadButton.childNodes[0].classList.replace("fa-pulse", "fa-fw");
             massUploadButton.childNodes[1].innerText = "Mass Upload";
             massUploadButton.removeAttribute("disabled");
-            document.getElementById("message_container").innerHTML = error_msg;
+            messageContainer.innerHTML = error_msg;
         }
     });
 }
