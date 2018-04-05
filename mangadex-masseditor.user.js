@@ -13,15 +13,15 @@
 
 function createForm() //creates mass edit form
 {
-    var massEditForm = document.createElement("form");
+    const massEditForm = document.createElement("form");
     massEditForm.setAttribute("id", "mass_edit_form");
     massEditForm.classList.add("form-horizontal", "panel-body");
     massEditForm.style.display = "none";
-    var container = document.getElementById("content").getElementsByClassName("panel panel-default")[0];
-    var mangaInfo = container.getElementsByClassName("row edit")[0];
+    const container = document.getElementById("content").getElementsByClassName("panel panel-default")[0];
+    const mangaInfo = container.getElementsByClassName("row edit")[0];
     container.appendChild(massEditForm);
 
-    var userscriptInfo = document.createElement("div"); //info panel with userscript instructions
+    const userscriptInfo = document.createElement("div"); //info panel with userscript instructions
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
     userscriptInfo.innerHTML = "<h4>You are using MangaDex (shitty) Mass Editor ßeta by Xnot with some code borrowed from bcvxy</h4>" +
@@ -48,25 +48,25 @@ function createForm() //creates mass edit form
     document.getElementById("message_container").classList.replace("display-none", "display-block");
 
     //create chapter title to edit field
-    var chapterTitleToEditContainer = document.createElement("div");
+    const chapterTitleToEditContainer = document.createElement("div");
     chapterTitleToEditContainer.classList.add("form-group");
     massEditForm.appendChild(chapterTitleToEditContainer);
-    var chapterTitleToEditToggle = document.createElement("a");
+    const chapterTitleToEditToggle = document.createElement("a");
     chapterTitleToEditToggle.setAttribute("data-toggle", "collapse");
     chapterTitleToEditToggle.setAttribute("data-target", "#mass_chapter_title_to_edit");
     chapterTitleToEditContainer.appendChild(chapterTitleToEditToggle);
-    var chapterTitleToEditLabel = document.createElement("label");
+    const chapterTitleToEditLabel = document.createElement("label");
     chapterTitleToEditLabel.setAttribute("for","mass_chapter_title_to_edit");
     chapterTitleToEditLabel.classList.add("col-sm-3", "control-label");
     chapterTitleToEditLabel.innerText = "Chapter titles to edit";
     chapterTitleToEditToggle.appendChild(chapterTitleToEditLabel);
-    var chapterTitleToEditToggleIcon = document.createElement("span");
+    const chapterTitleToEditToggleIcon = document.createElement("span");
     chapterTitleToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     chapterTitleToEditLabel.appendChild(chapterTitleToEditToggleIcon);
-    var chapterTitleToEditFieldContainer = document.createElement("div");
+    const chapterTitleToEditFieldContainer = document.createElement("div");
     chapterTitleToEditFieldContainer.classList.add("col-sm-9");
     chapterTitleToEditContainer.appendChild(chapterTitleToEditFieldContainer);
-    var chapterTitleToEditField = document.createElement("textarea");
+    const chapterTitleToEditField = document.createElement("textarea");
     chapterTitleToEditField.setAttribute("id", "mass_chapter_title_to_edit");
     chapterTitleToEditField.setAttribute("name", "mass_chapter_title_to_edit");
     chapterTitleToEditField.setAttribute("placeholder", "Read Online\nRead Offline\nPlaceholder3");
@@ -84,25 +84,25 @@ function createForm() //creates mass edit form
                                                         });
 
     //create volume number to edit field
-    var volumeNumberToEditContainer = document.createElement("div");
+    const volumeNumberToEditContainer = document.createElement("div");
     volumeNumberToEditContainer.classList.add("form-group");
     massEditForm.appendChild(volumeNumberToEditContainer);
-    var volumeNumberToEditToggle = document.createElement("a");
+    const volumeNumberToEditToggle = document.createElement("a");
     volumeNumberToEditToggle.setAttribute("data-toggle", "collapse");
     volumeNumberToEditToggle.setAttribute("data-target", "#mass_volume_number_to_edit");
     volumeNumberToEditContainer.appendChild(volumeNumberToEditToggle);
-    var volumeNumberToEditLabel = document.createElement("label");
+    const volumeNumberToEditLabel = document.createElement("label");
     volumeNumberToEditLabel.setAttribute("for","mass_volume_number_to_edit");
     volumeNumberToEditLabel.classList.add("col-sm-3", "control-label");
     volumeNumberToEditLabel.innerText = "Volume numbers to edit";
     volumeNumberToEditToggle.appendChild(volumeNumberToEditLabel);
-    var volumeNumberToEditToggleIcon = document.createElement("span");
+    const volumeNumberToEditToggleIcon = document.createElement("span");
     volumeNumberToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     volumeNumberToEditLabel.appendChild(volumeNumberToEditToggleIcon);
-    var volumeNumberToEditFieldContainer = document.createElement("div");
+    const volumeNumberToEditFieldContainer = document.createElement("div");
     volumeNumberToEditFieldContainer.classList.add("col-sm-9");
     volumeNumberToEditContainer.appendChild(volumeNumberToEditFieldContainer);
-    var volumeNumberToEditField = document.createElement("textarea");
+    const volumeNumberToEditField = document.createElement("textarea");
     volumeNumberToEditField.setAttribute("id", "mass_volume_number_to_edit");
     volumeNumberToEditField.setAttribute("name", "mass_volume_number_to_edit");
     volumeNumberToEditField.setAttribute("placeholder", "1\n2\n3");
@@ -120,25 +120,25 @@ function createForm() //creates mass edit form
                                                         });
 
     //create chapter number to edit field
-    var chapterNumberToEditContainer = document.createElement("div");
+    const chapterNumberToEditContainer = document.createElement("div");
     chapterNumberToEditContainer.classList.add("form-group");
     massEditForm.appendChild(chapterNumberToEditContainer);
-    var chapterNumberToEditToggle = document.createElement("a");
+    const chapterNumberToEditToggle = document.createElement("a");
     chapterNumberToEditToggle.setAttribute("data-toggle", "collapse");
     chapterNumberToEditToggle.setAttribute("data-target", "#mass_chapter_number_to_edit");
     chapterNumberToEditContainer.appendChild(chapterNumberToEditToggle);
-    var chapterNumberToEditLabel = document.createElement("label");
+    const chapterNumberToEditLabel = document.createElement("label");
     chapterNumberToEditLabel.setAttribute("for","mass_chapter_number_to_edit");
     chapterNumberToEditLabel.classList.add("col-sm-3", "control-label");
     chapterNumberToEditLabel.innerText = "Chapter numbers to edit";
     chapterNumberToEditToggle.appendChild(chapterNumberToEditLabel);
-    var chapterNumberToEditToggleIcon = document.createElement("span");
+    const chapterNumberToEditToggleIcon = document.createElement("span");
     chapterNumberToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     chapterNumberToEditLabel.appendChild(chapterNumberToEditToggleIcon);
-    var chapterNumberToEditFieldContainer = document.createElement("div");
+    const chapterNumberToEditFieldContainer = document.createElement("div");
     chapterNumberToEditFieldContainer.classList.add("col-sm-9");
     chapterNumberToEditContainer.appendChild(chapterNumberToEditFieldContainer);
-    var chapterNumberToEditField = document.createElement("textarea");
+    const chapterNumberToEditField = document.createElement("textarea");
     chapterNumberToEditField.setAttribute("id", "mass_chapter_number_to_edit");
     chapterNumberToEditField.setAttribute("name", "mass_chapter_number_to_edit");
     chapterNumberToEditField.setAttribute("placeholder", "1\n2\n3");
@@ -156,25 +156,25 @@ function createForm() //creates mass edit form
                                                         });
 
     //create language to edit field
-    var languageToEditContainer = document.createElement("div");
+    const languageToEditContainer = document.createElement("div");
     languageToEditContainer.classList.add("form-group");
     massEditForm.appendChild(languageToEditContainer);
-    var languageToEditToggle = document.createElement("a");
+    const languageToEditToggle = document.createElement("a");
     languageToEditToggle.setAttribute("data-toggle", "collapse");
     languageToEditToggle.setAttribute("data-target", "#mass_language_to_edit");
     languageToEditContainer.appendChild(languageToEditToggle);
-    var languageToEditLabel = document.createElement("label");
+    const languageToEditLabel = document.createElement("label");
     languageToEditLabel.setAttribute("for","mass_language_to_edit");
     languageToEditLabel.classList.add("col-sm-3", "control-label");
     languageToEditLabel.innerText = "Languages to edit";
     languageToEditToggle.appendChild(languageToEditLabel);
-    var languageToEditToggleIcon = document.createElement("span");
+    const languageToEditToggleIcon = document.createElement("span");
     languageToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     languageToEditLabel.appendChild(languageToEditToggleIcon);
-    var languageToEditFieldContainer = document.createElement("div");
+    const languageToEditFieldContainer = document.createElement("div");
     languageToEditFieldContainer.classList.add("col-sm-9");
     languageToEditContainer.appendChild(languageToEditFieldContainer);
-    var languageToEditField = document.createElement("textarea");
+    const languageToEditField = document.createElement("textarea");
     languageToEditField.setAttribute("id", "mass_language_to_edit");
     languageToEditField.setAttribute("name", "mass_language_to_edit");
     languageToEditField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
@@ -192,25 +192,25 @@ function createForm() //creates mass edit form
                                                     });
 
     //create groupid to edit field
-    var groupIdToEditContainer = document.createElement("div");
+    const groupIdToEditContainer = document.createElement("div");
     groupIdToEditContainer.classList.add("form-group");
     massEditForm.appendChild(groupIdToEditContainer);
-    var groupIdToEditToggle = document.createElement("a");
+    const groupIdToEditToggle = document.createElement("a");
     groupIdToEditToggle.setAttribute("data-toggle", "collapse");
     groupIdToEditToggle.setAttribute("data-target", "#mass_group_id_to_edit");
     groupIdToEditContainer.appendChild(groupIdToEditToggle);
-    var groupIdToEditLabel = document.createElement("label");
+    const groupIdToEditLabel = document.createElement("label");
     groupIdToEditLabel.setAttribute("for","mass_group_id_to_edit");
     groupIdToEditLabel.classList.add("col-sm-3", "control-label");
     groupIdToEditLabel.innerText = "Group IDs to edit";
     groupIdToEditToggle.appendChild(groupIdToEditLabel);
-    var groupIdToEditToggleIcon = document.createElement("span");
+    const groupIdToEditToggleIcon = document.createElement("span");
     groupIdToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     groupIdToEditLabel.appendChild(groupIdToEditToggleIcon);
-    var groupIdToEditFieldContainer = document.createElement("div");
+    const groupIdToEditFieldContainer = document.createElement("div");
     groupIdToEditFieldContainer.classList.add("col-sm-9");
     groupIdToEditContainer.appendChild(groupIdToEditFieldContainer);
-    var groupIdToEditField = document.createElement("textarea");
+    const groupIdToEditField = document.createElement("textarea");
     groupIdToEditField.setAttribute("id", "mass_group_id_to_edit");
     groupIdToEditField.setAttribute("name", "mass_group_id_to_edit");
     groupIdToEditField.setAttribute("placeholder", "1\n2\n3");
@@ -228,25 +228,25 @@ function createForm() //creates mass edit form
                                                     });
 
     //create group2id to edit field
-    var group2IdToEditContainer = document.createElement("div");
+    const group2IdToEditContainer = document.createElement("div");
     group2IdToEditContainer.classList.add("form-group");
     massEditForm.appendChild(group2IdToEditContainer);
-    var group2IdToEditToggle = document.createElement("a");
+    const group2IdToEditToggle = document.createElement("a");
     group2IdToEditToggle.setAttribute("data-toggle", "collapse");
     group2IdToEditToggle.setAttribute("data-target", "#mass_group_2_id_to_edit");
     group2IdToEditContainer.appendChild(group2IdToEditToggle);
-    var group2IdToEditLabel = document.createElement("label");
+    const group2IdToEditLabel = document.createElement("label");
     group2IdToEditLabel.setAttribute("for","mass_group_2_id_to_edit");
     group2IdToEditLabel.classList.add("col-sm-3", "control-label");
     group2IdToEditLabel.innerText = "Group 2 IDs to edit";
     group2IdToEditToggle.appendChild(group2IdToEditLabel);
-    var group2IdToEditToggleIcon = document.createElement("span");
+    const group2IdToEditToggleIcon = document.createElement("span");
     group2IdToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     group2IdToEditLabel.appendChild(group2IdToEditToggleIcon);
-    var group2IdToEditFieldContainer = document.createElement("div");
+    const group2IdToEditFieldContainer = document.createElement("div");
     group2IdToEditFieldContainer.classList.add("col-sm-9");
     group2IdToEditContainer.appendChild(group2IdToEditFieldContainer);
-    var group2IdToEditField = document.createElement("textarea");
+    const group2IdToEditField = document.createElement("textarea");
     group2IdToEditField.setAttribute("id", "mass_group_2_id_to_edit");
     group2IdToEditField.setAttribute("name", "mass_group_2_id_to_edit");
     group2IdToEditField.setAttribute("placeholder", "1\n2\n3");
@@ -264,25 +264,25 @@ function createForm() //creates mass edit form
                                                     });
 
     //create group3id to edit field
-    var group3IdToEditContainer = document.createElement("div");
+    const group3IdToEditContainer = document.createElement("div");
     group3IdToEditContainer.classList.add("form-group");
     massEditForm.appendChild(group3IdToEditContainer);
-    var group3IdToEditToggle = document.createElement("a");
+    const group3IdToEditToggle = document.createElement("a");
     group3IdToEditToggle.setAttribute("data-toggle", "collapse");
     group3IdToEditToggle.setAttribute("data-target", "#mass_group_3_id_to_edit");
     group3IdToEditContainer.appendChild(group3IdToEditToggle);
-    var group3IdToEditLabel = document.createElement("label");
+    const group3IdToEditLabel = document.createElement("label");
     group3IdToEditLabel.setAttribute("for","mass_group_3_id_to_edit");
     group3IdToEditLabel.classList.add("col-sm-3", "control-label");
     group3IdToEditLabel.innerText = "Group 3 IDs to edit";
     group3IdToEditToggle.appendChild(group3IdToEditLabel);
-    var group3IdToEditToggleIcon = document.createElement("span");
+    const group3IdToEditToggleIcon = document.createElement("span");
     group3IdToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     group3IdToEditLabel.appendChild(group3IdToEditToggleIcon);
-    var group3IdToEditFieldContainer = document.createElement("div");
+    const group3IdToEditFieldContainer = document.createElement("div");
     group3IdToEditFieldContainer.classList.add("col-sm-9");
     group3IdToEditContainer.appendChild(group3IdToEditFieldContainer);
-    var group3IdToEditField = document.createElement("textarea");
+    const group3IdToEditField = document.createElement("textarea");
     group3IdToEditField.setAttribute("id", "mass_group_3_id_to_edit");
     group3IdToEditField.setAttribute("name", "mass_group_3_id_to_edit");
     group3IdToEditField.setAttribute("placeholder", "1\n2\n3");
@@ -300,25 +300,25 @@ function createForm() //creates mass edit form
                                                     });
 
     //create new chapter title field
-    var newChapterTitleContainer = document.createElement("div");
+    const newChapterTitleContainer = document.createElement("div");
     newChapterTitleContainer.classList.add("form-group");
     massEditForm.appendChild(newChapterTitleContainer);
-    var newChapterTitleToggle = document.createElement("a");
+    const newChapterTitleToggle = document.createElement("a");
     newChapterTitleToggle.setAttribute("data-toggle", "collapse");
     newChapterTitleToggle.setAttribute("data-target", "#mass_new_chapter_title");
     newChapterTitleContainer.appendChild(newChapterTitleToggle);
-    var newChapterTitleLabel = document.createElement("label");
+    const newChapterTitleLabel = document.createElement("label");
     newChapterTitleLabel.setAttribute("for","mass_new_chapter_title");
     newChapterTitleLabel.classList.add("col-sm-3", "control-label");
     newChapterTitleLabel.innerText = "New chapter titles";
     newChapterTitleToggle.appendChild(newChapterTitleLabel);
-    var newChapterTitleToggleIcon = document.createElement("span");
+    const newChapterTitleToggleIcon = document.createElement("span");
     newChapterTitleToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     newChapterTitleLabel.appendChild(newChapterTitleToggleIcon);
-    var newChapterTitleFieldContainer = document.createElement("div");
+    const newChapterTitleFieldContainer = document.createElement("div");
     newChapterTitleFieldContainer.classList.add("col-sm-9");
     newChapterTitleContainer.appendChild(newChapterTitleFieldContainer);
-    var newChapterTitleField = document.createElement("textarea");
+    const newChapterTitleField = document.createElement("textarea");
     newChapterTitleField.setAttribute("id", "mass_new_chapter_title");
     newChapterTitleField.setAttribute("name", "mass_new_chapter_title");
     newChapterTitleField.setAttribute("placeholder", "title1\ntitle2\ntitle3");
@@ -336,25 +336,25 @@ function createForm() //creates mass edit form
                                                     });
 
     //create new volume number field
-    var newVolumeNumberContainer = document.createElement("div");
+    const newVolumeNumberContainer = document.createElement("div");
     newVolumeNumberContainer.classList.add("form-group");
     massEditForm.appendChild(newVolumeNumberContainer);
-    var newVolumeNumberToggle = document.createElement("a");
+    const newVolumeNumberToggle = document.createElement("a");
     newVolumeNumberToggle.setAttribute("data-toggle", "collapse");
     newVolumeNumberToggle.setAttribute("data-target", "#mass_new_volume_number");
     newVolumeNumberContainer.appendChild(newVolumeNumberToggle);
-    var newVolumeNumberLabel = document.createElement("label");
+    const newVolumeNumberLabel = document.createElement("label");
     newVolumeNumberLabel.setAttribute("for","mass_new_volume_number");
     newVolumeNumberLabel.classList.add("col-sm-3", "control-label");
     newVolumeNumberLabel.innerText = "New volume numbers";
     newVolumeNumberToggle.appendChild(newVolumeNumberLabel);
-    var newVolumeNumberToggleIcon = document.createElement("span");
+    const newVolumeNumberToggleIcon = document.createElement("span");
     newVolumeNumberToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     newVolumeNumberLabel.appendChild(newVolumeNumberToggleIcon);
-    var newVolumeNumberFieldContainer = document.createElement("div");
+    const newVolumeNumberFieldContainer = document.createElement("div");
     newVolumeNumberFieldContainer.classList.add("col-sm-9");
     newVolumeNumberContainer.appendChild(newVolumeNumberFieldContainer);
-    var newVolumeNumberField = document.createElement("textarea");
+    const newVolumeNumberField = document.createElement("textarea");
     newVolumeNumberField.setAttribute("id", "mass_new_volume_number");
     newVolumeNumberField.setAttribute("name", "mass_new_volume_number");
     newVolumeNumberField.setAttribute("placeholder", "volume1\nvolume2\nvolume3");
@@ -372,25 +372,25 @@ function createForm() //creates mass edit form
                                                     });
 
     //create new chapter number field
-    var newChapterNumberContainer = document.createElement("div");
+    const newChapterNumberContainer = document.createElement("div");
     newChapterNumberContainer.classList.add("form-group");
     massEditForm.appendChild(newChapterNumberContainer);
-    var newChapterNumberToggle = document.createElement("a");
+    const newChapterNumberToggle = document.createElement("a");
     newChapterNumberToggle.setAttribute("data-toggle", "collapse");
     newChapterNumberToggle.setAttribute("data-target", "#mass_new_chapter_number");
     newChapterNumberContainer.appendChild(newChapterNumberToggle);
-    var newChapterNumberLabel = document.createElement("label");
+    const newChapterNumberLabel = document.createElement("label");
     newChapterNumberLabel.setAttribute("for","mass_new_chapter_number");
     newChapterNumberLabel.classList.add("col-sm-3", "control-label");
     newChapterNumberLabel.innerText = "New chapter numbers";
     newChapterNumberToggle.appendChild(newChapterNumberLabel);
-    var newChapterNumberToggleIcon = document.createElement("span");
+    const newChapterNumberToggleIcon = document.createElement("span");
     newChapterNumberToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     newChapterNumberLabel.appendChild(newChapterNumberToggleIcon);
-    var newChapterNumberFieldContainer = document.createElement("div");
+    const newChapterNumberFieldContainer = document.createElement("div");
     newChapterNumberFieldContainer.classList.add("col-sm-9");
     newChapterNumberContainer.appendChild(newChapterNumberFieldContainer);
-    var newChapterNumberField = document.createElement("textarea");
+    const newChapterNumberField = document.createElement("textarea");
     newChapterNumberField.setAttribute("id", "mass_new_chapter_number");
     newChapterNumberField.setAttribute("name", "mass_new_chapter_number");
     newChapterNumberField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
@@ -408,25 +408,25 @@ function createForm() //creates mass edit form
                                                     });
 
     //create new language field
-    var newLanguageContainer = document.createElement("div");
+    const newLanguageContainer = document.createElement("div");
     newLanguageContainer.classList.add("form-group");
     massEditForm.appendChild(newLanguageContainer);
-    var newLanguageToggle = document.createElement("a");
+    const newLanguageToggle = document.createElement("a");
     newLanguageToggle.setAttribute("data-toggle", "collapse");
     newLanguageToggle.setAttribute("data-target", "#mass_new_language");
     newLanguageContainer.appendChild(newLanguageToggle);
-    var newLanguageLabel = document.createElement("label");
+    const newLanguageLabel = document.createElement("label");
     newLanguageLabel.setAttribute("for","mass_new_language");
     newLanguageLabel.classList.add("col-sm-3", "control-label");
     newLanguageLabel.innerText = "New languages";
     newLanguageToggle.appendChild(newLanguageLabel);
-    var newLanguageToggleIcon = document.createElement("span");
+    const newLanguageToggleIcon = document.createElement("span");
     newLanguageToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     newLanguageLabel.appendChild(newLanguageToggleIcon);
-    var newLanguageFieldContainer = document.createElement("div");
+    const newLanguageFieldContainer = document.createElement("div");
     newLanguageFieldContainer.classList.add("col-sm-9");
     newLanguageContainer.appendChild(newLanguageFieldContainer);
-    var newLanguageField = document.createElement("textarea");
+    const newLanguageField = document.createElement("textarea");
     newLanguageField.setAttribute("id", "mass_new_language");
     newLanguageField.setAttribute("name", "mass_new_language");
     newLanguageField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
@@ -444,25 +444,25 @@ function createForm() //creates mass edit form
                                                 });
 
     //create new groupid field
-    var newGroupIdContainer = document.createElement("div");
+    const newGroupIdContainer = document.createElement("div");
     newGroupIdContainer.classList.add("form-group");
     massEditForm.appendChild(newGroupIdContainer);
-    var newGroupIdToggle = document.createElement("a");
+    const newGroupIdToggle = document.createElement("a");
     newGroupIdToggle.setAttribute("data-toggle", "collapse");
     newGroupIdToggle.setAttribute("data-target", "#mass_new_group_id");
     newGroupIdContainer.appendChild(newGroupIdToggle);
-    var newGroupIdLabel = document.createElement("label");
+    const newGroupIdLabel = document.createElement("label");
     newGroupIdLabel.setAttribute("for","mass_new_group_id");
     newGroupIdLabel.classList.add("col-sm-3", "control-label");
     newGroupIdLabel.innerText = "New group IDs";
     newGroupIdToggle.appendChild(newGroupIdLabel);
-    var newGroupIdToggleIcon = document.createElement("span");
+    const newGroupIdToggleIcon = document.createElement("span");
     newGroupIdToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     newGroupIdLabel.appendChild(newGroupIdToggleIcon);
-    var newGroupIdFieldContainer = document.createElement("div");
+    const newGroupIdFieldContainer = document.createElement("div");
     newGroupIdFieldContainer.classList.add("col-sm-9");
     newGroupIdContainer.appendChild(newGroupIdFieldContainer);
-    var newGroupIdField = document.createElement("textarea");
+    const newGroupIdField = document.createElement("textarea");
     newGroupIdField.setAttribute("id", "mass_new_group_id");
     newGroupIdField.setAttribute("name", "mass_new_group_id");
     newGroupIdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
@@ -480,25 +480,25 @@ function createForm() //creates mass edit form
                                                 });
 
     //create new group2id field
-    var newGroup2IdContainer = document.createElement("div");
+    const newGroup2IdContainer = document.createElement("div");
     newGroup2IdContainer.classList.add("form-group");
     massEditForm.appendChild(newGroup2IdContainer);
-    var newGroup2IdToggle = document.createElement("a");
+    const newGroup2IdToggle = document.createElement("a");
     newGroup2IdToggle.setAttribute("data-toggle", "collapse");
     newGroup2IdToggle.setAttribute("data-target", "#mass_new_group_2_id");
     newGroup2IdContainer.appendChild(newGroup2IdToggle);
-    var newGroup2IdLabel = document.createElement("label");
+    const newGroup2IdLabel = document.createElement("label");
     newGroup2IdLabel.setAttribute("for","mass_new_group_2_id");
     newGroup2IdLabel.classList.add("col-sm-3", "control-label");
     newGroup2IdLabel.innerText = "New group 2 IDs";
     newGroup2IdToggle.appendChild(newGroup2IdLabel);
-    var newGroup2IdToggleIcon = document.createElement("span");
+    const newGroup2IdToggleIcon = document.createElement("span");
     newGroup2IdToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     newGroup2IdLabel.appendChild(newGroup2IdToggleIcon);
-    var newGroup2IdFieldContainer = document.createElement("div");
+    const newGroup2IdFieldContainer = document.createElement("div");
     newGroup2IdFieldContainer.classList.add("col-sm-9");
     newGroup2IdContainer.appendChild(newGroup2IdFieldContainer);
-    var newGroup2IdField = document.createElement("textarea");
+    const newGroup2IdField = document.createElement("textarea");
     newGroup2IdField.setAttribute("id", "mass_new_group_2_id");
     newGroup2IdField.setAttribute("name", "mass_new_group_2_id");
     newGroup2IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
@@ -516,25 +516,25 @@ function createForm() //creates mass edit form
                                                 });
 
     //create new group3id field
-    var newGroup3IdContainer = document.createElement("div");
+    const newGroup3IdContainer = document.createElement("div");
     newGroup3IdContainer.classList.add("form-group");
     massEditForm.appendChild(newGroup3IdContainer);
-    var newGroup3IdToggle = document.createElement("a");
+    const newGroup3IdToggle = document.createElement("a");
     newGroup3IdToggle.setAttribute("data-toggle", "collapse");
     newGroup3IdToggle.setAttribute("data-target", "#mass_new_group_3_id");
     newGroup3IdContainer.appendChild(newGroup3IdToggle);
-    var newGroup3IdLabel = document.createElement("label");
+    const newGroup3IdLabel = document.createElement("label");
     newGroup3IdLabel.setAttribute("for","mass_new_group_3_id");
     newGroup3IdLabel.classList.add("col-sm-3", "control-label");
     newGroup3IdLabel.innerText = "New group 3 IDs";
     newGroup3IdToggle.appendChild(newGroup3IdLabel);
-    var newGroup3IdToggleIcon = document.createElement("span");
+    const newGroup3IdToggleIcon = document.createElement("span");
     newGroup3IdToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     newGroup3IdLabel.appendChild(newGroup3IdToggleIcon);
-    var newGroup3IdFieldContainer = document.createElement("div");
+    const newGroup3IdFieldContainer = document.createElement("div");
     newGroup3IdFieldContainer.classList.add("col-sm-9");
     newGroup3IdContainer.appendChild(newGroup3IdFieldContainer);
-    var newGroup3IdField = document.createElement("textarea");
+    const newGroup3IdField = document.createElement("textarea");
     newGroup3IdField.setAttribute("id", "mass_new_group_3_id");
     newGroup3IdField.setAttribute("name", "mass_new_group_3_id");
     newGroup3IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
@@ -552,48 +552,48 @@ function createForm() //creates mass edit form
                                                 });
 
     //create buttons
-    var buttonsContainer = document.createElement("div");
+    const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("form-group");
     massEditForm.appendChild(buttonsContainer);
-    var buttonsDiv = document.createElement("div");
+    const buttonsDiv = document.createElement("div");
     buttonsDiv.classList.add("col-sm-12", "text-right", "btn-toolbar");
     buttonsContainer.appendChild(buttonsDiv);
-    var editButton = document.createElement("button");
+    const editButton = document.createElement("button");
     editButton.setAttribute("id", "mass_edit_save_button");
     editButton.setAttribute("type", "button");
     editButton.classList.add("btn", "btn-success", "pull-right");
     buttonsDiv.appendChild(editButton);
-    var editButtonIcon = document.createElement("span");
+    const editButtonIcon = document.createElement("span");
     editButtonIcon.classList.add("fas", "fa-save", "fa-fw");
     editButtonIcon.style.marginRight = "3px";
     editButton.appendChild(editButtonIcon);
-    var editButtonText = document.createElement("span");
+    const editButtonText = document.createElement("span");
     editButtonText.classList.add("span-1280");
     editButtonText.innerText = "Apply Edit";
     editButton.appendChild(editButtonText);
-    var cancelButton = document.createElement("button");
+    const cancelButton = document.createElement("button");
     cancelButton.setAttribute("id", "mass_edit_cancel_button");
     cancelButton.setAttribute("type", "button");
     cancelButton.classList.add("btn", "btn-danger", "pull-right");
     buttonsDiv.appendChild(cancelButton);
-    var cancelButtonIcon = document.createElement("span");
+    const cancelButtonIcon = document.createElement("span");
     cancelButtonIcon.classList.add("fas", "fa-ban", "fa-fw");
     cancelButtonIcon.style.marginRight = "3px";
     cancelButton.appendChild(cancelButtonIcon);
-    var cancelButtonText = document.createElement("span");
+    const cancelButtonText = document.createElement("span");
     cancelButtonText.classList.add("span-1280");
     cancelButtonText.innerText = "Cancel";
     cancelButton.appendChild(cancelButtonText);
-    var previewButton = document.createElement("button");
+    const previewButton = document.createElement("button");
     previewButton.setAttribute("id", "mass_edit_preview_button");
     previewButton.setAttribute("type", "button");
     previewButton.classList.add("btn", "btn-info", "pull-right");
     buttonsDiv.appendChild(previewButton);
-    var previewButtonIcon = document.createElement("span");
+    const previewButtonIcon = document.createElement("span");
     previewButtonIcon.classList.add("fas", "fa-eye", "fa-fw");
     previewButtonIcon.style.marginRight = "3px";
     previewButton.appendChild(previewButtonIcon);
-    var previewButtonText = document.createElement("span");
+    const previewButtonText = document.createElement("span");
     previewButtonText.classList.add("span-1280");
     previewButtonText.innerText = "Preview Edit";
     previewButton.appendChild(previewButtonText);
@@ -613,26 +613,26 @@ function createForm() //creates mass edit form
                                             });
 
     //add preview table
-    var editPreviewTable = document.createElement("table");
+    const editPreviewTable = document.createElement("table");
     editPreviewTable.classList.add("table", "table-hover", "table-striped", "table-condensed");
     massEditForm.appendChild(editPreviewTable);
-    var editPreviewTableBody = document.createElement("tbody");
+    const editPreviewTableBody = document.createElement("tbody");
     editPreviewTableBody.id = "edit_preview";
     editPreviewTable.appendChild(editPreviewTableBody);
 
     //add mass edit button to open form
-    var actionsContainer = document.getElementById("upload_button").parentNode;
+    const actionsContainer = document.getElementById("upload_button").parentNode;
     actionsContainer.classList.add("btn-toolbar");
-    var openEditButton = document.createElement("button");
+    const openEditButton = document.createElement("button");
     openEditButton.setAttribute("id", "mass_edit_open_button");
     openEditButton.setAttribute("type", "button");
     openEditButton.classList.add("btn", "btn-success", "pull-right");
     actionsContainer.appendChild(openEditButton);
-    var openEditButtonIcon = document.createElement("span");
+    const openEditButtonIcon = document.createElement("span");
     openEditButtonIcon.classList.add("fas", "fa-edit", "fa-fw");
     openEditButtonIcon.style.marginRight = "3px";
     openEditButton.appendChild(openEditButtonIcon);
-    var openEditButtonText = document.createElement("span");
+    const openEditButtonText = document.createElement("span");
     openEditButtonText.classList.add("span-1280");
     openEditButtonText.innerText = "Mass Edit";
     openEditButton.appendChild(openEditButtonText);
