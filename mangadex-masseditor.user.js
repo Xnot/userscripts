@@ -1025,45 +1025,50 @@ async function massEdit(fields) {
 
         // check for either volume or chapter present
         if ((x => y => x || y)(newData[2], newData[1]));
-        else
-            continue;
-        // check wether the data is actually different
-        if (arraysEqual(oldData, newData)){
-            messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>."
-            continue;
-        }
+        {
+            // check wether the data is actually different
+            if (arraysEqual(oldData, newData))
+            {
+                messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>."
+            }
+            else
+            {
+                // build formdata and POST
+                const formData = new FormData();
+                formData.append('manga_id', manga);
+                formData.append('chapter_name', newData[3]);
+                formData.append('volume_number', newData[1]);
+                formData.append('chapter_number', newData[2]);
+                formData.append('group_id', newData[4]);
+                formData.append('group_id_2', newData[5]);
+                formData.append('group_id_3', newData[6]);
+                formData.append('lang_id', langs[newData[7]]);
+                formData.append('file', newData[8]);
 
-        // build formdata and POST
-        const formData = new FormData();
-        formData.append('manga_id', manga);
-        formData.append('chapter_name', newData[3]);
-        formData.append('volume_number', newData[1]);
-        formData.append('chapter_number', newData[2]);
-        formData.append('group_id', newData[4]);
-        formData.append('group_id_2', newData[5]);
-        formData.append('group_id_3', newData[6]);
-        formData.append('lang_id', langs[newData[7]]);
-        formData.append('file', newData[8]);
+                const headers = new Headers();
+                headers.append("x-requested-with", "XMLHttpRequest");
 
-        const headers = new Headers();
-        headers.append("x-requested-with", "XMLHttpRequest");
+                // send 'em away
+                try
+                {
+                    const {ok} = await fetch('https://mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=' + newData[0], {
+                        method: 'POST',
+                        headers,
+                        body: formData,
+                        credentials: "same-origin",
+                        cache: "no-store"
+                    });
 
-        // send 'em away
-        try {
-            const {ok} = await fetch('https://mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=' + newData[0], {
-                method: 'POST',
-                headers,
-                body: formData,
-                credentials: "same-origin",
-                cache: "no-store"
-            });
+                    if(!ok)
+                        throw new Error("Not ok.");
 
-            if(!ok)
-                throw new Error("Not ok.");
-
-            console.log('ok.');
-        } catch(e) {
-            console.error('Error:', e);
+                    console.log('ok.');
+                }
+                catch(e)
+                {
+                    console.error('Error:', e);
+                }
+            }
         }
     }
     messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>all cool and good 👌👌👌👌👌</div>."
