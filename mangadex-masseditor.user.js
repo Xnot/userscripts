@@ -49,11 +49,18 @@ function createForm() //creates mass edit form
     var chapterTitleToEditContainer = document.createElement("div");
     chapterTitleToEditContainer.classList.add("form-group");
     massEditForm.appendChild(chapterTitleToEditContainer);
+    var chapterTitleToEditToggle = document.createElement("a");
+    chapterTitleToEditToggle.setAttribute("data-toggle", "collapse");
+    chapterTitleToEditToggle.setAttribute("data-target", "#mass_chapter_title_to_edit");
+    chapterTitleToEditContainer.appendChild(chapterTitleToEditToggle);
     var chapterTitleToEditLabel = document.createElement("label");
     chapterTitleToEditLabel.setAttribute("for","mass_chapter_title_to_edit");
     chapterTitleToEditLabel.classList.add("col-sm-3", "control-label");
     chapterTitleToEditLabel.innerText = "Chapter titles to edit";
-    chapterTitleToEditContainer.appendChild(chapterTitleToEditLabel);
+    chapterTitleToEditToggle.appendChild(chapterTitleToEditLabel);
+    var chapterTitleToEditToggleIcon = document.createElement("span");
+    chapterTitleToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    chapterTitleToEditLabel.appendChild(chapterTitleToEditToggleIcon);
     var chapterTitleToEditFieldContainer = document.createElement("div");
     chapterTitleToEditFieldContainer.classList.add("col-sm-9");
     chapterTitleToEditContainer.appendChild(chapterTitleToEditFieldContainer);
@@ -61,19 +68,35 @@ function createForm() //creates mass edit form
     chapterTitleToEditField.setAttribute("id", "mass_chapter_title_to_edit");
     chapterTitleToEditField.setAttribute("name", "mass_chapter_title_to_edit");
     chapterTitleToEditField.setAttribute("placeholder", "Read Online\nRead Offline\nPlaceholder3");
-    chapterTitleToEditField.classList.add("form-control");
+    chapterTitleToEditField.classList.add("form-control", "collapse", "in");
     chapterTitleToEditField.style.height = "80px";
     chapterTitleToEditFieldContainer.appendChild(chapterTitleToEditField);
+    $(chapterTitleToEditField).on("hidden.bs.collapse", function(event)
+                                                        {
+                                                            chapterTitleToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                        });
+    $(chapterTitleToEditField).on("shown.bs.collapse", function(event)
+                                                        {
+                                                            chapterTitleToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                            this.style.height = "80px";
+                                                        });
 
     //create volume number to edit field
     var volumeNumberToEditContainer = document.createElement("div");
     volumeNumberToEditContainer.classList.add("form-group");
     massEditForm.appendChild(volumeNumberToEditContainer);
+    var volumeNumberToEditToggle = document.createElement("a");
+    volumeNumberToEditToggle.setAttribute("data-toggle", "collapse");
+    volumeNumberToEditToggle.setAttribute("data-target", "#mass_volume_number_to_edit");
+    volumeNumberToEditContainer.appendChild(volumeNumberToEditToggle);
     var volumeNumberToEditLabel = document.createElement("label");
     volumeNumberToEditLabel.setAttribute("for","mass_volume_number_to_edit");
     volumeNumberToEditLabel.classList.add("col-sm-3", "control-label");
     volumeNumberToEditLabel.innerText = "Volume numbers to edit";
-    volumeNumberToEditContainer.appendChild(volumeNumberToEditLabel);
+    volumeNumberToEditToggle.appendChild(volumeNumberToEditLabel);
+    var volumeNumberToEditToggleIcon = document.createElement("span");
+    volumeNumberToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    volumeNumberToEditLabel.appendChild(volumeNumberToEditToggleIcon);
     var volumeNumberToEditFieldContainer = document.createElement("div");
     volumeNumberToEditFieldContainer.classList.add("col-sm-9");
     volumeNumberToEditContainer.appendChild(volumeNumberToEditFieldContainer);
@@ -81,19 +104,35 @@ function createForm() //creates mass edit form
     volumeNumberToEditField.setAttribute("id", "mass_volume_number_to_edit");
     volumeNumberToEditField.setAttribute("name", "mass_volume_number_to_edit");
     volumeNumberToEditField.setAttribute("placeholder", "1\n2\n3");
-    volumeNumberToEditField.classList.add("form-control");
+    volumeNumberToEditField.classList.add("form-control", "collapse", "in");
     volumeNumberToEditField.style.height = "80px";
     volumeNumberToEditFieldContainer.appendChild(volumeNumberToEditField);
+    $(volumeNumberToEditField).on("hidden.bs.collapse", function(event)
+                                                        {
+                                                            volumeNumberToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                        });
+    $(volumeNumberToEditField).on("shown.bs.collapse", function(event)
+                                                        {
+                                                            volumeNumberToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                            this.style.height = "80px";
+                                                        });
 
     //create chapter number to edit field
     var chapterNumberToEditContainer = document.createElement("div");
     chapterNumberToEditContainer.classList.add("form-group");
     massEditForm.appendChild(chapterNumberToEditContainer);
+    var chapterNumberToEditToggle = document.createElement("a");
+    chapterNumberToEditToggle.setAttribute("data-toggle", "collapse");
+    chapterNumberToEditToggle.setAttribute("data-target", "#mass_chapter_number_to_edit");
+    chapterNumberToEditContainer.appendChild(chapterNumberToEditToggle);
     var chapterNumberToEditLabel = document.createElement("label");
     chapterNumberToEditLabel.setAttribute("for","mass_chapter_number_to_edit");
     chapterNumberToEditLabel.classList.add("col-sm-3", "control-label");
     chapterNumberToEditLabel.innerText = "Chapter numbers to edit";
-    chapterNumberToEditContainer.appendChild(chapterNumberToEditLabel);
+    chapterNumberToEditToggle.appendChild(chapterNumberToEditLabel);
+    var chapterNumberToEditToggleIcon = document.createElement("span");
+    chapterNumberToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    chapterNumberToEditLabel.appendChild(chapterNumberToEditToggleIcon);
     var chapterNumberToEditFieldContainer = document.createElement("div");
     chapterNumberToEditFieldContainer.classList.add("col-sm-9");
     chapterNumberToEditContainer.appendChild(chapterNumberToEditFieldContainer);
@@ -101,19 +140,35 @@ function createForm() //creates mass edit form
     chapterNumberToEditField.setAttribute("id", "mass_chapter_number_to_edit");
     chapterNumberToEditField.setAttribute("name", "mass_chapter_number_to_edit");
     chapterNumberToEditField.setAttribute("placeholder", "1\n2\n3");
-    chapterNumberToEditField.classList.add("form-control");
+    chapterNumberToEditField.classList.add("form-control", "collapse", "in");
     chapterNumberToEditField.style.height = "80px";
     chapterNumberToEditFieldContainer.appendChild(chapterNumberToEditField);
+    $(chapterNumberToEditField).on("hidden.bs.collapse", function(event)
+                                                        {
+                                                            chapterNumberToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                        });
+    $(chapterNumberToEditField).on("shown.bs.collapse", function(event)
+                                                        {
+                                                            chapterNumberToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                            this.style.height = "80px";
+                                                        });
 
     //create language to edit field
     var languageToEditContainer = document.createElement("div");
     languageToEditContainer.classList.add("form-group");
     massEditForm.appendChild(languageToEditContainer);
+    var languageToEditToggle = document.createElement("a");
+    languageToEditToggle.setAttribute("data-toggle", "collapse");
+    languageToEditToggle.setAttribute("data-target", "#mass_language_to_edit");
+    languageToEditContainer.appendChild(languageToEditToggle);
     var languageToEditLabel = document.createElement("label");
     languageToEditLabel.setAttribute("for","mass_language_to_edit");
     languageToEditLabel.classList.add("col-sm-3", "control-label");
     languageToEditLabel.innerText = "Languages to edit";
-    languageToEditContainer.appendChild(languageToEditLabel);
+    languageToEditToggle.appendChild(languageToEditLabel);
+    var languageToEditToggleIcon = document.createElement("span");
+    languageToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    languageToEditLabel.appendChild(languageToEditToggleIcon);
     var languageToEditFieldContainer = document.createElement("div");
     languageToEditFieldContainer.classList.add("col-sm-9");
     languageToEditContainer.appendChild(languageToEditFieldContainer);
@@ -121,19 +176,35 @@ function createForm() //creates mass edit form
     languageToEditField.setAttribute("id", "mass_language_to_edit");
     languageToEditField.setAttribute("name", "mass_language_to_edit");
     languageToEditField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
-    languageToEditField.classList.add("form-control");
+    languageToEditField.classList.add("form-control", "collapse");
     languageToEditField.style.height = "35px";
     languageToEditFieldContainer.appendChild(languageToEditField);
+    $(languageToEditField).on("hidden.bs.collapse", function(event)
+                                                    {
+                                                        languageToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                    });
+    $(languageToEditField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        languageToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
 
     //create groupid to edit field
     var groupIdToEditContainer = document.createElement("div");
     groupIdToEditContainer.classList.add("form-group");
     massEditForm.appendChild(groupIdToEditContainer);
+    var groupIdToEditToggle = document.createElement("a");
+    groupIdToEditToggle.setAttribute("data-toggle", "collapse");
+    groupIdToEditToggle.setAttribute("data-target", "#mass_group_id_to_edit");
+    groupIdToEditContainer.appendChild(groupIdToEditToggle);
     var groupIdToEditLabel = document.createElement("label");
     groupIdToEditLabel.setAttribute("for","mass_group_id_to_edit");
     groupIdToEditLabel.classList.add("col-sm-3", "control-label");
     groupIdToEditLabel.innerText = "Group IDs to edit";
-    groupIdToEditContainer.appendChild(groupIdToEditLabel);
+    groupIdToEditToggle.appendChild(groupIdToEditLabel);
+    var groupIdToEditToggleIcon = document.createElement("span");
+    groupIdToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    groupIdToEditLabel.appendChild(groupIdToEditToggleIcon);
     var groupIdToEditFieldContainer = document.createElement("div");
     groupIdToEditFieldContainer.classList.add("col-sm-9");
     groupIdToEditContainer.appendChild(groupIdToEditFieldContainer);
@@ -141,19 +212,35 @@ function createForm() //creates mass edit form
     groupIdToEditField.setAttribute("id", "mass_group_id_to_edit");
     groupIdToEditField.setAttribute("name", "mass_group_id_to_edit");
     groupIdToEditField.setAttribute("placeholder", "1\n2\n3");
-    groupIdToEditField.classList.add("form-control");
+    groupIdToEditField.classList.add("form-control", "collapse", "in");
     groupIdToEditField.style.height = "80px";
     groupIdToEditFieldContainer.appendChild(groupIdToEditField);
+    $(groupIdToEditField).on("hidden.bs.collapse", function(event)
+                                                    {
+                                                        groupIdToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                    });
+    $(groupIdToEditField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        groupIdToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
 
     //create group2id to edit field
     var group2IdToEditContainer = document.createElement("div");
     group2IdToEditContainer.classList.add("form-group");
     massEditForm.appendChild(group2IdToEditContainer);
+    var group2IdToEditToggle = document.createElement("a");
+    group2IdToEditToggle.setAttribute("data-toggle", "collapse");
+    group2IdToEditToggle.setAttribute("data-target", "#mass_group_2_id_to_edit");
+    group2IdToEditContainer.appendChild(group2IdToEditToggle);
     var group2IdToEditLabel = document.createElement("label");
     group2IdToEditLabel.setAttribute("for","mass_group_2_id_to_edit");
     group2IdToEditLabel.classList.add("col-sm-3", "control-label");
     group2IdToEditLabel.innerText = "Group 2 IDs to edit";
-    group2IdToEditContainer.appendChild(group2IdToEditLabel);
+    group2IdToEditToggle.appendChild(group2IdToEditLabel);
+    var group2IdToEditToggleIcon = document.createElement("span");
+    group2IdToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    group2IdToEditLabel.appendChild(group2IdToEditToggleIcon);
     var group2IdToEditFieldContainer = document.createElement("div");
     group2IdToEditFieldContainer.classList.add("col-sm-9");
     group2IdToEditContainer.appendChild(group2IdToEditFieldContainer);
@@ -161,19 +248,35 @@ function createForm() //creates mass edit form
     group2IdToEditField.setAttribute("id", "mass_group_2_id_to_edit");
     group2IdToEditField.setAttribute("name", "mass_group_2_id_to_edit");
     group2IdToEditField.setAttribute("placeholder", "1\n2\n3");
-    group2IdToEditField.classList.add("form-control");
+    group2IdToEditField.classList.add("form-control", "collapse");
     group2IdToEditField.style.height = "35px";
     group2IdToEditFieldContainer.appendChild(group2IdToEditField);
+    $(group2IdToEditField).on("hidden.bs.collapse", function(event)
+                                                    {
+                                                        group2IdToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                    });
+    $(group2IdToEditField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        group2IdToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
 
     //create group3id to edit field
     var group3IdToEditContainer = document.createElement("div");
     group3IdToEditContainer.classList.add("form-group");
     massEditForm.appendChild(group3IdToEditContainer);
+    var group3IdToEditToggle = document.createElement("a");
+    group3IdToEditToggle.setAttribute("data-toggle", "collapse");
+    group3IdToEditToggle.setAttribute("data-target", "#mass_group_3_id_to_edit");
+    group3IdToEditContainer.appendChild(group3IdToEditToggle);
     var group3IdToEditLabel = document.createElement("label");
     group3IdToEditLabel.setAttribute("for","mass_group_3_id_to_edit");
     group3IdToEditLabel.classList.add("col-sm-3", "control-label");
     group3IdToEditLabel.innerText = "Group 3 IDs to edit";
-    group3IdToEditContainer.appendChild(group3IdToEditLabel);
+    group3IdToEditToggle.appendChild(group3IdToEditLabel);
+    var group3IdToEditToggleIcon = document.createElement("span");
+    group3IdToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    group3IdToEditLabel.appendChild(group3IdToEditToggleIcon);
     var group3IdToEditFieldContainer = document.createElement("div");
     group3IdToEditFieldContainer.classList.add("col-sm-9");
     group3IdToEditContainer.appendChild(group3IdToEditFieldContainer);
@@ -181,19 +284,35 @@ function createForm() //creates mass edit form
     group3IdToEditField.setAttribute("id", "mass_group_3_id_to_edit");
     group3IdToEditField.setAttribute("name", "mass_group_3_id_to_edit");
     group3IdToEditField.setAttribute("placeholder", "1\n2\n3");
-    group3IdToEditField.classList.add("form-control");
+    group3IdToEditField.classList.add("form-control", "collapse");
     group3IdToEditField.style.height = "35px";
     group3IdToEditFieldContainer.appendChild(group3IdToEditField);
+    $(group3IdToEditField).on("hidden.bs.collapse", function(event)
+                                                    {
+                                                        group3IdToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                    });
+    $(group3IdToEditField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        group3IdToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
 
     //create new chapter title field
     var newChapterTitleContainer = document.createElement("div");
     newChapterTitleContainer.classList.add("form-group");
     massEditForm.appendChild(newChapterTitleContainer);
+    var newChapterTitleToggle = document.createElement("a");
+    newChapterTitleToggle.setAttribute("data-toggle", "collapse");
+    newChapterTitleToggle.setAttribute("data-target", "#mass_new_chapter_title");
+    newChapterTitleContainer.appendChild(newChapterTitleToggle);
     var newChapterTitleLabel = document.createElement("label");
     newChapterTitleLabel.setAttribute("for","mass_new_chapter_title");
     newChapterTitleLabel.classList.add("col-sm-3", "control-label");
     newChapterTitleLabel.innerText = "New chapter titles";
-    newChapterTitleContainer.appendChild(newChapterTitleLabel);
+    newChapterTitleToggle.appendChild(newChapterTitleLabel);
+    var newChapterTitleToggleIcon = document.createElement("span");
+    newChapterTitleToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    newChapterTitleLabel.appendChild(newChapterTitleToggleIcon);
     var newChapterTitleFieldContainer = document.createElement("div");
     newChapterTitleFieldContainer.classList.add("col-sm-9");
     newChapterTitleContainer.appendChild(newChapterTitleFieldContainer);
@@ -201,19 +320,35 @@ function createForm() //creates mass edit form
     newChapterTitleField.setAttribute("id", "mass_new_chapter_title");
     newChapterTitleField.setAttribute("name", "mass_new_chapter_title");
     newChapterTitleField.setAttribute("placeholder", "title1\ntitle2\ntitle3");
-    newChapterTitleField.classList.add("form-control");
+    newChapterTitleField.classList.add("form-control", "collapse", "in");
     newChapterTitleField.style.height = "80px";
     newChapterTitleFieldContainer.appendChild(newChapterTitleField);
+    $(newChapterTitleField).on("hidden.bs.collapse", function(event)
+                                                    {
+                                                        newChapterTitleToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                    });
+    $(newChapterTitleField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        newChapterTitleToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
 
     //create new volume number field
     var newVolumeNumberContainer = document.createElement("div");
     newVolumeNumberContainer.classList.add("form-group");
     massEditForm.appendChild(newVolumeNumberContainer);
+    var newVolumeNumberToggle = document.createElement("a");
+    newVolumeNumberToggle.setAttribute("data-toggle", "collapse");
+    newVolumeNumberToggle.setAttribute("data-target", "#mass_new_volume_number");
+    newVolumeNumberContainer.appendChild(newVolumeNumberToggle);
     var newVolumeNumberLabel = document.createElement("label");
     newVolumeNumberLabel.setAttribute("for","mass_new_volume_number");
     newVolumeNumberLabel.classList.add("col-sm-3", "control-label");
     newVolumeNumberLabel.innerText = "New volume numbers";
-    newVolumeNumberContainer.appendChild(newVolumeNumberLabel);
+    newVolumeNumberToggle.appendChild(newVolumeNumberLabel);
+    var newVolumeNumberToggleIcon = document.createElement("span");
+    newVolumeNumberToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    newVolumeNumberLabel.appendChild(newVolumeNumberToggleIcon);
     var newVolumeNumberFieldContainer = document.createElement("div");
     newVolumeNumberFieldContainer.classList.add("col-sm-9");
     newVolumeNumberContainer.appendChild(newVolumeNumberFieldContainer);
@@ -221,19 +356,35 @@ function createForm() //creates mass edit form
     newVolumeNumberField.setAttribute("id", "mass_new_volume_number");
     newVolumeNumberField.setAttribute("name", "mass_new_volume_number");
     newVolumeNumberField.setAttribute("placeholder", "volume1\nvolume2\nvolume3");
-    newVolumeNumberField.classList.add("form-control");
+    newVolumeNumberField.classList.add("form-control", "collapse", "in");
     newVolumeNumberField.style.height = "80px";
     newVolumeNumberFieldContainer.appendChild(newVolumeNumberField);
+    $(newVolumeNumberField).on("hidden.bs.collapse", function(event)
+                                                    {
+                                                        newVolumeNumberToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                    });
+    $(newVolumeNumberField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        newVolumeNumberToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
 
     //create new chapter number field
     var newChapterNumberContainer = document.createElement("div");
     newChapterNumberContainer.classList.add("form-group");
     massEditForm.appendChild(newChapterNumberContainer);
+    var newChapterNumberToggle = document.createElement("a");
+    newChapterNumberToggle.setAttribute("data-toggle", "collapse");
+    newChapterNumberToggle.setAttribute("data-target", "#mass_new_chapter_number");
+    newChapterNumberContainer.appendChild(newChapterNumberToggle);
     var newChapterNumberLabel = document.createElement("label");
     newChapterNumberLabel.setAttribute("for","mass_new_chapter_number");
     newChapterNumberLabel.classList.add("col-sm-3", "control-label");
     newChapterNumberLabel.innerText = "New chapter numbers";
-    newChapterNumberContainer.appendChild(newChapterNumberLabel);
+    newChapterNumberToggle.appendChild(newChapterNumberLabel);
+    var newChapterNumberToggleIcon = document.createElement("span");
+    newChapterNumberToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    newChapterNumberLabel.appendChild(newChapterNumberToggleIcon);
     var newChapterNumberFieldContainer = document.createElement("div");
     newChapterNumberFieldContainer.classList.add("col-sm-9");
     newChapterNumberContainer.appendChild(newChapterNumberFieldContainer);
@@ -241,59 +392,107 @@ function createForm() //creates mass edit form
     newChapterNumberField.setAttribute("id", "mass_new_chapter_number");
     newChapterNumberField.setAttribute("name", "mass_new_chapter_number");
     newChapterNumberField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
-    newChapterNumberField.classList.add("form-control");
+    newChapterNumberField.classList.add("form-control", "collapse", "in");
     newChapterNumberField.style.height = "80px";
     newChapterNumberFieldContainer.appendChild(newChapterNumberField);
+    $(newChapterNumberField).on("hidden.bs.collapse", function(event)
+                                                        {
+                                                            newChapterNumberToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                        });
+    $(newChapterNumberField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        newChapterNumberToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
 
     //create new language field
     var newLanguageContainer = document.createElement("div");
     newLanguageContainer.classList.add("form-group");
     massEditForm.appendChild(newLanguageContainer);
+    var newLanguageToggle = document.createElement("a");
+    newLanguageToggle.setAttribute("data-toggle", "collapse");
+    newLanguageToggle.setAttribute("data-target", "#mass_new_language");
+    newLanguageContainer.appendChild(newLanguageToggle);
     var newLanguageLabel = document.createElement("label");
-    newLanguageLabel.setAttribute("for","mass_new_chapter_number");
+    newLanguageLabel.setAttribute("for","mass_new_language");
     newLanguageLabel.classList.add("col-sm-3", "control-label");
     newLanguageLabel.innerText = "New languages";
-    newLanguageContainer.appendChild(newLanguageLabel);
+    newLanguageToggle.appendChild(newLanguageLabel);
+    var newLanguageToggleIcon = document.createElement("span");
+    newLanguageToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    newLanguageLabel.appendChild(newLanguageToggleIcon);
     var newLanguageFieldContainer = document.createElement("div");
     newLanguageFieldContainer.classList.add("col-sm-9");
     newLanguageContainer.appendChild(newLanguageFieldContainer);
     var newLanguageField = document.createElement("textarea");
-    newLanguageField.setAttribute("id", "mass_new_chapter_number");
-    newLanguageField.setAttribute("name", "mass_new_chapter_number");
+    newLanguageField.setAttribute("id", "mass_new_language");
+    newLanguageField.setAttribute("name", "mass_new_language");
     newLanguageField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
-    newLanguageField.classList.add("form-control");
+    newLanguageField.classList.add("form-control", "collapse");
     newLanguageField.style.height = "35px";
     newLanguageFieldContainer.appendChild(newLanguageField);
+    $(newLanguageField).on("hidden.bs.collapse", function(event)
+                                                {
+                                                    newLanguageToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                });
+    $(newLanguageField).on("shown.bs.collapse", function(event)
+                                                {
+                                                    newLanguageToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                    this.style.height = "80px";
+                                                });
 
     //create new groupid field
     var newGroupIdContainer = document.createElement("div");
     newGroupIdContainer.classList.add("form-group");
     massEditForm.appendChild(newGroupIdContainer);
+    var newGroupIdToggle = document.createElement("a");
+    newGroupIdToggle.setAttribute("data-toggle", "collapse");
+    newGroupIdToggle.setAttribute("data-target", "#mass_new_group_id");
+    newGroupIdContainer.appendChild(newGroupIdToggle);
     var newGroupIdLabel = document.createElement("label");
     newGroupIdLabel.setAttribute("for","mass_new_group_id");
     newGroupIdLabel.classList.add("col-sm-3", "control-label");
     newGroupIdLabel.innerText = "New group IDs";
-    newGroupIdContainer.appendChild(newGroupIdLabel);
+    newGroupIdToggle.appendChild(newGroupIdLabel);
+    var newGroupIdToggleIcon = document.createElement("span");
+    newGroupIdToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    newGroupIdLabel.appendChild(newGroupIdToggleIcon);
     var newGroupIdFieldContainer = document.createElement("div");
     newGroupIdFieldContainer.classList.add("col-sm-9");
     newGroupIdContainer.appendChild(newGroupIdFieldContainer);
     var newGroupIdField = document.createElement("textarea");
-    newGroupIdField.setAttribute("id", "mass_new_chapter_number");
-    newGroupIdField.setAttribute("name", "mass_new_chapter_number");
+    newGroupIdField.setAttribute("id", "mass_new_group_id");
+    newGroupIdField.setAttribute("name", "mass_new_group_id");
     newGroupIdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
-    newGroupIdField.classList.add("form-control");
+    newGroupIdField.classList.add("form-control", "collapse", "in");
     newGroupIdField.style.height = "80px";
     newGroupIdFieldContainer.appendChild(newGroupIdField);
+    $(newGroupIdField).on("hidden.bs.collapse", function(event)
+                                                {
+                                                    newGroupIdToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                });
+    $(newGroupIdField).on("shown.bs.collapse", function(event)
+                                                {
+                                                    newGroupIdToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                    this.style.height = "80px";
+                                                });
 
     //create new group2id field
     var newGroup2IdContainer = document.createElement("div");
     newGroup2IdContainer.classList.add("form-group");
     massEditForm.appendChild(newGroup2IdContainer);
+    var newGroup2IdToggle = document.createElement("a");
+    newGroup2IdToggle.setAttribute("data-toggle", "collapse");
+    newGroup2IdToggle.setAttribute("data-target", "#mass_new_group_2_id");
+    newGroup2IdContainer.appendChild(newGroup2IdToggle);
     var newGroup2IdLabel = document.createElement("label");
     newGroup2IdLabel.setAttribute("for","mass_new_group_2_id");
     newGroup2IdLabel.classList.add("col-sm-3", "control-label");
     newGroup2IdLabel.innerText = "New group 2 IDs";
-    newGroup2IdContainer.appendChild(newGroup2IdLabel);
+    newGroup2IdToggle.appendChild(newGroup2IdLabel);
+    var newGroup2IdToggleIcon = document.createElement("span");
+    newGroup2IdToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    newGroup2IdLabel.appendChild(newGroup2IdToggleIcon);
     var newGroup2IdFieldContainer = document.createElement("div");
     newGroup2IdFieldContainer.classList.add("col-sm-9");
     newGroup2IdContainer.appendChild(newGroup2IdFieldContainer);
@@ -301,19 +500,35 @@ function createForm() //creates mass edit form
     newGroup2IdField.setAttribute("id", "mass_new_group_2_id");
     newGroup2IdField.setAttribute("name", "mass_new_group_2_id");
     newGroup2IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
-    newGroup2IdField.classList.add("form-control");
+    newGroup2IdField.classList.add("form-control", "collapse");
     newGroup2IdField.style.height = "35px";
     newGroup2IdFieldContainer.appendChild(newGroup2IdField);
+    $(newGroup2IdField).on("hidden.bs.collapse", function(event)
+                                                {
+                                                    newGroup2IdToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                });
+    $(newGroup2IdField).on("shown.bs.collapse", function(event)
+                                                {
+                                                    newGroup2IdToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                    this.style.height = "80px";
+                                                });
 
     //create new group3id field
     var newGroup3IdContainer = document.createElement("div");
     newGroup3IdContainer.classList.add("form-group");
     massEditForm.appendChild(newGroup3IdContainer);
+    var newGroup3IdToggle = document.createElement("a");
+    newGroup3IdToggle.setAttribute("data-toggle", "collapse");
+    newGroup3IdToggle.setAttribute("data-target", "#mass_new_group_3_id");
+    newGroup3IdContainer.appendChild(newGroup3IdToggle);
     var newGroup3IdLabel = document.createElement("label");
     newGroup3IdLabel.setAttribute("for","mass_new_group_3_id");
     newGroup3IdLabel.classList.add("col-sm-3", "control-label");
     newGroup3IdLabel.innerText = "New group 3 IDs";
-    newGroup3IdContainer.appendChild(newGroup3IdLabel);
+    newGroup3IdToggle.appendChild(newGroup3IdLabel);
+    var newGroup3IdToggleIcon = document.createElement("span");
+    newGroup3IdToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    newGroup3IdLabel.appendChild(newGroup3IdToggleIcon);
     var newGroup3IdFieldContainer = document.createElement("div");
     newGroup3IdFieldContainer.classList.add("col-sm-9");
     newGroup3IdContainer.appendChild(newGroup3IdFieldContainer);
@@ -321,9 +536,18 @@ function createForm() //creates mass edit form
     newGroup3IdField.setAttribute("id", "mass_new_group_3_id");
     newGroup3IdField.setAttribute("name", "mass_new_group_3_id");
     newGroup3IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
-    newGroup3IdField.classList.add("form-control");
+    newGroup3IdField.classList.add("form-control", "collapse");
     newGroup3IdField.style.height = "35px";
     newGroup3IdFieldContainer.appendChild(newGroup3IdField);
+    $(newGroup3IdField).on("hidden.bs.collapse", function(event)
+                                                {
+                                                    newGroup3IdToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                });
+    $(newGroup3IdField).on("shown.bs.collapse", function(event)
+                                                {
+                                                    newGroup3IdToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                    this.style.height = "80px";
+                                                });
 
     //create buttons
     var buttonsContainer = document.createElement("div");
@@ -382,9 +606,9 @@ function createForm() //creates mass edit form
                                                 mangaInfo.style.display =  "block";
                                             });
     previewButton.addEventListener("click", function(event)
-                                        {
-                                            previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value]);
-                                        });
+                                            {
+                                                previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value]);
+                                            });
 
     //add preview table
     var editPreviewTable = document.createElement("table");
