@@ -598,7 +598,7 @@ function uploadNext(event, splitFields, i)
                     massUploadButton.childNodes[0].classList.replace("fa-pulse", "fa-fw");
                     massUploadButton.childNodes[1].innerText = "Mass Upload";
                     massUploadButton.removeAttribute("disabled");
-                    const prevLang = document.getElementById("lang_id").selectedIndex //restore lang
+                    const prevLang = document.getElementById("lang_id").selectedIndex; //restore lang
                     document.getElementById("upload_form").reset(); //self explanatory
                     document.getElementById("mass_upload_form").reset();
                     document.getElementById("mass_group_id").value = group1List.join("\n");

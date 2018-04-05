@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.67
+// @version      0.70
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -26,23 +26,22 @@ function createForm() //creates mass edit form
     userscriptInfo.setAttribute("role", "alert");
     userscriptInfo.innerHTML = "<h4>You are using MangaDex (shitty) Mass Editor ßeta by Xnot with some code borrowed from bcvxy</h4>" +
         "<ol><li>Use the 'to edit' fields to grab the chapters you want. Each line is one value" +
+        "<br />Only chapters in the page you are looking at can be grabbed" +
         "<br />Filling in multiple 'to edit' fields will grab chapters that match both. For example filling titles with 'Read Online' and volume with '4' and '2' will grab all chapters titled 'Read Online' in volumes 4 and 2" +
-        "<br />Filling in only some 'to edit' fields will ignore the others" +
+        "<br />Empty 'to edit' fields are ignored" +
         "<li>The 'new' fields determine the new values for the grabbed chapters top to bottom" +
-        "<li>Just use the preview button and figure it out because it's pretty confusing <strike>and these instructions are shit</strike>" +
-        "<li>Press the Apply Edit button and wait an undetermined amount of time because I haven't added any sort of progress tracking yet (there is some in the console though thx bcvxy)" +
-        "<li>Refresh after every edit so you aren't editing based on outdated information. Auto-refresh soon™" +
+        "<li>Use the preview button if you feel so inclined" +
+        "<li>Press the Apply Edit button and wait until it's all cool and good" +
+        "<li>Refresh after every edit so you aren't editing based on outdated information." +
         "<li>Editing <strike>groups, languages and</strike> files soon™ maybe</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.60:" +
-        "<ul><li>Added a bunch of other fields to match chapters with" +
-        "<li>Added a bunch of other fields to edit chapters with" +
-        "<li>Added a preview button <strike>because the new fields are a mess</strike>" +
-        "<li><strike>Hopefully I didn't fuck anything up and the preview actually matches the results</strike></ul>" +
     "Update 0.65:" +
         "<ul><li>Added group and language editing" +
         "<li>You have to use groups by ID" +
-        "<li>Use group ID 0 if you want to exclude/delete groups 2 and 3</ul>";
+        "<li>Use group ID 0 if you want to exclude/delete groups 2 and 3</ul>" +
+    "Update 0.70:" +
+        "<ul><li>Added progress and success messages" +
+        "<li>All fields are now collapsible</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
@@ -1029,7 +1028,7 @@ async function massEdit(fields) {
             // check wether the data is actually different
             if (arraysEqual(oldData, newData))
             {
-                messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>."
+                messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>.";
             }
             else
             {
@@ -1067,9 +1066,10 @@ async function massEdit(fields) {
                 catch(e)
                 {
                     console.error('Error:', e);
+                    messageContainer.innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>Not ok.</div>.";
                 }
             }
         }
     }
-    messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>all cool and good 👌👌👌👌👌</div>."
+    messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>all cool and good 👌👌👌👌👌</div>.";
 }
