@@ -45,6 +45,8 @@ function createForm() //creates mass edit form
         "<li>Use group ID 0 if you want to exclude/delete groups 2 and 3</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
+    document.getElementById("message_container").classList.replace("display-none", "display-block");
+
     //create chapter title to edit field
     var chapterTitleToEditContainer = document.createElement("div");
     chapterTitleToEditContainer.classList.add("form-group");
@@ -851,6 +853,8 @@ function arraysEqual(a, b) {
 async function massEdit(fields) {
     'use strict';
 
+    const messageContainer = document.getElementById("message_container");
+
     const langs =
     {
         "English":"1",
@@ -953,7 +957,7 @@ async function massEdit(fields) {
                                     });
     for (let i = 0, len = toEdit.length; i < len; i++)
     {
-        console.log("Processing chapter #" + (i+1) + " of " + len);
+        messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>Processing " + (i + 1) + "/" + len + "</div>."
         // data format 0:chapId 1:volNum 2:chapNum 3:title 4:groupId 5:group2Id 6:group3Id 7:langTitle 8:file(optional)
         var oldData = toEdit[i];
         var newData = oldData.slice(0);
@@ -1025,7 +1029,7 @@ async function massEdit(fields) {
             continue;
         // check wether the data is actually different
         if (arraysEqual(oldData, newData)){
-            console.log("No changes, skipping...");
+            messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>."
             continue;
         }
 
@@ -1062,5 +1066,5 @@ async function massEdit(fields) {
             console.error('Error:', e);
         }
     }
-    console.log("%call cool and good 👌", "color:green");
+    messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>all cool and good 👌👌👌👌👌</div>."
 }
