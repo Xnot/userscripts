@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.70
+// @version      0.80
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -26,22 +26,23 @@ function createForm() //creates mass edit form
     userscriptInfo.setAttribute("role", "alert");
     userscriptInfo.innerHTML = "<h4>You are using MangaDex (shitty) Mass Editor ßeta by Xnot with some code borrowed from bcvxy</h4>" +
         "<ol><li>Use the 'to edit' fields to grab the chapters you want. Each line is one value" +
+        "<br />Use 'Read Online' to grab empty titles, ' ' (a space) to grab empty chapter/volume numbers, and '0' to grab empty groups2/3" +
         "<br />Only chapters in the page you are looking at can be grabbed" +
         "<br />Filling in multiple 'to edit' fields will grab chapters that match both. For example filling titles with 'Read Online' and volume with '4' and '2' will grab all chapters titled 'Read Online' in volumes 4 and 2" +
         "<br />Empty 'to edit' fields are ignored" +
         "<li>The 'new' fields determine the new values for the grabbed chapters top to bottom" +
+        "<br />Use ' ' to delete titles and chapter/volume numbers, and '0' to delete groups2/3" +
         "<li>Use the preview button if you feel so inclined" +
         "<li>Press the Apply Edit button and wait until it's all cool and good" +
         "<li>Refresh after every edit so you aren't editing based on outdated information." +
         "<li>Editing <strike>groups, languages and</strike> files soon™ maybe</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.65:" +
-        "<ul><li>Added group and language editing" +
-        "<li>You have to use groups by ID" +
-        "<li>Use group ID 0 if you want to exclude/delete groups 2 and 3</ul>" +
     "Update 0.70:" +
         "<ul><li>Added progress and success messages" +
-        "<li>All fields are now collapsible</ul>";
+        "<li>All fields are now collapsible</ul>" +
+    "Update 0.80:" +
+        "<ul><li>Inputting a single value in the 'new' fields now uses that value for all edits" +
+        "<li>Chapters with no chapter/volume number are now grabbable with ' '</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
@@ -752,6 +753,10 @@ function previewEdit(fields)
                                                 {
                                                     chapterTitlePreview = title;
                                                 }
+                                                else if(newChapterTitles[0] === " ")
+                                                {
+                                                    chapterTitlePreview = "Read Online";
+                                                }
                                                 else
                                                 {
                                                     chapterTitlePreview = newChapterTitles[0];
@@ -759,7 +764,14 @@ function previewEdit(fields)
                                             }
                                             else
                                             {
-                                                chapterTitlePreview = newChapterTitles[i] || title;
+                                                if(newChapterTitles[i] === " ")
+                                                {
+                                                    chapterTitlePreview = "Read Online";
+                                                }
+                                                else
+                                                {
+                                                    chapterTitlePreview = newChapterTitles[i] || title;
+                                                }
                                             }
                                             var volumeNumberPreview;
                                             if(newVolumeNumbers.length == 1)
