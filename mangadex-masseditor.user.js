@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.70
+// @version      0.80
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -26,22 +26,23 @@ function createForm() //creates mass edit form
     userscriptInfo.setAttribute("role", "alert");
     userscriptInfo.innerHTML = "<h4>You are using MangaDex (shitty) Mass Editor ßeta by Xnot with some code borrowed from bcvxy</h4>" +
         "<ol><li>Use the 'to edit' fields to grab the chapters you want. Each line is one value" +
+        "<br />Use 'Read Online' to grab empty titles, ' ' (a space) to grab empty chapter/volume numbers, and '0' to grab empty groups2/3" +
         "<br />Only chapters in the page you are looking at can be grabbed" +
         "<br />Filling in multiple 'to edit' fields will grab chapters that match both. For example filling titles with 'Read Online' and volume with '4' and '2' will grab all chapters titled 'Read Online' in volumes 4 and 2" +
         "<br />Empty 'to edit' fields are ignored" +
         "<li>The 'new' fields determine the new values for the grabbed chapters top to bottom" +
+        "<br />Use ' ' to delete titles and chapter/volume numbers, and '0' to delete groups2/3" +
         "<li>Use the preview button if you feel so inclined" +
         "<li>Press the Apply Edit button and wait until it's all cool and good" +
         "<li>Refresh after every edit so you aren't editing based on outdated information." +
         "<li>Editing <strike>groups, languages and</strike> files soon™ maybe</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.65:" +
-        "<ul><li>Added group and language editing" +
-        "<li>You have to use groups by ID" +
-        "<li>Use group ID 0 if you want to exclude/delete groups 2 and 3</ul>" +
     "Update 0.70:" +
         "<ul><li>Added progress and success messages" +
-        "<li>All fields are now collapsible</ul>";
+        "<li>All fields are now collapsible</ul>" +
+    "Update 0.80:" +
+        "<ul><li>Inputting a single value in the 'new' fields now uses that value for all edits" +
+        "<li>Chapters with no chapter/volume number are now grabbable with ' '</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
@@ -709,25 +710,30 @@ function previewEdit(fields)
     var i = 0;
     $('a[href*="/chapter/"').each(function (chapter)
                                     {
-                                        var title = "";
-                                        if ($(this).get(0).getAttribute('data-chapter-name') === "")
-                                        {
-                                            title = "Read Online";
-                                        }
-                                        else
+                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
+                                        var title = "Read Online";
+                                        if($(this).get(0).getAttribute('data-chapter-name') !== "")
                                         {
                                             title = $(this).get(0).getAttribute('data-chapter-name');
                                         }
-                                        const volNum = $(this).get(0).getAttribute('data-volume-num');
-                                        const chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        var volNum = " ";
+                                        if($(this).get(0).getAttribute('data-volume-num') !== "")
+                                        {
+                                            volNum = $(this).get(0).getAttribute('data-volume-num');
+                                        }
+                                        var chapNum = " ";
+                                        if($(this).get(0).getAttribute('data-chapter-num') !== "")
+                                        {
+                                            chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        }
                                         const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
                                         const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
                                         var group2Id = "0";
-                                        var group3Id = "0";
                                         if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
                                         {
                                             group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
                                         }
+                                        var group3Id = "0";
                                         if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
                                         {
                                             group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
@@ -735,69 +741,129 @@ function previewEdit(fields)
 
                                         if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
-                                            var editPreviewOld = this.parentNode.parentNode.cloneNode(true);
+                                            const editPreviewOld = this.parentNode.parentNode.cloneNode(true);
                                             editPreviewOld.childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
                                             previewTable.appendChild(editPreviewOld);
-                                            var editPreviewNew = this.parentNode.parentNode.cloneNode(true);
+                                            const editPreviewNew = this.parentNode.parentNode.cloneNode(true);
                                             editPreviewNew.childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title=''></span>";
                                             var chapterTitlePreview;
-                                            if(newChapterTitles.length == 1 && newChapterTitles[0] === "")
+                                            if(newChapterTitles.length == 1)
                                             {
-                                                chapterTitlePreview = title;
+                                                if(newChapterTitles[0] === "")
+                                                {
+                                                    chapterTitlePreview = title;
+                                                }
+                                                else if(newChapterTitles[0] === " ")
+                                                {
+                                                    chapterTitlePreview = "Read Online";
+                                                }
+                                                else
+                                                {
+                                                    chapterTitlePreview = newChapterTitles[0];
+                                                }
                                             }
                                             else
                                             {
-                                                chapterTitlePreview = newChapterTitles[i] || title;
+                                                if(newChapterTitles[i] === " ")
+                                                {
+                                                    chapterTitlePreview = "Read Online";
+                                                }
+                                                else
+                                                {
+                                                    chapterTitlePreview = newChapterTitles[i] || title;
+                                                }
                                             }
                                             var volumeNumberPreview;
-                                            if(newVolumeNumbers.length == 1 && newVolumeNumbers[0] === "")
+                                            if(newVolumeNumbers.length == 1)
                                             {
-                                                volumeNumberPreview = volNum;
+                                                if(newVolumeNumbers[0] === "")
+                                                {
+                                                    volumeNumberPreview = volNum;
+                                                }
+                                                else
+                                                {
+                                                    volumeNumberPreview = newVolumeNumbers[0];
+                                                }
                                             }
                                             else
                                             {
                                                 volumeNumberPreview = newVolumeNumbers[i] || volNum;
                                             }
                                             var chapterNumberPreview;
-                                            if(newChapterNumbers.length == 1 && newChapterNumbers === "")
+                                            if(newChapterNumbers.length == 1)
                                             {
-                                                chapterNumberPreview = chapNum;
+                                                if(newChapterNumbers[0] === "")
+                                                {
+                                                    chapterNumberPreview = chapNum;
+                                                }
+                                                else
+                                                {
+                                                    chapterNumberPreview = newChapterNumbers[0];
+                                                }
                                             }
                                             else
                                             {
                                                 chapterNumberPreview = newChapterNumbers[i] || chapNum;
                                             }
                                             var languagePreview;
-                                            if(newLanguages.length == 1 && newLanguages[0] === "")
+                                            if(newLanguages.length == 1)
                                             {
-                                                languagePreview = langTitle;
+                                                if(newLanguages[0] === "")
+                                                {
+                                                    languagePreview = langTitle;
+                                                }
+                                                else
+                                                {
+                                                    languagePreview = newLanguages[0];
+                                                }
                                             }
                                             else
                                             {
                                                 languagePreview = newLanguages[i] || langTitle;
                                             }
                                             var groupPreview;
-                                            if(newGroups.length == 1 && newGroups[0] === "")
+                                            if(newGroups.length == 1)
                                             {
-                                                groupPreview = groupId;
+                                                if(newGroups[0] === "")
+                                                {
+                                                    groupPreview = groupId;
+                                                }
+                                                else
+                                                {
+                                                    groupPreview = newGroups[0];
+                                                }
                                             }
                                             else
                                             {
                                                 groupPreview = newGroups[i] || groupId;
                                             }
                                             var group2Preview;
-                                            if(newGroups2.length == 1 && newGroups2[0] === "")
+                                            if(newGroups2.length == 1)
                                             {
-                                                group2Preview = group2Id;
+                                                if(newGroups2[0] === "")
+                                                {
+                                                    group2Preview = group2Id;
+                                                }
+                                                else
+                                                {
+                                                    group2Preview = newGroups2[0];
+                                                }
                                             }
                                             else
                                             {
                                                 group2Preview = newGroups2[i] || group2Id;
                                             }
                                             var group3Preview;
-                                            if(newGroups3.length == 1 && newGroups3[0] === "")
+                                            if(newGroups3.length == 1)
                                             {
-                                                group3Preview = group3Id;
+                                                if(newGroups3[0] === "")
+                                                {
+                                                    group3Preview = group3Id;
+                                                }
+                                                else
+                                                {
+                                                    group3Preview = newGroups3[0];
+                                                }
                                             }
                                             else
                                             {
@@ -806,11 +872,11 @@ function previewEdit(fields)
 
                                             //fill in new preview
                                             editPreviewNew.childNodes[3].innerText = "";
-                                            if(volumeNumberPreview !== "")
+                                            if(volumeNumberPreview !== " ")
                                             {
                                                 editPreviewNew.childNodes[3].innerText += "Vol. " +  volumeNumberPreview;
                                             }
-                                            if(chapterNumberPreview !== "")
+                                            if(chapterNumberPreview !== " ")
                                             {
                                                 editPreviewNew.childNodes[3].innerText += " Ch. " + chapterNumberPreview;
                                             }
@@ -923,26 +989,31 @@ async function massEdit(fields) {
 
     $('a[href*="/chapter/"').each(function (chapter)
                                     {
+                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
                                         const title = $(this).get(0).getAttribute('data-chapter-name');
-                                        var tempTitle;
-                                        if (title === "")
-                                        {
-                                            tempTitle = "Read Online";
-                                        }
-                                        else
+                                        var tempTitle = "Read Online"; //use a tempTitle because the site treats "Read Online" differently from ""
+                                        if (title !== "")
                                         {
                                             tempTitle = title;
                                         }
-                                        const volNum = $(this).get(0).getAttribute('data-volume-num');
-                                        const chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        var volNum = " "; //don't need to use temp for these since they'll get trimmed anyway
+                                        if($(this).get(0).getAttribute('data-volume-num') !== "")
+                                        {
+                                            volNum = $(this).get(0).getAttribute('data-volume-num');
+                                        }
+                                        var chapNum = " ";
+                                        if($(this).get(0).getAttribute('data-chapter-num') !== "")
+                                        {
+                                            chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        }
                                         const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
                                         const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
                                         var group2Id = "0";
-                                        var group3Id = "0";
                                         if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
                                         {
                                             group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
                                         }
+                                        var group3Id = "0";
                                         if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
                                         {
                                             group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
@@ -965,57 +1036,106 @@ async function massEdit(fields) {
         // make your changes to newData, which is a clone of oldData by default
         // --- CHANGES TO DATA HERE ---
         //if there are no new values use old
-        if(newVolumeNumbers.length == 1 && newVolumeNumbers[0] === "")
+        if(newVolumeNumbers.length == 1)
         {
-            newData[1] = oldData[1];
+            if(newVolumeNumbers[0] === "")
+            {
+                newData[1] = oldData[1];
+            }
+            else
+            {
+                newData[1] = newVolumeNumbers[0];
+            }
         }
         else
         {
             newData[1] = newVolumeNumbers[i] || oldData[1];
         }
-        if(newChapterNumbers.length == 1 && newChapterNumbers[0] === "")
+        if(newChapterNumbers.length == 1)
         {
-            newData[2] = oldData[2];
+            if(newChapterNumbers[0] === "")
+            {
+                newData[2] = oldData[2];
+            }
+            else
+            {
+                newData[2] = newChapterNumbers[0];
+            }
         }
         else
         {
             newData[2] = newChapterNumbers[i] || oldData[2];
         }
-        if(newChapterTitles.length == 1 && newChapterTitles[0] === "")
+        if(newChapterTitles.length == 1)
         {
-            newData[3] = oldData[3];
+            if(newChapterTitles[0] === "")
+            {
+                newData[3] = oldData[3];
+            }
+            else
+            {
+                newData[3] = newChapterTitles[0];
+            }
         }
         else
         {
             newData[3] = newChapterTitles[i] || oldData[3];
         }
-        if(newGroups.length == 1 && newGroups[0] === "")
+        if(newGroups.length == 1)
         {
-            newData[4] = oldData[4];
+            if(newGroups[0] === "")
+            {
+                newData[4] = oldData[4];
+            }
+            else
+            {
+                newData[4] = newGroups[0];
+            }
         }
         else
         {
             newData[4] = newGroups[i] || oldData[4];
         }
-        if(newGroups2.length == 1 && newGroups2[0] === "")
+        if(newGroups2.length == 1)
         {
-            newData[5] = oldData[5];
+            if(newGroups2[0] === "")
+            {
+                newData[5] = oldData[5];
+            }
+            else
+            {
+                newData[5] = newGroups2[0];
+            }
         }
         else
         {
             newData[5] = newGroups2[i] || oldData[5];
         }
-        if(newGroups3.length == 1 && newGroups3[0] === "")
+        if(newGroups3.length == 1)
         {
-            newData[6] = oldData[6];
+            if(newGroups3[0] === "")
+            {
+                newData[6] = oldData[6];
+            }
+            else
+            {
+                newData[6] = newGroups3[0];
+            }
         }
         else
         {
             newData[6] = newGroups3[i] || oldData[6];
         }
-        if(newLanguages.length == 1 && newLanguages[0] === "")
+        if(newLanguages.length == 1)
         {
-            newData[7] = oldData[7];
+            if(newLanguages[0] === "")
+            {
+                newData[7] = oldData[7];
+            }
+            else
+            {
+                newData[7] = newLanguages[0];
+            }
         }
         else
         {
