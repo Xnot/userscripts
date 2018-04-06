@@ -709,25 +709,30 @@ function previewEdit(fields)
     var i = 0;
     $('a[href*="/chapter/"').each(function (chapter)
                                     {
-                                        var title = "";
-                                        if ($(this).get(0).getAttribute('data-chapter-name') === "")
-                                        {
-                                            title = "Read Online";
-                                        }
-                                        else
+                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
+                                        var title = "Read Online";
+                                        if($(this).get(0).getAttribute('data-chapter-name') !== "")
                                         {
                                             title = $(this).get(0).getAttribute('data-chapter-name');
                                         }
-                                        const volNum = $(this).get(0).getAttribute('data-volume-num');
-                                        const chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        var volNum = " ";
+                                        if($(this).get(0).getAttribute('data-volume-num') !== "")
+                                        {
+                                            volNum = $(this).get(0).getAttribute('data-volume-num');
+                                        }
+                                        var chapNum = " ";
+                                        if($(this).get(0).getAttribute('data-chapter-num') !== "")
+                                        {
+                                            chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        }
                                         const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
                                         const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
                                         var group2Id = "0";
-                                        var group3Id = "0";
                                         if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
                                         {
                                             group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
                                         }
+                                        var group3Id = "0";
                                         if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
                                         {
                                             group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
@@ -855,11 +860,11 @@ function previewEdit(fields)
 
                                             //fill in new preview
                                             editPreviewNew.childNodes[3].innerText = "";
-                                            if(volumeNumberPreview !== "" && volumeNumberPreview !== " ")
+                                            if(volumeNumberPreview !== " ")
                                             {
                                                 editPreviewNew.childNodes[3].innerText += "Vol. " +  volumeNumberPreview;
                                             }
-                                            if(chapterNumberPreview !== "" && chapterNumberPreview !== " ")
+                                            if(chapterNumberPreview !== " ")
                                             {
                                                 editPreviewNew.childNodes[3].innerText += " Ch. " + chapterNumberPreview;
                                             }
@@ -972,26 +977,31 @@ async function massEdit(fields) {
 
     $('a[href*="/chapter/"').each(function (chapter)
                                     {
+                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
                                         const title = $(this).get(0).getAttribute('data-chapter-name');
-                                        var tempTitle;
-                                        if (title === "")
-                                        {
-                                            tempTitle = "Read Online";
-                                        }
-                                        else
+                                        var tempTitle = "Read Online"; //use a tempTitle because the site treats "Read Online" differently from ""
+                                        if (title !== "")
                                         {
                                             tempTitle = title;
                                         }
-                                        const volNum = $(this).get(0).getAttribute('data-volume-num');
-                                        const chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        var volNum = " "; //don't need to use temp for these since they'll get trimmed anyway
+                                        if($(this).get(0).getAttribute('data-volume-num') !== "")
+                                        {
+                                            volNum = $(this).get(0).getAttribute('data-volume-num');
+                                        }
+                                        var chapNum = " ";
+                                        if($(this).get(0).getAttribute('data-chapter-num') !== "")
+                                        {
+                                            chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                        }
                                         const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
                                         const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
                                         var group2Id = "0";
-                                        var group3Id = "0";
                                         if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
                                         {
                                             group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
                                         }
+                                        var group3Id = "0";
                                         if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
                                         {
                                             group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
