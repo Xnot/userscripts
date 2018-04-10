@@ -289,7 +289,7 @@ function createForm() //creates mass upload form
     fileContainer.classList.add("form-group");
     massUploadForm.appendChild(fileContainer);
     const fileLabel = document.createElement("label");
-    fileLabel.setAttribute("for","files");
+    fileLabel.setAttribute("for","mass_file");
     fileLabel.classList.add("col-sm-3", "control-label");
     fileLabel.innerText = "Files";
     fileContainer.appendChild(fileLabel);
