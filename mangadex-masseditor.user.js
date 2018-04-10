@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.90
+// @version      0.91
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -42,6 +42,7 @@ function createForm() //creates mass edit form
         "<li>Chapters with no chapter/volume number are now grabbable with ' '</ul>" +
     "Update 0.90:" +
         "<ul><li>Added file editing" +
+        "<li>The files will be in alphabetical order when you hover the button, but are actually reversed when applying edit to match the top to bottom format" +
         "<li>Fixed previews which chapter comment update broke</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
