@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.93
+// @version      1.94
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -29,11 +29,11 @@ function createForm() //creates mass upload form
         "<li>Click the Mass Upload button" +
         "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 1.89:" +
-        "<ul><li>Groups now don't reset on completion</ul>" +
     "Update 1.91:" +
         "<ul><li>Language now doesn't reset on completion" +
-        "<li><strike>Now works with Greasemonkey</strike> Adding Greasemonkey compatibility breaks random things unpredictably so fuck Greasemonkey</ul>";
+        "<li><strike>Now works with Greasemonkey</strike> Adding Greasemonkey compatibility breaks random things unpredictably so fuck Greasemonkey</ul>" +
+    "Update 1.94:" +
+        "<ul><li>If you enter a new line after the first group or if there's already more than one group, selecting another group from the dropdown will add it instead of replacing what's already there</ul>";
     const container = document.getElementById("content");
     container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
 
@@ -177,7 +177,18 @@ function createForm() //creates mass upload form
     group1FieldContainer.appendChild(group1Field);
     document.getElementById("group_id").addEventListener("change", function()
                                                                     {
-                                                                        group1Field.value = this.options[this.selectedIndex].value;
+                                                                        if(group1Field.value.split("\n").length == 1)
+                                                                        {
+                                                                            group1Field.value = this.options[this.selectedIndex].value;
+                                                                        }
+                                                                        else if(group1Field.value.split("\n")[group1Field.value.split("\n").length - 1] === "")
+                                                                        {
+                                                                            group1Field.value += this.options[this.selectedIndex].value;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            group1Field.value += "\n" + this.options[this.selectedIndex].value;
+                                                                        }
                                                                         this.previousSibling.previousSibling.childNodes[0].childNodes[1].data += " - ID: " + this.options[this.selectedIndex].value;
                                                                     });
 
@@ -202,7 +213,18 @@ function createForm() //creates mass upload form
     group2FieldContainer.appendChild(group2Field);
     document.getElementById("group_id_2").addEventListener("change", function()
                                                                     {
-                                                                        group2Field.value = this.options[this.selectedIndex].value;
+                                                                        if(group2Field.value.split("\n").length == 1)
+                                                                        {
+                                                                            group2Field.value = this.options[this.selectedIndex].value;
+                                                                        }
+                                                                        else if(group2Field.value.split("\n")[group2Field.value.split("\n").length - 1] === "")
+                                                                        {
+                                                                            group2Field.value += this.options[this.selectedIndex].value;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            group2Field.value += "\n" + this.options[this.selectedIndex].value;
+                                                                        }
                                                                         this.previousSibling.previousSibling.childNodes[0].childNodes[1].data += " - ID: " + this.options[this.selectedIndex].value;
                                                                     });
 
@@ -227,7 +249,18 @@ function createForm() //creates mass upload form
     group3FieldContainer.appendChild(group3Field);
     document.getElementById("group_id_3").addEventListener("change", function()
                                                                     {
-                                                                        group3Field.value = this.options[this.selectedIndex].value;
+                                                                        if(group3Field.value.split("\n").length == 1)
+                                                                        {
+                                                                            group3Field.value = this.options[this.selectedIndex].value;
+                                                                        }
+                                                                        else if(group3Field.value.split("\n")[group3Field.value.split("\n").length - 1] === "")
+                                                                        {
+                                                                            group3Field.value += this.options[this.selectedIndex].value;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            group3Field.value += "\n" + this.options[this.selectedIndex].value;
+                                                                        }
                                                                         this.previousSibling.previousSibling.childNodes[0].childNodes[1].data += " - ID: " + this.options[this.selectedIndex].value;
                                                                     });
 
@@ -369,30 +402,6 @@ function splitInputs(fields) // splits the coma separated fields into arrays
     var group2List = fields[4].value.split("\n");
     var group3List = fields[5].value.split("\n");
     var fileList = fields[6].files;
-    for(let i = 0; i < chapterNameList.length; i++)
-    {
-        chapterNameList[i] = chapterNameList[i].trim();
-    }
-    for(let i = 0; i < volumeNumberList.length; i++)
-    {
-        volumeNumberList[i] = volumeNumberList[i].trim();
-    }
-    for(let i = 0; i < chapterNumberList.length; i++)
-    {
-        chapterNumberList[i] = chapterNumberList[i].trim();
-    }
-    for(let i = 0; i < group1List.length; i++)
-    {
-        group1List[i] = group1List[i].trim();
-    }
-    for(let i = 0; i < group2List.length; i++)
-    {
-        group2List[i] = group2List[i].trim();
-    }
-    for(let i = 0; i < group3List.length; i++)
-    {
-        group3List[i] = group3List[i].trim();
-    }
     return [chapterNameList, volumeNumberList, chapterNumberList, group1List, group2List, group3List, fileList];
 }
 
