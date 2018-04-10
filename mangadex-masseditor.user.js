@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.80
+// @version      0.90
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -37,12 +37,12 @@ function createForm() //creates mass edit form
         "<li>Refresh after every edit so you aren't editing based on outdated information." +
         "<li>Editing <strike>groups, languages and</strike> files soon™ maybe</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.70:" +
-        "<ul><li>Added progress and success messages" +
-        "<li>All fields are now collapsible</ul>" +
     "Update 0.80:" +
         "<ul><li>Inputting a single value in the 'new' fields now uses that value for all edits" +
-        "<li>Chapters with no chapter/volume number are now grabbable with ' '</ul>";
+        "<li>Chapters with no chapter/volume number are now grabbable with ' '</ul>" +
+    "Update 0.90:" +
+        "<ul><li>Added file editing" +
+        "<li>Fixed previews which chapter comment update broke</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
@@ -551,6 +551,82 @@ function createForm() //creates mass edit form
                                                     this.style.height = "80px";
                                                 });
 
+    //create file field
+    const fileContainer = document.createElement("div");
+    fileContainer.classList.add("form-group");
+    massEditForm.appendChild(fileContainer);
+    const fileToggle = document.createElement("a");
+    fileToggle.setAttribute("data-toggle", "collapse");
+    fileToggle.setAttribute("data-target", "#mass_file_container");
+    fileContainer.appendChild(fileToggle);
+    const fileLabel = document.createElement("label");
+    fileLabel.classList.add("col-sm-3", "control-label");
+    fileLabel.innerText = "New Files";
+    fileToggle.appendChild(fileLabel);
+    const fileToggleIcon = document.createElement("span");
+    fileToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    fileLabel.appendChild(fileToggleIcon);
+    const fileFieldContainer = document.createElement("div");
+    fileFieldContainer.classList.add("col-sm-9", "collapse");
+    fileFieldContainer.setAttribute("id", "mass_file_container");
+    fileContainer.appendChild(fileFieldContainer);
+    const fileInputGroup = document.createElement("div");
+    fileInputGroup.classList.add("input-group");
+    fileFieldContainer.appendChild(fileInputGroup);
+    const fileText = document.createElement("input");
+    fileText.classList.add("form-control");
+    fileText.setAttribute("type", "text");
+    fileText.setAttribute("placeholder", "No files selected");
+    fileText.setAttribute("disabled", "true");
+    fileInputGroup.appendChild(fileText);
+    const fileButtonGroup = document.createElement("span");
+    fileButtonGroup.classList.add("input-group-btn");
+    fileInputGroup.appendChild(fileButtonGroup);
+    const fileButton = document.createElement("span");
+    fileButton.classList.add("btn", "btn-default", "btn-file");
+    fileButtonGroup.appendChild(fileButton);
+    const fileButtonIcon = document.createElement("span");
+    fileButtonIcon.classList.add("far", "fa-folder-open", "fa-fw");
+    fileButtonIcon.style.marginRight = "3px";
+    fileButton.appendChild(fileButtonIcon);
+    const fileButtonText = document.createElement("span");
+    fileButtonText.classList.add("span-1280");
+    fileButtonText.innerText = "Browse";
+    fileButton.appendChild(fileButtonText);
+    const fileField = document.createElement("input");
+    fileField.setAttribute("id", "mass_file");
+    fileField.setAttribute("type", "file");
+    fileField.setAttribute("name", "file");
+    fileField.setAttribute("multiple", "true");
+    fileField.setAttribute("accept", ".zip,.cbz");
+    fileButton.appendChild(fileField);
+    var reversedFiles = [];
+    fileField.addEventListener("change", function()
+                                        {
+                                            if(this.files.length == 1)
+                                            {
+                                                fileText.value = this.files.length + " file selected";
+                                            }
+                                            else
+                                            {
+                                                fileText.value = this.files.length + " files selected";
+                                            }
+
+                                            for(let i = 0; i < this.files.length; i++)
+                                            {
+                                                reversedFiles[i] = this.files[i];
+                                            }
+                                            reversedFiles.reverse();
+                                        });
+    $(fileFieldContainer).on("hidden.bs.collapse", function(event)
+                                                {
+                                                    fileToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                });
+    $(fileFieldContainer).on("shown.bs.collapse", function(event)
+                                                {
+                                                    fileToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                });
+
     //create buttons
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("form-group");
@@ -599,7 +675,7 @@ function createForm() //creates mass edit form
     previewButton.appendChild(previewButtonText);
     editButton.addEventListener("click", function(event)
                                         {
-                                            massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value]);
+                                            massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, reversedFiles]);
                                         });
     cancelButton.addEventListener("click", function()
                                             {
@@ -609,7 +685,7 @@ function createForm() //creates mass edit form
                                             });
     previewButton.addEventListener("click", function(event)
                                             {
-                                                previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value]);
+                                                previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, reversedFiles]);
                                             });
 
     //add preview table
@@ -885,17 +961,17 @@ function previewEdit(fields)
                                                 editPreviewNew.childNodes[3].innerText +=  " - ";
                                             }
                                             editPreviewNew.childNodes[3].innerText += chapterTitlePreview;
-                                            editPreviewNew.childNodes[5].childNodes[0].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
-                                            editPreviewNew.childNodes[5].childNodes[0].setAttribute("alt", languagePreview);
-                                            editPreviewNew.childNodes[5].childNodes[0].setAttribute("title", languagePreview);
-                                            editPreviewNew.childNodes[7].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
+                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
+                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("alt", languagePreview);
+                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("title", languagePreview);
+                                            editPreviewNew.childNodes[9].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
                                             if(group2Preview != "0")
                                             {
-                                                editPreviewNew.childNodes[7].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
+                                                editPreviewNew.childNodes[9].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
                                             }
                                             if(group3Preview != "0")
                                             {
-                                                editPreviewNew.childNodes[7].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
+                                                editPreviewNew.childNodes[9].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
                                             }
 
                                             previewTable.appendChild(editPreviewNew);
@@ -979,6 +1055,7 @@ async function massEdit(fields) {
     const newGroups = fields[11].split("\n");
     const newGroups2 = fields[12].split("\n");
     const newGroups3 = fields[13].split("\n");
+    const newFiles = fields[14];
 
     const previewTable = document.getElementById("edit_preview");
 
@@ -1022,7 +1099,7 @@ async function massEdit(fields) {
                                         if((oldChapterTitles.includes(tempTitle) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
                                             const chapId = $(this).get(0).href.match(/(\d+)/)[0];
-                                            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle]);
+                                            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, newFiles]);
                                         }
                                     });
     for (let i = 0, len = toEdit.length; i < len; i++)
@@ -1146,7 +1223,7 @@ async function massEdit(fields) {
         if ((x => y => x || y)(newData[2], newData[1]));
         {
             // check wether the data is actually different
-            if (arraysEqual(oldData, newData))
+            if (arraysEqual(oldData, newData) && newData[8].length == 0)
             {
                 messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>.";
             }
@@ -1162,7 +1239,8 @@ async function massEdit(fields) {
                 formData.append('group_id_2', newData[5]);
                 formData.append('group_id_3', newData[6]);
                 formData.append('lang_id', langs[newData[7]]);
-                formData.append('file', newData[8]);
+                formData.append("old_file", "why is this a thing holo");
+                formData.append('file', newData[8][i]);
 
                 const headers = new Headers();
                 headers.append("x-requested-with", "XMLHttpRequest");
