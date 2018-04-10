@@ -43,6 +43,7 @@ function createForm() //creates mass edit form
     "Update 0.90:" +
         "<ul><li>Added file editing" +
         "<li>The files will be in alphabetical order when you hover the button, but are actually reversed when applying edit to match the top to bottom format" +
+        "<li>Also make sure you want to replace the file of all grabbed chapters because there's no way to skip grabbed chapters with file editing right now" +
         "<li>Fixed previews which chapter comment update broke</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
