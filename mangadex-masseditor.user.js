@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.91
+// @version      0.92
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -786,7 +786,7 @@ function previewEdit(fields)
     }
 
     var i = 0;
-    $('a[href*="/chapter/"').each(function (chapter)
+    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).each(function (chapter)
                                     {
                                         //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
                                         var title = "Read Online";
@@ -1066,7 +1066,7 @@ async function massEdit(fields) {
         previewTable.removeChild(previewTable.firstChild);
     }
 
-    $('a[href*="/chapter/"').each(function (chapter)
+    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).each(function (chapter)
                                     {
                                         //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
                                         const title = $(this).get(0).getAttribute('data-chapter-name');
