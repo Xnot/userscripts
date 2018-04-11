@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.92
+// @version      0.93
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -1041,6 +1041,8 @@ async function massEdit(fields) {
 
     //List of chapters to edit
     let toEdit = [];
+    var oldData = [];
+    var newData = [];
 
     // good place to put some data:
     const oldChapterTitles = fields[0].split("\n");
@@ -1241,7 +1243,14 @@ async function massEdit(fields) {
                 formData.append('group_id_2', newData[5]);
                 formData.append('group_id_3', newData[6]);
                 formData.append('lang_id', langs[newData[7]]);
-                formData.append("old_file", "why is this a thing holo");
+                if(newData[8][i] == undefined)
+                {
+                    formData.append("old_file", "");
+                }
+                else
+                {
+                    formData.append("old_file", "why is this a thing holo");
+                }
                 formData.append('file', newData[8][i]);
 
                 const headers = new Headers();
