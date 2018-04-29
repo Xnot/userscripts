@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         MangaDex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.94
+// @version      1.95
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-massuploader.user.js
 // @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-massuploader.user.js
-// @match        https://mangadex.org/upload/*
+// @include      https://*mangadex.org/upload/*
 // @grant        none
 // ==/UserScript==
 
@@ -148,8 +148,9 @@ function createForm() //creates mass upload form
     groupDelayCheckboxField.setAttribute("id", "mass_group_delay");
     groupDelayCheckboxField.setAttribute("name", "mass_group_delay");
     groupDelayCheckboxField.setAttribute("type", "checkbox");
+    groupDelayCheckboxField.setAttribute("disabled", "");
     groupDelayCheckbox.appendChild(groupDelayCheckboxField);
-    const groupDelayCheckboxText = document.createTextNode("Will apply to all uploads.");
+    const groupDelayCheckboxText = document.createTextNode("Disabled because Holo deleted this.");
     groupDelayCheckbox.appendChild(groupDelayCheckboxText);
     groupDelayCheckboxField.addEventListener("click", function()
                                                         {

@@ -7,7 +7,7 @@
 // @author       bcvxy, Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
 // @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
-// @match        https://mangadex.org/manga/*
+// @include      https://*mangadex.org/manga/*
 // @grant        none
 // ==/UserScript==
 
