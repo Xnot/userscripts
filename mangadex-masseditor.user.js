@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.93
+// @version      0.94
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -32,19 +32,19 @@ function createForm() //creates mass edit form
         "<br />Empty 'to edit' fields are ignored" +
         "<li>The 'new' fields determine the new values for the grabbed chapters top to bottom" +
         "<br />Use ' ' to delete titles and chapter/volume numbers, and '0' to delete groups2/3" +
+        "<br />Inputting a single value will use that value for all grabbed chapters instead" +
         "<li>Use the preview button if you feel so inclined" +
         "<li>Press the Apply Edit button and wait until it's all cool and good" +
-        "<li>Refresh after every edit so you aren't editing based on outdated information." +
-        "<li>Editing <strike>groups, languages and</strike> files soon™ maybe</ol>" +
+        "<li>Refresh after every edit so you aren't editing based on outdated information.</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.80:" +
-        "<ul><li>Inputting a single value in the 'new' fields now uses that value for all edits" +
-        "<li>Chapters with no chapter/volume number are now grabbable with ' '</ul>" +
     "Update 0.90:" +
         "<ul><li>Added file editing" +
         "<li>The files will be in alphabetical order when you hover the button, but are actually reversed when applying edit to match the top to bottom format" +
         "<li>Also make sure you want to replace the file of all grabbed chapters because there's no way to skip grabbed chapters with file editing right now" +
-        "<li>Fixed previews which chapter comment update broke</ul>";
+        "<li>Fixed previews which chapter comment update broke</ul>" +
+    "Update 0.94:" +
+        "<ul><li>You can now transfer chapters to other manga entries by entering the manga IDs in the apropriate field" +
+        "<li>It follows the same rules as the other fields</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
@@ -181,7 +181,7 @@ function createForm() //creates mass edit form
     languageToEditField.setAttribute("name", "mass_language_to_edit");
     languageToEditField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
     languageToEditField.classList.add("form-control", "collapse");
-    languageToEditField.style.height = "35px";
+    languageToEditField.style.height = "80px";
     languageToEditFieldContainer.appendChild(languageToEditField);
     $(languageToEditField).on("hidden.bs.collapse", function(event)
                                                     {
@@ -253,7 +253,7 @@ function createForm() //creates mass edit form
     group2IdToEditField.setAttribute("name", "mass_group_2_id_to_edit");
     group2IdToEditField.setAttribute("placeholder", "1\n2\n3");
     group2IdToEditField.classList.add("form-control", "collapse");
-    group2IdToEditField.style.height = "35px";
+    group2IdToEditField.style.height = "80px";
     group2IdToEditFieldContainer.appendChild(group2IdToEditField);
     $(group2IdToEditField).on("hidden.bs.collapse", function(event)
                                                     {
@@ -289,7 +289,7 @@ function createForm() //creates mass edit form
     group3IdToEditField.setAttribute("name", "mass_group_3_id_to_edit");
     group3IdToEditField.setAttribute("placeholder", "1\n2\n3");
     group3IdToEditField.classList.add("form-control", "collapse");
-    group3IdToEditField.style.height = "35px";
+    group3IdToEditField.style.height = "80px";
     group3IdToEditFieldContainer.appendChild(group3IdToEditField);
     $(group3IdToEditField).on("hidden.bs.collapse", function(event)
                                                     {
@@ -433,7 +433,7 @@ function createForm() //creates mass edit form
     newLanguageField.setAttribute("name", "mass_new_language");
     newLanguageField.setAttribute("placeholder", "English\nSpanish (Es)\nPortuguese (Br)");
     newLanguageField.classList.add("form-control", "collapse");
-    newLanguageField.style.height = "35px";
+    newLanguageField.style.height = "80px";
     newLanguageFieldContainer.appendChild(newLanguageField);
     $(newLanguageField).on("hidden.bs.collapse", function(event)
                                                 {
@@ -505,7 +505,7 @@ function createForm() //creates mass edit form
     newGroup2IdField.setAttribute("name", "mass_new_group_2_id");
     newGroup2IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
     newGroup2IdField.classList.add("form-control", "collapse");
-    newGroup2IdField.style.height = "35px";
+    newGroup2IdField.style.height = "80px";
     newGroup2IdFieldContainer.appendChild(newGroup2IdField);
     $(newGroup2IdField).on("hidden.bs.collapse", function(event)
                                                 {
@@ -541,7 +541,7 @@ function createForm() //creates mass edit form
     newGroup3IdField.setAttribute("name", "mass_new_group_3_id");
     newGroup3IdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
     newGroup3IdField.classList.add("form-control", "collapse");
-    newGroup3IdField.style.height = "35px";
+    newGroup3IdField.style.height = "80px";
     newGroup3IdFieldContainer.appendChild(newGroup3IdField);
     $(newGroup3IdField).on("hidden.bs.collapse", function(event)
                                                 {
@@ -552,6 +552,42 @@ function createForm() //creates mass edit form
                                                     newGroup3IdToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
                                                     this.style.height = "80px";
                                                 });
+
+    //create new mangaid field
+    const newMangaIdContainer = document.createElement("div");
+    newMangaIdContainer.classList.add("form-group");
+    massEditForm.appendChild(newMangaIdContainer);
+    const newMangaIdToggle = document.createElement("a");
+    newMangaIdToggle.setAttribute("data-toggle", "collapse");
+    newMangaIdToggle.setAttribute("data-target", "#mass_new_manga_id");
+    newMangaIdContainer.appendChild(newMangaIdToggle);
+    const newMangaIdLabel = document.createElement("label");
+    newMangaIdLabel.setAttribute("for","mass_new_manga_id");
+    newMangaIdLabel.classList.add("col-sm-3", "control-label");
+    newMangaIdLabel.innerText = "New Manga IDs";
+    newMangaIdToggle.appendChild(newMangaIdLabel);
+    const newMangaIdToggleIcon = document.createElement("span");
+    newMangaIdToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    newMangaIdLabel.appendChild(newMangaIdToggleIcon);
+    const newMangaIdFieldContainer = document.createElement("div");
+    newMangaIdFieldContainer.classList.add("col-sm-9");
+    newMangaIdContainer.appendChild(newMangaIdFieldContainer);
+    const newMangaIdField = document.createElement("textarea");
+    newMangaIdField.setAttribute("id", "mass_new_manga_id");
+    newMangaIdField.setAttribute("name", "mass_new_manga_id");
+    newMangaIdField.setAttribute("placeholder", "1\n2\n3");
+    newMangaIdField.classList.add("form-control", "collapse");
+    newMangaIdField.style.height = "80px";
+    newMangaIdFieldContainer.appendChild(newMangaIdField);
+    $(newMangaIdField).on("hidden.bs.collapse", function(event)
+                                                        {
+                                                            newMangaIdToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                        });
+    $(newMangaIdField).on("shown.bs.collapse", function(event)
+                                                        {
+                                                            newMangaIdToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                            this.style.height = "80px";
+                                                        });
 
     //create file field
     const fileContainer = document.createElement("div");
@@ -677,17 +713,17 @@ function createForm() //creates mass edit form
     previewButton.appendChild(previewButtonText);
     editButton.addEventListener("click", function(event)
                                         {
-                                            massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, reversedFiles]);
+                                            massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, newMangaIdField.value, reversedFiles]);
                                         });
     cancelButton.addEventListener("click", function()
                                             {
                                                 massEditForm.reset();
                                                 massEditForm.style.display = "none";
-                                                mangaInfo.style.display =  "block";
+                                                mangaInfo.style.display = "block";
                                             });
     previewButton.addEventListener("click", function(event)
                                             {
-                                                previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, reversedFiles]);
+                                                previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, newMangaIdField.value, reversedFiles]);
                                             });
 
     //add preview table
@@ -760,7 +796,8 @@ function previewEdit(fields)
         "Thai":"th",
         "Catalan":"ct",
         "Filipino":"ph",
-        "Chinese (Trad)":"hk"
+        "Chinese (Trad)":"hk",
+        "Ukrainian":"ua"
     };
 
     const oldChapterTitles = fields[0].split("\n");
@@ -777,6 +814,7 @@ function previewEdit(fields)
     const newGroups = fields[11].split("\n");
     const newGroups2 = fields[12].split("\n");
     const newGroups3 = fields[13].split("\n");
+    //add preview for new manga and files
 
     const previewTable = document.getElementById("edit_preview");
 
@@ -952,7 +990,7 @@ function previewEdit(fields)
                                             editPreviewNew.childNodes[3].innerText = "";
                                             if(volumeNumberPreview !== " ")
                                             {
-                                                editPreviewNew.childNodes[3].innerText += "Vol. " +  volumeNumberPreview;
+                                                editPreviewNew.childNodes[3].innerText += "Vol. " + volumeNumberPreview;
                                             }
                                             if(chapterNumberPreview !== " ")
                                             {
@@ -960,7 +998,7 @@ function previewEdit(fields)
                                             }
                                             if(editPreviewNew.childNodes[3].innerText != "")
                                             {
-                                                editPreviewNew.childNodes[3].innerText +=  " - ";
+                                                editPreviewNew.childNodes[3].innerText += " - ";
                                             }
                                             editPreviewNew.childNodes[3].innerText += chapterTitlePreview;
                                             editPreviewNew.childNodes[7].childNodes[0].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
@@ -1034,10 +1072,11 @@ async function massEdit(fields) {
         "Thai":"32",
         "Catalan":"33",
         "Filipino":"34",
-        "Chinese (Trad)":"35"
+        "Chinese (Trad)":"35",
+        "Ukrainian":"36"
     };
 
-    const manga = (/\/(\d+)/g).exec(window.location.href)[1];
+    const oldMangaId = (/\/(\d+)/g).exec(window.location.href)[1];
 
     //List of chapters to edit
     let toEdit = [];
@@ -1059,7 +1098,8 @@ async function massEdit(fields) {
     const newGroups = fields[11].split("\n");
     const newGroups2 = fields[12].split("\n");
     const newGroups3 = fields[13].split("\n");
-    const newFiles = fields[14];
+    const newMangaIds = fields[14].split("\n");
+    const newFiles = fields[15];
 
     const previewTable = document.getElementById("edit_preview");
 
@@ -1103,15 +1143,17 @@ async function massEdit(fields) {
                                         if((oldChapterTitles.includes(tempTitle) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
                                             const chapId = $(this).get(0).href.match(/(\d+)/)[0];
-                                            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, newFiles]);
+                                            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, oldMangaId]);
                                         }
                                     });
     for (let i = 0, len = toEdit.length; i < len; i++)
     {
         messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>Processing " + (i + 1) + "/" + len + "</div>."
-        // data format 0:chapId 1:volNum 2:chapNum 3:title 4:groupId 5:group2Id 6:group3Id 7:langTitle 8:file(optional)
-        var oldData = toEdit[i];
-        var newData = oldData.slice(0);
+        // data format 0:chapId 1:volNum 2:chapNum 3:title 4:groupId 5:group2Id 6:group3Id 7:langTitle 8:mangaId
+        //files are appended separately at the end because of some weird check holo uses
+        // fucking kill me this is a mess
+        oldData = toEdit[i];
+        newData = oldData.slice(0);
 
         // oldData holds the current information for the chapter. Don't change it
         // make your changes to newData, which is a clone of oldData by default
@@ -1222,12 +1264,32 @@ async function massEdit(fields) {
         {
             newData[7] = newLanguages[i] || oldData[7];
         }
+        var newFile = false
+        if(newFiles[i] != undefined)
+        {
+            newFile = true
+        }
+        if(newMangaIds.length == 1)
+        {
+            if(newMangaIds[0] === "")
+            {
+                newData[8] = oldData[8];
+            }
+            else
+            {
+                newData[8] = newMangaIds[0];
+            }
+        }
+        else
+        {
+            newData[8] = newMangaIds[i] || oldData[8];
+        }
 
         // check for either volume or chapter present
-        if ((x => y => x || y)(newData[2], newData[1]));
+        if((x => y => x || y)(newData[2], newData[1]))
         {
             // check wether the data is actually different
-            if (arraysEqual(oldData, newData) && newData[8].length == 0)
+            if (arraysEqual(oldData, newData) && newFiles.length == 0)
             {
                 messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>.";
             }
@@ -1235,7 +1297,7 @@ async function massEdit(fields) {
             {
                 // build formdata and POST
                 const formData = new FormData();
-                formData.append('manga_id', manga);
+                formData.append('manga_id', newData[8]);
                 formData.append('chapter_name', newData[3]);
                 formData.append('volume_number', newData[1]);
                 formData.append('chapter_number', newData[2]);
@@ -1243,15 +1305,15 @@ async function massEdit(fields) {
                 formData.append('group_id_2', newData[5]);
                 formData.append('group_id_3', newData[6]);
                 formData.append('lang_id', langs[newData[7]]);
-                if(newData[8][i] == undefined)
+                if(!newFile)
                 {
                     formData.append("old_file", "");
                 }
                 else
                 {
-                    formData.append("old_file", "why is this a thing holo");
+                    formData.append('old_file', "why is this a thing holo");
+                    formData.append('file', newFiles[i]);
                 }
-                formData.append('file', newData[8][i]);
 
                 const headers = new Headers();
                 headers.append("x-requested-with", "XMLHttpRequest");

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.95
+// @version      1.96
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -92,7 +92,7 @@ function createForm() //creates mass upload form
     volumeNumberContainer.classList.add("form-group");
     massUploadForm.appendChild(volumeNumberContainer);
     const volumeNumberLabel = document.createElement("label");
-    volumeNumberLabel.setAttribute("for","mass_chapter_name");
+    volumeNumberLabel.setAttribute("for","mass_volume_number");
     volumeNumberLabel.classList.add("col-sm-3", "control-label");
     volumeNumberLabel.innerText = "Volume numbers";
     volumeNumberContainer.appendChild(volumeNumberLabel);
