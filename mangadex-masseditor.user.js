@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.94
+// @version      0.95
 // @icon         https://mangadex.org/favicon.ico
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -764,7 +764,7 @@ function previewEdit(fields)
     {
         "English":"gb",
         "Japanese":"jp",
-        "Polish":"po",
+        "Polish":"pl",
         "Serbo-Croatian":"rs",
         "Dutch":"nl",
         "Italian":"it",
