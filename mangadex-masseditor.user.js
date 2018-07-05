@@ -746,24 +746,10 @@ function createForm() //creates mass edit form
                                             });
 
     //add preview table
-    const editPreviewTable = document.createElement("table");
-    editPreviewTable.classList.add("table", "table-hover", "table-striped", "table-sm");
+    const editPreviewTable = document.createElement("div");
+    editPreviewTable.classList.add("chapter-container");
+    editPreviewTable.id = "edit_preview";
     massEditForm.appendChild(editPreviewTable);
-    const editPreviewTableHead = document.createElement("thead"); //table used to work without this, now it doesn't
-    editPreviewTableHead.innerHTML = '<tr class="border-top-0">' + //can't be fucked to do this rn so the html is copy-pasted from the site
-                                            '<th width="28px"></th>' +
-                                            '<th><span class="far fa-file fa-fw " aria-hidden="true" title="Chapter"></span></th>' +
-                                            '<th width="5%" class="text-center"><span class="fas fa-comments fa-fw " aria-hidden="true" title="Comments"></span></th>' +
-                                            '<th class="text-center" width="30px"><span class="fas fa-globe fa-fw " aria-hidden="true" title="Language"></span></th>' +
-                                            '<th width="20%" class="d-none d-lg-table-cell"><span class="fas fa-users fa-fw " aria-hidden="true" title="Group"></span></th>' +
-                                            '<th width="10%" class="d-none d-lg-table-cell"><span class="fas fa-user fa-fw " aria-hidden="true" title="User"></span></th>' +
-                                            '<th class="text-center text-info"><span class="fas fa-eye fa-fw " aria-hidden="true" title="Views"></span></th>' +
-                                            '<th style="min-width: 70px;" class="text-right"><span class="far fa-clock fa-fw " aria-hidden="true" title="Age"></span></th>' +
-                                    '</tr>';
-    editPreviewTable.appendChild(editPreviewTableHead);
-    const editPreviewTableBody = document.createElement("tbody");
-    editPreviewTableBody.id = "edit_preview";
-    editPreviewTable.appendChild(editPreviewTableBody);
 
     //add mass edit button to open form
     const actionsContainer = document.getElementById("upload_button").parentNode;
@@ -855,54 +841,51 @@ function previewEdit(fields)
     }
 
     var i = 0;
-    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).each(function (chapter)
+    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).not($('a[href*="/edit"]')).each(function (chapter)
                                     {
+                                        const row = this.parentNode.parentNode;
                                         //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by " "
                                         var title = " ";
-                                        if($(this).get(0).getAttribute('data-chapter-name') !== "")
+                                        if(row.getAttribute('data-title') !== "")
                                         {
-                                            title = $(this).get(0).getAttribute('data-chapter-name');
+                                            title = row.getAttribute('data-title');
                                         }
                                         var volNum = " ";
-                                        if($(this).get(0).getAttribute('data-volume-num') !== "")
+                                        if(row.getAttribute('data-volume') !== "")
                                         {
-                                            volNum = $(this).get(0).getAttribute('data-volume-num');
+                                            volNum = row.getAttribute('data-volume');
                                         }
                                         var chapNum = " ";
-                                        if($(this).get(0).getAttribute('data-chapter-num') !== "")
+                                        if(row.getAttribute('data-chapter') !== "")
                                         {
-                                            chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                            chapNum = row.getAttribute('data-chapter');
                                         }
-                                        const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
-                                        const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
+                                        const langTitle = row.childNodes[11].childNodes[1].title;
+                                        const groupId = row.childNodes[13].childNodes[1].href.match(/(\d+)/)[0];
                                         var group2Id = "0";
-                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
+                                        if(row.childNodes[13].childNodes.length > 3)
                                         {
-                                            group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
+                                            group2Id = row.childNodes[13].childNodes[3].href.match(/(\d+)/)[0];
                                         }
                                         var group3Id = "0";
-                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
+                                        if(row.childNodes[13].childNodes.length > 5)
                                         {
-                                            group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
+                                            group3Id = row.childNodes[13].childNodes[5].href.match(/(\d+)/)[0];
                                         }
 
                                         if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
-                                            const editPreviewOld = this.parentNode.parentNode.cloneNode(true);
-                                            editPreviewOld.childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
+                                            const editPreviewOld = row.parentNode.parentNode.cloneNode(true);
+                                            editPreviewOld.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
                                             previewTable.appendChild(editPreviewOld);
-                                            const editPreviewNew = this.parentNode.parentNode.cloneNode(true);
-                                            editPreviewNew.childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title=''></span>";
+                                            const editPreviewNew = row.parentNode.parentNode.cloneNode(true);
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title=''></span>";
                                             var chapterTitlePreview;
                                             if(newChapterTitles.length == 1)
                                             {
                                                 if(newChapterTitles[0] === "")
                                                 {
                                                     chapterTitlePreview = title;
-                                                }
-                                                else if(newChapterTitles[0] === " ")
-                                                {
-                                                    chapterTitlePreview = "Read Online";
                                                 }
                                                 else
                                                 {
@@ -911,14 +894,7 @@ function previewEdit(fields)
                                             }
                                             else
                                             {
-                                                if(newChapterTitles[i] === " ")
-                                                {
-                                                    chapterTitlePreview = "Read Online";
-                                                }
-                                                else
-                                                {
-                                                    chapterTitlePreview = newChapterTitles[i] || title;
-                                                }
+                                                chapterTitlePreview = newChapterTitles[i] || title;
                                             }
                                             var volumeNumberPreview;
                                             if(newVolumeNumbers.length == 1)
@@ -1018,31 +994,38 @@ function previewEdit(fields)
                                             }
 
                                             //fill in new preview
-                                            editPreviewNew.childNodes[3].innerText = "";
-                                            if(volumeNumberPreview !== " ")
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].innerHTML = "<span></span><span></span>";
+                                            if(volumeNumberPreview !== " " && volumeNumberPreview !== "0")
                                             {
-                                                editPreviewNew.childNodes[3].innerText += "Vol. " + volumeNumberPreview;
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText += "Vol. " + volumeNumberPreview;
                                             }
                                             if(chapterNumberPreview !== " ")
                                             {
-                                                editPreviewNew.childNodes[3].innerText += " Ch. " + chapterNumberPreview;
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText += " Ch. " + chapterNumberPreview;
                                             }
-                                            if(editPreviewNew.childNodes[3].innerText != "")
+                                            if(editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText != "" && chapterTitlePreview !== " ")
                                             {
-                                                editPreviewNew.childNodes[3].innerText += " - ";
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += " - ";
                                             }
-                                            editPreviewNew.childNodes[3].innerText += chapterTitlePreview;
-                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
-                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("alt", languagePreview);
-                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("title", languagePreview);
-                                            editPreviewNew.childNodes[9].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
+                                            if((volumeNumberPreview === " " || volumeNumberPreview === "0") && chapterNumberPreview === " " && chapterTitlePreview === " ")
+                                            {
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += "Oneshot";
+                                            }
+                                            else
+                                            {
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += chapterTitlePreview;
+                                            }
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("alt", languagePreview);
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("title", languagePreview);
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
                                             if(group2Preview != "0")
                                             {
-                                                editPreviewNew.childNodes[9].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
                                             }
                                             if(group3Preview != "0")
                                             {
-                                                editPreviewNew.childNodes[9].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
                                             }
 
                                             previewTable.appendChild(editPreviewNew);
@@ -1139,41 +1122,41 @@ async function massEdit(fields) {
         previewTable.removeChild(previewTable.firstChild);
     }
 
-    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).each(function (chapter)
+    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).not($('a[href*="/edit"]')).each(function (chapter)
                                     {
-                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
-                                        const title = $(this).get(0).getAttribute('data-chapter-name');
-                                        var tempTitle = "Read Online"; //use a tempTitle because the site treats "Read Online" differently from ""
-                                        if (title !== "")
+                                        const row = this.parentNode.parentNode;
+                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by " "
+                                        var title = " "
+                                        if(row.getAttribute('data-title') !== "")
                                         {
-                                            tempTitle = title;
+                                            title = row.getAttribute('data-title');
                                         }
-                                        var volNum = " "; //don't need to use temp for these since they'll get trimmed anyway
-                                        if($(this).get(0).getAttribute('data-volume-num') !== "")
+                                        var volNum = " ";
+                                        if(row.getAttribute('data-volume') !== "")
                                         {
-                                            volNum = $(this).get(0).getAttribute('data-volume-num');
+                                            volNum = row.getAttribute('data-volume');
                                         }
                                         var chapNum = " ";
-                                        if($(this).get(0).getAttribute('data-chapter-num') !== "")
+                                        if(row.getAttribute('data-chapter') !== "")
                                         {
-                                            chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                            chapNum = row.getAttribute('data-chapter');
                                         }
-                                        const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
-                                        const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
+                                        const langTitle = row.childNodes[11].childNodes[1].title;
+                                        const groupId = row.childNodes[13].childNodes[1].href.match(/(\d+)/)[0];
                                         var group2Id = "0";
-                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
+                                        if(row.childNodes[13].childNodes.length > 3)
                                         {
-                                            group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
+                                            group2Id = row.childNodes[13].childNodes[3].href.match(/(\d+)/)[0];
                                         }
                                         var group3Id = "0";
-                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
+                                        if(row.childNodes[13].childNodes.length > 5)
                                         {
-                                            group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
+                                            group3Id = row.childNodes[13].childNodes[5].href.match(/(\d+)/)[0];
                                         }
 
-                                        if((oldChapterTitles.includes(tempTitle) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
+                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
-                                            const chapId = $(this).get(0).href.match(/(\d+)/)[0];
+                                            const chapId = row.getAttribute('data-id');
                                             toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, oldMangaId]);
                                         }
                                     });
@@ -1322,7 +1305,7 @@ async function massEdit(fields) {
             // check wether the data is actually different
             if (arraysEqual(oldData, newData) && newFiles.length == 0)
             {
-                messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>.";
+                messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>.";
             }
             else
             {
@@ -1352,7 +1335,7 @@ async function massEdit(fields) {
                 // send 'em away
                 try
                 {
-                    const {ok} = await fetch('https://mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=' + newData[0], {
+                    const {ok} = await fetch('http://beta.mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=' + newData[0], { //CHANGE THIS WHEN BETA GOES LIVE
                         method: 'POST',
                         headers,
                         body: formData,
@@ -1368,10 +1351,10 @@ async function massEdit(fields) {
                 catch(e)
                 {
                     console.error('Error:', e);
-                    messageContainer.innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>Not ok.</div>.";
+                    messageContainer.innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a>Not ok.</div>.";
                 }
             }
         }
     }
-    messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>all cool and good 👌👌👌👌👌</div>.";
+    messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a>all cool and good 👌👌👌👌👌</div>.";
 }
