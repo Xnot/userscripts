@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.95
-// @icon         https://mangadex.org/favicon.ico
+// @version      0.96
+// @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
 // @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
 // @include      https://*mangadex.org/manga/*
+// @include      http://*mangadex.org/manga/*
 // @grant        none
 // ==/UserScript==
 
@@ -15,9 +16,9 @@ function createForm() //creates mass edit form
 {
     const massEditForm = document.createElement("form");
     massEditForm.setAttribute("id", "mass_edit_form");
-    massEditForm.classList.add("form-horizontal", "panel-body");
+    massEditForm.classList.add("card-body");
     massEditForm.style.display = "none";
-    const container = document.getElementById("content").getElementsByClassName("panel panel-default")[0];
+    const container = document.getElementsByClassName("card mb-3")[0].getElementsByClassName("card-body p-0")[0];
     const mangaInfo = container.getElementsByClassName("row edit")[0];
     container.appendChild(massEditForm);
 
@@ -37,42 +38,40 @@ function createForm() //creates mass edit form
         "<li>Press the Apply Edit button and wait until it's all cool and good" +
         "<li>Refresh after every edit so you aren't editing based on outdated information.</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.90:" +
-        "<ul><li>Added file editing" +
-        "<li>The files will be in alphabetical order when you hover the button, but are actually reversed when applying edit to match the top to bottom format" +
-        "<li>Also make sure you want to replace the file of all grabbed chapters because there's no way to skip grabbed chapters with file editing right now" +
-        "<li>Fixed previews which chapter comment update broke</ul>" +
     "Update 0.94:" +
         "<ul><li>You can now transfer chapters to other manga entries by entering the manga IDs in the apropriate field" +
-        "<li>It follows the same rules as the other fields</ul>";
+        "<li>It follows the same rules as the other fields</ul>" +
+    "Update 0.96:" +
+        "<ul><li>Updated for V3</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
 
     //create chapter title to edit field
     const chapterTitleToEditContainer = document.createElement("div");
-    chapterTitleToEditContainer.classList.add("form-group");
+    chapterTitleToEditContainer.classList.add("form-group", "row");
     massEditForm.appendChild(chapterTitleToEditContainer);
     const chapterTitleToEditToggle = document.createElement("a");
     chapterTitleToEditToggle.setAttribute("data-toggle", "collapse");
     chapterTitleToEditToggle.setAttribute("data-target", "#mass_chapter_title_to_edit");
+    chapterTitleToEditToggle.classList.add("col-sm-2");
     chapterTitleToEditContainer.appendChild(chapterTitleToEditToggle);
     const chapterTitleToEditLabel = document.createElement("label");
     chapterTitleToEditLabel.setAttribute("for","mass_chapter_title_to_edit");
-    chapterTitleToEditLabel.classList.add("col-sm-3", "control-label");
+    chapterTitleToEditLabel.classList.add("control-label");
     chapterTitleToEditLabel.innerText = "Chapter titles to edit";
     chapterTitleToEditToggle.appendChild(chapterTitleToEditLabel);
     const chapterTitleToEditToggleIcon = document.createElement("span");
     chapterTitleToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     chapterTitleToEditLabel.appendChild(chapterTitleToEditToggleIcon);
     const chapterTitleToEditFieldContainer = document.createElement("div");
-    chapterTitleToEditFieldContainer.classList.add("col-sm-9");
+    chapterTitleToEditFieldContainer.classList.add("col-sm-10");
     chapterTitleToEditContainer.appendChild(chapterTitleToEditFieldContainer);
     const chapterTitleToEditField = document.createElement("textarea");
     chapterTitleToEditField.setAttribute("id", "mass_chapter_title_to_edit");
     chapterTitleToEditField.setAttribute("name", "mass_chapter_title_to_edit");
     chapterTitleToEditField.setAttribute("placeholder", "Read Online\nRead Offline\nPlaceholder3");
-    chapterTitleToEditField.classList.add("form-control", "collapse", "in");
+    chapterTitleToEditField.classList.add("form-control", "collapse", "show");
     chapterTitleToEditField.style.height = "80px";
     chapterTitleToEditFieldContainer.appendChild(chapterTitleToEditField);
     $(chapterTitleToEditField).on("hidden.bs.collapse", function(event)
@@ -87,28 +86,29 @@ function createForm() //creates mass edit form
 
     //create volume number to edit field
     const volumeNumberToEditContainer = document.createElement("div");
-    volumeNumberToEditContainer.classList.add("form-group");
+    volumeNumberToEditContainer.classList.add("form-group", "row");
     massEditForm.appendChild(volumeNumberToEditContainer);
     const volumeNumberToEditToggle = document.createElement("a");
     volumeNumberToEditToggle.setAttribute("data-toggle", "collapse");
     volumeNumberToEditToggle.setAttribute("data-target", "#mass_volume_number_to_edit");
+    volumeNumberToEditToggle.classList.add("col-sm-2");
     volumeNumberToEditContainer.appendChild(volumeNumberToEditToggle);
     const volumeNumberToEditLabel = document.createElement("label");
     volumeNumberToEditLabel.setAttribute("for","mass_volume_number_to_edit");
-    volumeNumberToEditLabel.classList.add("col-sm-3", "control-label");
+    volumeNumberToEditLabel.classList.add("control-label");
     volumeNumberToEditLabel.innerText = "Volume numbers to edit";
     volumeNumberToEditToggle.appendChild(volumeNumberToEditLabel);
     const volumeNumberToEditToggleIcon = document.createElement("span");
     volumeNumberToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     volumeNumberToEditLabel.appendChild(volumeNumberToEditToggleIcon);
     const volumeNumberToEditFieldContainer = document.createElement("div");
-    volumeNumberToEditFieldContainer.classList.add("col-sm-9");
+    volumeNumberToEditFieldContainer.classList.add("col-sm-10");
     volumeNumberToEditContainer.appendChild(volumeNumberToEditFieldContainer);
     const volumeNumberToEditField = document.createElement("textarea");
     volumeNumberToEditField.setAttribute("id", "mass_volume_number_to_edit");
     volumeNumberToEditField.setAttribute("name", "mass_volume_number_to_edit");
     volumeNumberToEditField.setAttribute("placeholder", "1\n2\n3");
-    volumeNumberToEditField.classList.add("form-control", "collapse", "in");
+    volumeNumberToEditField.classList.add("form-control", "collapse", "show");
     volumeNumberToEditField.style.height = "80px";
     volumeNumberToEditFieldContainer.appendChild(volumeNumberToEditField);
     $(volumeNumberToEditField).on("hidden.bs.collapse", function(event)
@@ -123,28 +123,29 @@ function createForm() //creates mass edit form
 
     //create chapter number to edit field
     const chapterNumberToEditContainer = document.createElement("div");
-    chapterNumberToEditContainer.classList.add("form-group");
+    chapterNumberToEditContainer.classList.add("form-group", "row");
     massEditForm.appendChild(chapterNumberToEditContainer);
     const chapterNumberToEditToggle = document.createElement("a");
     chapterNumberToEditToggle.setAttribute("data-toggle", "collapse");
     chapterNumberToEditToggle.setAttribute("data-target", "#mass_chapter_number_to_edit");
+    chapterNumberToEditToggle.classList.add("col-sm-2");
     chapterNumberToEditContainer.appendChild(chapterNumberToEditToggle);
     const chapterNumberToEditLabel = document.createElement("label");
     chapterNumberToEditLabel.setAttribute("for","mass_chapter_number_to_edit");
-    chapterNumberToEditLabel.classList.add("col-sm-3", "control-label");
+    chapterNumberToEditLabel.classList.add("control-label");
     chapterNumberToEditLabel.innerText = "Chapter numbers to edit";
     chapterNumberToEditToggle.appendChild(chapterNumberToEditLabel);
     const chapterNumberToEditToggleIcon = document.createElement("span");
     chapterNumberToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     chapterNumberToEditLabel.appendChild(chapterNumberToEditToggleIcon);
     const chapterNumberToEditFieldContainer = document.createElement("div");
-    chapterNumberToEditFieldContainer.classList.add("col-sm-9");
+    chapterNumberToEditFieldContainer.classList.add("col-sm-10");
     chapterNumberToEditContainer.appendChild(chapterNumberToEditFieldContainer);
     const chapterNumberToEditField = document.createElement("textarea");
     chapterNumberToEditField.setAttribute("id", "mass_chapter_number_to_edit");
     chapterNumberToEditField.setAttribute("name", "mass_chapter_number_to_edit");
     chapterNumberToEditField.setAttribute("placeholder", "1\n2\n3");
-    chapterNumberToEditField.classList.add("form-control", "collapse", "in");
+    chapterNumberToEditField.classList.add("form-control", "collapse", "show");
     chapterNumberToEditField.style.height = "80px";
     chapterNumberToEditFieldContainer.appendChild(chapterNumberToEditField);
     $(chapterNumberToEditField).on("hidden.bs.collapse", function(event)
@@ -159,22 +160,23 @@ function createForm() //creates mass edit form
 
     //create language to edit field
     const languageToEditContainer = document.createElement("div");
-    languageToEditContainer.classList.add("form-group");
+    languageToEditContainer.classList.add("form-group", "row");
     massEditForm.appendChild(languageToEditContainer);
     const languageToEditToggle = document.createElement("a");
     languageToEditToggle.setAttribute("data-toggle", "collapse");
     languageToEditToggle.setAttribute("data-target", "#mass_language_to_edit");
+    languageToEditToggle.classList.add("col-sm-2");
     languageToEditContainer.appendChild(languageToEditToggle);
     const languageToEditLabel = document.createElement("label");
     languageToEditLabel.setAttribute("for","mass_language_to_edit");
-    languageToEditLabel.classList.add("col-sm-3", "control-label");
+    languageToEditLabel.classList.add("control-label");
     languageToEditLabel.innerText = "Languages to edit";
     languageToEditToggle.appendChild(languageToEditLabel);
     const languageToEditToggleIcon = document.createElement("span");
     languageToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     languageToEditLabel.appendChild(languageToEditToggleIcon);
     const languageToEditFieldContainer = document.createElement("div");
-    languageToEditFieldContainer.classList.add("col-sm-9");
+    languageToEditFieldContainer.classList.add("col-sm-10");
     languageToEditContainer.appendChild(languageToEditFieldContainer);
     const languageToEditField = document.createElement("textarea");
     languageToEditField.setAttribute("id", "mass_language_to_edit");
@@ -195,28 +197,29 @@ function createForm() //creates mass edit form
 
     //create groupid to edit field
     const groupIdToEditContainer = document.createElement("div");
-    groupIdToEditContainer.classList.add("form-group");
+    groupIdToEditContainer.classList.add("form-group", "row");
     massEditForm.appendChild(groupIdToEditContainer);
     const groupIdToEditToggle = document.createElement("a");
     groupIdToEditToggle.setAttribute("data-toggle", "collapse");
     groupIdToEditToggle.setAttribute("data-target", "#mass_group_id_to_edit");
+    groupIdToEditToggle.classList.add("col-sm-2");
     groupIdToEditContainer.appendChild(groupIdToEditToggle);
     const groupIdToEditLabel = document.createElement("label");
     groupIdToEditLabel.setAttribute("for","mass_group_id_to_edit");
-    groupIdToEditLabel.classList.add("col-sm-3", "control-label");
+    groupIdToEditLabel.classList.add("control-label");
     groupIdToEditLabel.innerText = "Group IDs to edit";
     groupIdToEditToggle.appendChild(groupIdToEditLabel);
     const groupIdToEditToggleIcon = document.createElement("span");
     groupIdToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     groupIdToEditLabel.appendChild(groupIdToEditToggleIcon);
     const groupIdToEditFieldContainer = document.createElement("div");
-    groupIdToEditFieldContainer.classList.add("col-sm-9");
+    groupIdToEditFieldContainer.classList.add("col-sm-10");
     groupIdToEditContainer.appendChild(groupIdToEditFieldContainer);
     const groupIdToEditField = document.createElement("textarea");
     groupIdToEditField.setAttribute("id", "mass_group_id_to_edit");
     groupIdToEditField.setAttribute("name", "mass_group_id_to_edit");
     groupIdToEditField.setAttribute("placeholder", "1\n2\n3");
-    groupIdToEditField.classList.add("form-control", "collapse", "in");
+    groupIdToEditField.classList.add("form-control", "collapse", "show");
     groupIdToEditField.style.height = "80px";
     groupIdToEditFieldContainer.appendChild(groupIdToEditField);
     $(groupIdToEditField).on("hidden.bs.collapse", function(event)
@@ -231,22 +234,23 @@ function createForm() //creates mass edit form
 
     //create group2id to edit field
     const group2IdToEditContainer = document.createElement("div");
-    group2IdToEditContainer.classList.add("form-group");
+    group2IdToEditContainer.classList.add("form-group", "row");
     massEditForm.appendChild(group2IdToEditContainer);
     const group2IdToEditToggle = document.createElement("a");
     group2IdToEditToggle.setAttribute("data-toggle", "collapse");
     group2IdToEditToggle.setAttribute("data-target", "#mass_group_2_id_to_edit");
+    group2IdToEditToggle.classList.add("col-sm-2");
     group2IdToEditContainer.appendChild(group2IdToEditToggle);
     const group2IdToEditLabel = document.createElement("label");
     group2IdToEditLabel.setAttribute("for","mass_group_2_id_to_edit");
-    group2IdToEditLabel.classList.add("col-sm-3", "control-label");
+    group2IdToEditLabel.classList.add("control-label");
     group2IdToEditLabel.innerText = "Group 2 IDs to edit";
     group2IdToEditToggle.appendChild(group2IdToEditLabel);
     const group2IdToEditToggleIcon = document.createElement("span");
     group2IdToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     group2IdToEditLabel.appendChild(group2IdToEditToggleIcon);
     const group2IdToEditFieldContainer = document.createElement("div");
-    group2IdToEditFieldContainer.classList.add("col-sm-9");
+    group2IdToEditFieldContainer.classList.add("col-sm-10");
     group2IdToEditContainer.appendChild(group2IdToEditFieldContainer);
     const group2IdToEditField = document.createElement("textarea");
     group2IdToEditField.setAttribute("id", "mass_group_2_id_to_edit");
@@ -267,22 +271,23 @@ function createForm() //creates mass edit form
 
     //create group3id to edit field
     const group3IdToEditContainer = document.createElement("div");
-    group3IdToEditContainer.classList.add("form-group");
+    group3IdToEditContainer.classList.add("form-group", "row");
     massEditForm.appendChild(group3IdToEditContainer);
     const group3IdToEditToggle = document.createElement("a");
     group3IdToEditToggle.setAttribute("data-toggle", "collapse");
     group3IdToEditToggle.setAttribute("data-target", "#mass_group_3_id_to_edit");
+    group3IdToEditToggle.classList.add("col-sm-2");
     group3IdToEditContainer.appendChild(group3IdToEditToggle);
     const group3IdToEditLabel = document.createElement("label");
     group3IdToEditLabel.setAttribute("for","mass_group_3_id_to_edit");
-    group3IdToEditLabel.classList.add("col-sm-3", "control-label");
+    group3IdToEditLabel.classList.add("control-label");
     group3IdToEditLabel.innerText = "Group 3 IDs to edit";
     group3IdToEditToggle.appendChild(group3IdToEditLabel);
     const group3IdToEditToggleIcon = document.createElement("span");
     group3IdToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     group3IdToEditLabel.appendChild(group3IdToEditToggleIcon);
     const group3IdToEditFieldContainer = document.createElement("div");
-    group3IdToEditFieldContainer.classList.add("col-sm-9");
+    group3IdToEditFieldContainer.classList.add("col-sm-10");
     group3IdToEditContainer.appendChild(group3IdToEditFieldContainer);
     const group3IdToEditField = document.createElement("textarea");
     group3IdToEditField.setAttribute("id", "mass_group_3_id_to_edit");
@@ -303,28 +308,29 @@ function createForm() //creates mass edit form
 
     //create new chapter title field
     const newChapterTitleContainer = document.createElement("div");
-    newChapterTitleContainer.classList.add("form-group");
+    newChapterTitleContainer.classList.add("form-group", "row");
     massEditForm.appendChild(newChapterTitleContainer);
     const newChapterTitleToggle = document.createElement("a");
     newChapterTitleToggle.setAttribute("data-toggle", "collapse");
     newChapterTitleToggle.setAttribute("data-target", "#mass_new_chapter_title");
+    newChapterTitleToggle.classList.add("col-sm-2");
     newChapterTitleContainer.appendChild(newChapterTitleToggle);
     const newChapterTitleLabel = document.createElement("label");
     newChapterTitleLabel.setAttribute("for","mass_new_chapter_title");
-    newChapterTitleLabel.classList.add("col-sm-3", "control-label");
+    newChapterTitleLabel.classList.add("control-label");
     newChapterTitleLabel.innerText = "New chapter titles";
     newChapterTitleToggle.appendChild(newChapterTitleLabel);
     const newChapterTitleToggleIcon = document.createElement("span");
     newChapterTitleToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     newChapterTitleLabel.appendChild(newChapterTitleToggleIcon);
     const newChapterTitleFieldContainer = document.createElement("div");
-    newChapterTitleFieldContainer.classList.add("col-sm-9");
+    newChapterTitleFieldContainer.classList.add("col-sm-10");
     newChapterTitleContainer.appendChild(newChapterTitleFieldContainer);
     const newChapterTitleField = document.createElement("textarea");
     newChapterTitleField.setAttribute("id", "mass_new_chapter_title");
     newChapterTitleField.setAttribute("name", "mass_new_chapter_title");
     newChapterTitleField.setAttribute("placeholder", "title1\ntitle2\ntitle3");
-    newChapterTitleField.classList.add("form-control", "collapse", "in");
+    newChapterTitleField.classList.add("form-control", "collapse", "show");
     newChapterTitleField.style.height = "80px";
     newChapterTitleFieldContainer.appendChild(newChapterTitleField);
     $(newChapterTitleField).on("hidden.bs.collapse", function(event)
@@ -339,28 +345,29 @@ function createForm() //creates mass edit form
 
     //create new volume number field
     const newVolumeNumberContainer = document.createElement("div");
-    newVolumeNumberContainer.classList.add("form-group");
+    newVolumeNumberContainer.classList.add("form-group", "row");
     massEditForm.appendChild(newVolumeNumberContainer);
     const newVolumeNumberToggle = document.createElement("a");
     newVolumeNumberToggle.setAttribute("data-toggle", "collapse");
     newVolumeNumberToggle.setAttribute("data-target", "#mass_new_volume_number");
+    newVolumeNumberToggle.classList.add("col-sm-2");
     newVolumeNumberContainer.appendChild(newVolumeNumberToggle);
     const newVolumeNumberLabel = document.createElement("label");
     newVolumeNumberLabel.setAttribute("for","mass_new_volume_number");
-    newVolumeNumberLabel.classList.add("col-sm-3", "control-label");
+    newVolumeNumberLabel.classList.add("control-label");
     newVolumeNumberLabel.innerText = "New volume numbers";
     newVolumeNumberToggle.appendChild(newVolumeNumberLabel);
     const newVolumeNumberToggleIcon = document.createElement("span");
     newVolumeNumberToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     newVolumeNumberLabel.appendChild(newVolumeNumberToggleIcon);
     const newVolumeNumberFieldContainer = document.createElement("div");
-    newVolumeNumberFieldContainer.classList.add("col-sm-9");
+    newVolumeNumberFieldContainer.classList.add("col-sm-10");
     newVolumeNumberContainer.appendChild(newVolumeNumberFieldContainer);
     const newVolumeNumberField = document.createElement("textarea");
     newVolumeNumberField.setAttribute("id", "mass_new_volume_number");
     newVolumeNumberField.setAttribute("name", "mass_new_volume_number");
     newVolumeNumberField.setAttribute("placeholder", "volume1\nvolume2\nvolume3");
-    newVolumeNumberField.classList.add("form-control", "collapse", "in");
+    newVolumeNumberField.classList.add("form-control", "collapse", "show");
     newVolumeNumberField.style.height = "80px";
     newVolumeNumberFieldContainer.appendChild(newVolumeNumberField);
     $(newVolumeNumberField).on("hidden.bs.collapse", function(event)
@@ -375,28 +382,29 @@ function createForm() //creates mass edit form
 
     //create new chapter number field
     const newChapterNumberContainer = document.createElement("div");
-    newChapterNumberContainer.classList.add("form-group");
+    newChapterNumberContainer.classList.add("form-group", "row");
     massEditForm.appendChild(newChapterNumberContainer);
     const newChapterNumberToggle = document.createElement("a");
     newChapterNumberToggle.setAttribute("data-toggle", "collapse");
     newChapterNumberToggle.setAttribute("data-target", "#mass_new_chapter_number");
+    newChapterNumberToggle.classList.add("col-sm-2");
     newChapterNumberContainer.appendChild(newChapterNumberToggle);
     const newChapterNumberLabel = document.createElement("label");
     newChapterNumberLabel.setAttribute("for","mass_new_chapter_number");
-    newChapterNumberLabel.classList.add("col-sm-3", "control-label");
+    newChapterNumberLabel.classList.add("control-label");
     newChapterNumberLabel.innerText = "New chapter numbers";
     newChapterNumberToggle.appendChild(newChapterNumberLabel);
     const newChapterNumberToggleIcon = document.createElement("span");
     newChapterNumberToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     newChapterNumberLabel.appendChild(newChapterNumberToggleIcon);
     const newChapterNumberFieldContainer = document.createElement("div");
-    newChapterNumberFieldContainer.classList.add("col-sm-9");
+    newChapterNumberFieldContainer.classList.add("col-sm-10");
     newChapterNumberContainer.appendChild(newChapterNumberFieldContainer);
     const newChapterNumberField = document.createElement("textarea");
     newChapterNumberField.setAttribute("id", "mass_new_chapter_number");
     newChapterNumberField.setAttribute("name", "mass_new_chapter_number");
     newChapterNumberField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
-    newChapterNumberField.classList.add("form-control", "collapse", "in");
+    newChapterNumberField.classList.add("form-control", "collapse", "show");
     newChapterNumberField.style.height = "80px";
     newChapterNumberFieldContainer.appendChild(newChapterNumberField);
     $(newChapterNumberField).on("hidden.bs.collapse", function(event)
@@ -411,22 +419,23 @@ function createForm() //creates mass edit form
 
     //create new language field
     const newLanguageContainer = document.createElement("div");
-    newLanguageContainer.classList.add("form-group");
+    newLanguageContainer.classList.add("form-group", "row");
     massEditForm.appendChild(newLanguageContainer);
     const newLanguageToggle = document.createElement("a");
     newLanguageToggle.setAttribute("data-toggle", "collapse");
     newLanguageToggle.setAttribute("data-target", "#mass_new_language");
+    newLanguageToggle.classList.add("col-sm-2");
     newLanguageContainer.appendChild(newLanguageToggle);
     const newLanguageLabel = document.createElement("label");
     newLanguageLabel.setAttribute("for","mass_new_language");
-    newLanguageLabel.classList.add("col-sm-3", "control-label");
+    newLanguageLabel.classList.add("control-label");
     newLanguageLabel.innerText = "New languages";
     newLanguageToggle.appendChild(newLanguageLabel);
     const newLanguageToggleIcon = document.createElement("span");
     newLanguageToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     newLanguageLabel.appendChild(newLanguageToggleIcon);
     const newLanguageFieldContainer = document.createElement("div");
-    newLanguageFieldContainer.classList.add("col-sm-9");
+    newLanguageFieldContainer.classList.add("col-sm-10");
     newLanguageContainer.appendChild(newLanguageFieldContainer);
     const newLanguageField = document.createElement("textarea");
     newLanguageField.setAttribute("id", "mass_new_language");
@@ -447,28 +456,29 @@ function createForm() //creates mass edit form
 
     //create new groupid field
     const newGroupIdContainer = document.createElement("div");
-    newGroupIdContainer.classList.add("form-group");
+    newGroupIdContainer.classList.add("form-group", "row");
     massEditForm.appendChild(newGroupIdContainer);
     const newGroupIdToggle = document.createElement("a");
     newGroupIdToggle.setAttribute("data-toggle", "collapse");
     newGroupIdToggle.setAttribute("data-target", "#mass_new_group_id");
+    newGroupIdToggle.classList.add("col-sm-2");
     newGroupIdContainer.appendChild(newGroupIdToggle);
     const newGroupIdLabel = document.createElement("label");
     newGroupIdLabel.setAttribute("for","mass_new_group_id");
-    newGroupIdLabel.classList.add("col-sm-3", "control-label");
+    newGroupIdLabel.classList.add("control-label");
     newGroupIdLabel.innerText = "New group IDs";
     newGroupIdToggle.appendChild(newGroupIdLabel);
     const newGroupIdToggleIcon = document.createElement("span");
     newGroupIdToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
     newGroupIdLabel.appendChild(newGroupIdToggleIcon);
     const newGroupIdFieldContainer = document.createElement("div");
-    newGroupIdFieldContainer.classList.add("col-sm-9");
+    newGroupIdFieldContainer.classList.add("col-sm-10");
     newGroupIdContainer.appendChild(newGroupIdFieldContainer);
     const newGroupIdField = document.createElement("textarea");
     newGroupIdField.setAttribute("id", "mass_new_group_id");
     newGroupIdField.setAttribute("name", "mass_new_group_id");
     newGroupIdField.setAttribute("placeholder", "chapter1\nchapter2\nchapter3");
-    newGroupIdField.classList.add("form-control", "collapse", "in");
+    newGroupIdField.classList.add("form-control", "collapse", "show");
     newGroupIdField.style.height = "80px";
     newGroupIdFieldContainer.appendChild(newGroupIdField);
     $(newGroupIdField).on("hidden.bs.collapse", function(event)
@@ -483,22 +493,23 @@ function createForm() //creates mass edit form
 
     //create new group2id field
     const newGroup2IdContainer = document.createElement("div");
-    newGroup2IdContainer.classList.add("form-group");
+    newGroup2IdContainer.classList.add("form-group", "row");
     massEditForm.appendChild(newGroup2IdContainer);
     const newGroup2IdToggle = document.createElement("a");
     newGroup2IdToggle.setAttribute("data-toggle", "collapse");
     newGroup2IdToggle.setAttribute("data-target", "#mass_new_group_2_id");
+    newGroup2IdToggle.classList.add("col-sm-2");
     newGroup2IdContainer.appendChild(newGroup2IdToggle);
     const newGroup2IdLabel = document.createElement("label");
     newGroup2IdLabel.setAttribute("for","mass_new_group_2_id");
-    newGroup2IdLabel.classList.add("col-sm-3", "control-label");
+    newGroup2IdLabel.classList.add("control-label");
     newGroup2IdLabel.innerText = "New group 2 IDs";
     newGroup2IdToggle.appendChild(newGroup2IdLabel);
     const newGroup2IdToggleIcon = document.createElement("span");
     newGroup2IdToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     newGroup2IdLabel.appendChild(newGroup2IdToggleIcon);
     const newGroup2IdFieldContainer = document.createElement("div");
-    newGroup2IdFieldContainer.classList.add("col-sm-9");
+    newGroup2IdFieldContainer.classList.add("col-sm-10");
     newGroup2IdContainer.appendChild(newGroup2IdFieldContainer);
     const newGroup2IdField = document.createElement("textarea");
     newGroup2IdField.setAttribute("id", "mass_new_group_2_id");
@@ -519,22 +530,23 @@ function createForm() //creates mass edit form
 
     //create new group3id field
     const newGroup3IdContainer = document.createElement("div");
-    newGroup3IdContainer.classList.add("form-group");
+    newGroup3IdContainer.classList.add("form-group", "row");
     massEditForm.appendChild(newGroup3IdContainer);
     const newGroup3IdToggle = document.createElement("a");
     newGroup3IdToggle.setAttribute("data-toggle", "collapse");
     newGroup3IdToggle.setAttribute("data-target", "#mass_new_group_3_id");
+    newGroup3IdToggle.classList.add("col-sm-2");
     newGroup3IdContainer.appendChild(newGroup3IdToggle);
     const newGroup3IdLabel = document.createElement("label");
     newGroup3IdLabel.setAttribute("for","mass_new_group_3_id");
-    newGroup3IdLabel.classList.add("col-sm-3", "control-label");
+    newGroup3IdLabel.classList.add("control-label");
     newGroup3IdLabel.innerText = "New group 3 IDs";
     newGroup3IdToggle.appendChild(newGroup3IdLabel);
     const newGroup3IdToggleIcon = document.createElement("span");
     newGroup3IdToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     newGroup3IdLabel.appendChild(newGroup3IdToggleIcon);
     const newGroup3IdFieldContainer = document.createElement("div");
-    newGroup3IdFieldContainer.classList.add("col-sm-9");
+    newGroup3IdFieldContainer.classList.add("col-sm-10");
     newGroup3IdContainer.appendChild(newGroup3IdFieldContainer);
     const newGroup3IdField = document.createElement("textarea");
     newGroup3IdField.setAttribute("id", "mass_new_group_3_id");
@@ -555,22 +567,23 @@ function createForm() //creates mass edit form
 
     //create new mangaid field
     const newMangaIdContainer = document.createElement("div");
-    newMangaIdContainer.classList.add("form-group");
+    newMangaIdContainer.classList.add("form-group", "row");
     massEditForm.appendChild(newMangaIdContainer);
     const newMangaIdToggle = document.createElement("a");
     newMangaIdToggle.setAttribute("data-toggle", "collapse");
     newMangaIdToggle.setAttribute("data-target", "#mass_new_manga_id");
+    newMangaIdToggle.classList.add("col-sm-2");
     newMangaIdContainer.appendChild(newMangaIdToggle);
     const newMangaIdLabel = document.createElement("label");
     newMangaIdLabel.setAttribute("for","mass_new_manga_id");
-    newMangaIdLabel.classList.add("col-sm-3", "control-label");
+    newMangaIdLabel.classList.add("control-label");
     newMangaIdLabel.innerText = "New Manga IDs";
     newMangaIdToggle.appendChild(newMangaIdLabel);
     const newMangaIdToggleIcon = document.createElement("span");
     newMangaIdToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     newMangaIdLabel.appendChild(newMangaIdToggleIcon);
     const newMangaIdFieldContainer = document.createElement("div");
-    newMangaIdFieldContainer.classList.add("col-sm-9");
+    newMangaIdFieldContainer.classList.add("col-sm-10");
     newMangaIdContainer.appendChild(newMangaIdFieldContainer);
     const newMangaIdField = document.createElement("textarea");
     newMangaIdField.setAttribute("id", "mass_new_manga_id");
@@ -591,21 +604,22 @@ function createForm() //creates mass edit form
 
     //create file field
     const fileContainer = document.createElement("div");
-    fileContainer.classList.add("form-group");
+    fileContainer.classList.add("form-group", "row");
     massEditForm.appendChild(fileContainer);
     const fileToggle = document.createElement("a");
     fileToggle.setAttribute("data-toggle", "collapse");
     fileToggle.setAttribute("data-target", "#mass_file_container");
+    fileToggle.classList.add("col-sm-2");
     fileContainer.appendChild(fileToggle);
     const fileLabel = document.createElement("label");
-    fileLabel.classList.add("col-sm-3", "control-label");
+    fileLabel.classList.add("control-label");
     fileLabel.innerText = "New Files";
     fileToggle.appendChild(fileLabel);
     const fileToggleIcon = document.createElement("span");
     fileToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
     fileLabel.appendChild(fileToggleIcon);
     const fileFieldContainer = document.createElement("div");
-    fileFieldContainer.classList.add("col-sm-9", "collapse");
+    fileFieldContainer.classList.add("col-sm-10", "collapse");
     fileFieldContainer.setAttribute("id", "mass_file_container");
     fileContainer.appendChild(fileFieldContainer);
     const fileInputGroup = document.createElement("div");
@@ -667,11 +681,39 @@ function createForm() //creates mass edit form
 
     //create buttons
     const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("form-group");
+    buttonsContainer.classList.add("form-group", "row");
     massEditForm.appendChild(buttonsContainer);
     const buttonsDiv = document.createElement("div");
-    buttonsDiv.classList.add("col-sm-12", "text-right", "btn-toolbar");
+    buttonsDiv.classList.add("col-sm-12", "text-right");
     buttonsContainer.appendChild(buttonsDiv);
+    const previewButton = document.createElement("button");
+    previewButton.setAttribute("id", "mass_edit_preview_button");
+    previewButton.setAttribute("type", "button");
+    previewButton.classList.add("btn", "btn-info", "pull-right");
+    previewButton.style.marginRight = "4px";
+    buttonsDiv.appendChild(previewButton);
+    const previewButtonIcon = document.createElement("span");
+    previewButtonIcon.classList.add("fas", "fa-eye", "fa-fw");
+    previewButtonIcon.style.marginRight = "3px";
+    previewButton.appendChild(previewButtonIcon);
+    const previewButtonText = document.createElement("span");
+    previewButtonText.classList.add("d-none", "d-xl-inline");
+    previewButtonText.innerText = "Preview Edit";
+    previewButton.appendChild(previewButtonText);
+    const cancelButton = document.createElement("button");
+    cancelButton.setAttribute("id", "mass_edit_cancel_button");
+    cancelButton.setAttribute("type", "button");
+    cancelButton.classList.add("btn", "btn-danger", "pull-right");
+    cancelButton.style.marginRight = "4px";
+    buttonsDiv.appendChild(cancelButton);
+    const cancelButtonIcon = document.createElement("span");
+    cancelButtonIcon.classList.add("fas", "fa-ban", "fa-fw");
+    cancelButtonIcon.style.marginRight = "3px";
+    cancelButton.appendChild(cancelButtonIcon);
+    const cancelButtonText = document.createElement("span");
+    cancelButtonText.classList.add("d-none", "d-xl-inline");
+    cancelButtonText.innerText = "Cancel";
+    cancelButton.appendChild(cancelButtonText);
     const editButton = document.createElement("button");
     editButton.setAttribute("id", "mass_edit_save_button");
     editButton.setAttribute("type", "button");
@@ -682,35 +724,9 @@ function createForm() //creates mass edit form
     editButtonIcon.style.marginRight = "3px";
     editButton.appendChild(editButtonIcon);
     const editButtonText = document.createElement("span");
-    editButtonText.classList.add("span-1280");
+    editButtonText.classList.add("d-none", "d-xl-inline");
     editButtonText.innerText = "Apply Edit";
     editButton.appendChild(editButtonText);
-    const cancelButton = document.createElement("button");
-    cancelButton.setAttribute("id", "mass_edit_cancel_button");
-    cancelButton.setAttribute("type", "button");
-    cancelButton.classList.add("btn", "btn-danger", "pull-right");
-    buttonsDiv.appendChild(cancelButton);
-    const cancelButtonIcon = document.createElement("span");
-    cancelButtonIcon.classList.add("fas", "fa-ban", "fa-fw");
-    cancelButtonIcon.style.marginRight = "3px";
-    cancelButton.appendChild(cancelButtonIcon);
-    const cancelButtonText = document.createElement("span");
-    cancelButtonText.classList.add("span-1280");
-    cancelButtonText.innerText = "Cancel";
-    cancelButton.appendChild(cancelButtonText);
-    const previewButton = document.createElement("button");
-    previewButton.setAttribute("id", "mass_edit_preview_button");
-    previewButton.setAttribute("type", "button");
-    previewButton.classList.add("btn", "btn-info", "pull-right");
-    buttonsDiv.appendChild(previewButton);
-    const previewButtonIcon = document.createElement("span");
-    previewButtonIcon.classList.add("fas", "fa-eye", "fa-fw");
-    previewButtonIcon.style.marginRight = "3px";
-    previewButton.appendChild(previewButtonIcon);
-    const previewButtonText = document.createElement("span");
-    previewButtonText.classList.add("span-1280");
-    previewButtonText.innerText = "Preview Edit";
-    previewButton.appendChild(previewButtonText);
     editButton.addEventListener("click", function(event)
                                         {
                                             massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, newMangaIdField.value, reversedFiles]);
@@ -719,7 +735,7 @@ function createForm() //creates mass edit form
                                             {
                                                 massEditForm.reset();
                                                 massEditForm.style.display = "none";
-                                                mangaInfo.style.display = "block";
+                                                mangaInfo.style.display = "flex";
                                             });
     previewButton.addEventListener("click", function(event)
                                             {
@@ -727,27 +743,25 @@ function createForm() //creates mass edit form
                                             });
 
     //add preview table
-    const editPreviewTable = document.createElement("table");
-    editPreviewTable.classList.add("table", "table-hover", "table-striped", "table-condensed");
+    const editPreviewTable = document.createElement("div");
+    editPreviewTable.classList.add("chapter-container");
+    editPreviewTable.id = "edit_preview";
     massEditForm.appendChild(editPreviewTable);
-    const editPreviewTableBody = document.createElement("tbody");
-    editPreviewTableBody.id = "edit_preview";
-    editPreviewTable.appendChild(editPreviewTableBody);
 
     //add mass edit button to open form
     const actionsContainer = document.getElementById("upload_button").parentNode;
-    actionsContainer.classList.add("btn-toolbar");
     const openEditButton = document.createElement("button");
     openEditButton.setAttribute("id", "mass_edit_open_button");
     openEditButton.setAttribute("type", "button");
-    openEditButton.classList.add("btn", "btn-success", "pull-right");
+    openEditButton.classList.add("btn", "btn-success", "float-right");
+    openEditButton.style.marginRight = "4px";
     actionsContainer.appendChild(openEditButton);
     const openEditButtonIcon = document.createElement("span");
     openEditButtonIcon.classList.add("fas", "fa-edit", "fa-fw");
     openEditButtonIcon.style.marginRight = "3px";
     openEditButton.appendChild(openEditButtonIcon);
     const openEditButtonText = document.createElement("span");
-    openEditButtonText.classList.add("span-1280");
+    openEditButtonText.classList.add("d-none", "d-xl-inline");
     openEditButtonText.innerText = "Mass Edit";
     openEditButton.appendChild(openEditButtonText);
     openEditButton.addEventListener("click", function()
@@ -824,54 +838,51 @@ function previewEdit(fields)
     }
 
     var i = 0;
-    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).each(function (chapter)
+    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).not($('a[href*="/edit"]')).each(function (chapter)
                                     {
-                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
-                                        var title = "Read Online";
-                                        if($(this).get(0).getAttribute('data-chapter-name') !== "")
+                                        const row = this.parentNode.parentNode;
+                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by " "
+                                        var title = " ";
+                                        if(row.getAttribute('data-title') !== "")
                                         {
-                                            title = $(this).get(0).getAttribute('data-chapter-name');
+                                            title = row.getAttribute('data-title');
                                         }
                                         var volNum = " ";
-                                        if($(this).get(0).getAttribute('data-volume-num') !== "")
+                                        if(row.getAttribute('data-volume') !== "")
                                         {
-                                            volNum = $(this).get(0).getAttribute('data-volume-num');
+                                            volNum = row.getAttribute('data-volume');
                                         }
                                         var chapNum = " ";
-                                        if($(this).get(0).getAttribute('data-chapter-num') !== "")
+                                        if(row.getAttribute('data-chapter') !== "")
                                         {
-                                            chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                            chapNum = row.getAttribute('data-chapter');
                                         }
-                                        const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
-                                        const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
+                                        const langTitle = row.childNodes[11].childNodes[1].title;
+                                        const groupId = row.childNodes[13].childNodes[1].href.match(/(\d+)/)[0];
                                         var group2Id = "0";
-                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
+                                        if(row.childNodes[13].childNodes.length > 3)
                                         {
-                                            group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
+                                            group2Id = row.childNodes[13].childNodes[3].href.match(/(\d+)/)[0];
                                         }
                                         var group3Id = "0";
-                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
+                                        if(row.childNodes[13].childNodes.length > 5)
                                         {
-                                            group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
+                                            group3Id = row.childNodes[13].childNodes[5].href.match(/(\d+)/)[0];
                                         }
 
                                         if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
-                                            const editPreviewOld = this.parentNode.parentNode.cloneNode(true);
-                                            editPreviewOld.childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
+                                            const editPreviewOld = row.parentNode.parentNode.cloneNode(true);
+                                            editPreviewOld.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
                                             previewTable.appendChild(editPreviewOld);
-                                            const editPreviewNew = this.parentNode.parentNode.cloneNode(true);
-                                            editPreviewNew.childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title=''></span>";
+                                            const editPreviewNew = row.parentNode.parentNode.cloneNode(true);
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title=''></span>";
                                             var chapterTitlePreview;
                                             if(newChapterTitles.length == 1)
                                             {
                                                 if(newChapterTitles[0] === "")
                                                 {
                                                     chapterTitlePreview = title;
-                                                }
-                                                else if(newChapterTitles[0] === " ")
-                                                {
-                                                    chapterTitlePreview = "Read Online";
                                                 }
                                                 else
                                                 {
@@ -880,14 +891,7 @@ function previewEdit(fields)
                                             }
                                             else
                                             {
-                                                if(newChapterTitles[i] === " ")
-                                                {
-                                                    chapterTitlePreview = "Read Online";
-                                                }
-                                                else
-                                                {
-                                                    chapterTitlePreview = newChapterTitles[i] || title;
-                                                }
+                                                chapterTitlePreview = newChapterTitles[i] || title;
                                             }
                                             var volumeNumberPreview;
                                             if(newVolumeNumbers.length == 1)
@@ -987,31 +991,38 @@ function previewEdit(fields)
                                             }
 
                                             //fill in new preview
-                                            editPreviewNew.childNodes[3].innerText = "";
-                                            if(volumeNumberPreview !== " ")
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].innerHTML = "<span></span><span></span>";
+                                            if(volumeNumberPreview !== " " && volumeNumberPreview !== "0")
                                             {
-                                                editPreviewNew.childNodes[3].innerText += "Vol. " + volumeNumberPreview;
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText += "Vol. " + volumeNumberPreview;
                                             }
                                             if(chapterNumberPreview !== " ")
                                             {
-                                                editPreviewNew.childNodes[3].innerText += " Ch. " + chapterNumberPreview;
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText += " Ch. " + chapterNumberPreview;
                                             }
-                                            if(editPreviewNew.childNodes[3].innerText != "")
+                                            if(editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText != "" && chapterTitlePreview !== " ")
                                             {
-                                                editPreviewNew.childNodes[3].innerText += " - ";
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += " - ";
                                             }
-                                            editPreviewNew.childNodes[3].innerText += chapterTitlePreview;
-                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
-                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("alt", languagePreview);
-                                            editPreviewNew.childNodes[7].childNodes[0].setAttribute("title", languagePreview);
-                                            editPreviewNew.childNodes[9].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
+                                            if((volumeNumberPreview === " " || volumeNumberPreview === "0") && chapterNumberPreview === " " && chapterTitlePreview === " ")
+                                            {
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += "Oneshot";
+                                            }
+                                            else
+                                            {
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += chapterTitlePreview;
+                                            }
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("alt", languagePreview);
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("title", languagePreview);
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
                                             if(group2Preview != "0")
                                             {
-                                                editPreviewNew.childNodes[9].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
                                             }
                                             if(group3Preview != "0")
                                             {
-                                                editPreviewNew.childNodes[9].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
                                             }
 
                                             previewTable.appendChild(editPreviewNew);
@@ -1108,41 +1119,41 @@ async function massEdit(fields) {
         previewTable.removeChild(previewTable.firstChild);
     }
 
-    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).each(function (chapter)
+    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).not($('a[href*="/edit"]')).each(function (chapter)
                                     {
-                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by "Read Online"/" "
-                                        const title = $(this).get(0).getAttribute('data-chapter-name');
-                                        var tempTitle = "Read Online"; //use a tempTitle because the site treats "Read Online" differently from ""
-                                        if (title !== "")
+                                        const row = this.parentNode.parentNode;
+                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by " "
+                                        var title = " "
+                                        if(row.getAttribute('data-title') !== "")
                                         {
-                                            tempTitle = title;
+                                            title = row.getAttribute('data-title');
                                         }
-                                        var volNum = " "; //don't need to use temp for these since they'll get trimmed anyway
-                                        if($(this).get(0).getAttribute('data-volume-num') !== "")
+                                        var volNum = " ";
+                                        if(row.getAttribute('data-volume') !== "")
                                         {
-                                            volNum = $(this).get(0).getAttribute('data-volume-num');
+                                            volNum = row.getAttribute('data-volume');
                                         }
                                         var chapNum = " ";
-                                        if($(this).get(0).getAttribute('data-chapter-num') !== "")
+                                        if(row.getAttribute('data-chapter') !== "")
                                         {
-                                            chapNum = $(this).get(0).getAttribute('data-chapter-num');
+                                            chapNum = row.getAttribute('data-chapter');
                                         }
-                                        const langTitle = $(this).closest('tr').find('img[src*="/images/flags/"]')[0].title;
-                                        const groupId = $(this).closest('tr').find('a[href*="/group/"]')[0].href.match(/(\d+)/)[0];
+                                        const langTitle = row.childNodes[11].childNodes[1].title;
+                                        const groupId = row.childNodes[13].childNodes[1].href.match(/(\d+)/)[0];
                                         var group2Id = "0";
-                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 1)
+                                        if(row.childNodes[13].childNodes.length > 3)
                                         {
-                                            group2Id = $(this).closest('tr').find('a[href*="/group/"]')[1].href.match(/(\d+)/)[0];
+                                            group2Id = row.childNodes[13].childNodes[3].href.match(/(\d+)/)[0];
                                         }
                                         var group3Id = "0";
-                                        if($(this).closest('tr').find('a[href*="/group/"]').length > 2)
+                                        if(row.childNodes[13].childNodes.length > 5)
                                         {
-                                            group3Id = $(this).closest('tr').find('a[href*="/group/"]')[2].href.match(/(\d+)/)[0];
+                                            group3Id = row.childNodes[13].childNodes[5].href.match(/(\d+)/)[0];
                                         }
 
-                                        if((oldChapterTitles.includes(tempTitle) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
+                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
-                                            const chapId = $(this).get(0).href.match(/(\d+)/)[0];
+                                            const chapId = row.getAttribute('data-id');
                                             toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, oldMangaId]);
                                         }
                                     });
@@ -1291,7 +1302,7 @@ async function massEdit(fields) {
             // check wether the data is actually different
             if (arraysEqual(oldData, newData) && newFiles.length == 0)
             {
-                messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>.";
+                messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a>No changes in " + (i + 1) + "/" + len + ", skipping</div>.";
             }
             else
             {
@@ -1321,7 +1332,7 @@ async function massEdit(fields) {
                 // send 'em away
                 try
                 {
-                    const {ok} = await fetch('https://mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=' + newData[0], {
+                    const {ok} = await fetch('http://beta.mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=' + newData[0], { //CHANGE THIS WHEN BETA GOES LIVE
                         method: 'POST',
                         headers,
                         body: formData,
@@ -1337,10 +1348,10 @@ async function massEdit(fields) {
                 catch(e)
                 {
                     console.error('Error:', e);
-                    messageContainer.innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>Not ok.</div>.";
+                    messageContainer.innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a>Not ok.</div>.";
                 }
             }
         }
     }
-    messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>all cool and good 👌👌👌👌👌</div>.";
+    messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a>all cool and good 👌👌👌👌👌</div>.";
 }
