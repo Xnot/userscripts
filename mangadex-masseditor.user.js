@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.95
-// @icon         https://mangadex.org/favicon.ico
+// @version      0.96
+// @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
@@ -38,14 +38,11 @@ function createForm() //creates mass edit form
         "<li>Press the Apply Edit button and wait until it's all cool and good" +
         "<li>Refresh after every edit so you aren't editing based on outdated information.</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.90:" +
-        "<ul><li>Added file editing" +
-        "<li>The files will be in alphabetical order when you hover the button, but are actually reversed when applying edit to match the top to bottom format" +
-        "<li>Also make sure you want to replace the file of all grabbed chapters because there's no way to skip grabbed chapters with file editing right now" +
-        "<li>Fixed previews which chapter comment update broke</ul>" +
     "Update 0.94:" +
         "<ul><li>You can now transfer chapters to other manga entries by entering the manga IDs in the apropriate field" +
-        "<li>It follows the same rules as the other fields</ul>";
+        "<li>It follows the same rules as the other fields</ul>" +
+    "Update 0.96:" +
+        "<ul><li>Updated for V3</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
