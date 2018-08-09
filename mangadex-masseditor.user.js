@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.96
+// @version      0.97
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -1332,7 +1332,7 @@ async function massEdit(fields) {
                 // send 'em away
                 try
                 {
-                    const {ok} = await fetch('http://beta.mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=' + newData[0], { //CHANGE THIS WHEN BETA GOES LIVE
+                    const {ok} = await fetch('https://mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=' + newData[0], {
                         method: 'POST',
                         headers,
                         body: formData,
