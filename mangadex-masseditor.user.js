@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         MangaDex (shitty) Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.97
+// @version      0.98
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
 // @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
 // @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
-// @include      https://*mangadex.org/manga/*
-// @include      http://*mangadex.org/manga/*
+// @include      https://*mangadex.org/title/*
+// @include      http://*mangadex.org/title/*
 // @grant        none
 // ==/UserScript==
 
@@ -1012,7 +1012,7 @@ function previewEdit(fields)
                                             {
                                                 editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += chapterTitlePreview;
                                             }
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("src", "https://s1.mangadex.org/images/flags/" + flags[languagePreview] + ".png");
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("src", "https://mangadex.org/images/flags/" + flags[languagePreview] + ".png");
                                             editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("alt", languagePreview);
                                             editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("title", languagePreview);
                                             editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
