@@ -689,8 +689,7 @@ function createForm() //creates mass edit form
     const previewButton = document.createElement("button");
     previewButton.setAttribute("id", "mass_edit_preview_button");
     previewButton.setAttribute("type", "button");
-    previewButton.classList.add("btn", "btn-info", "pull-right");
-    previewButton.style.marginRight = "4px";
+    previewButton.classList.add("btn", "btn-info", "pull-right", "mr-1");
     buttonsDiv.appendChild(previewButton);
     const previewButtonIcon = document.createElement("span");
     previewButtonIcon.classList.add("fas", "fa-eye", "fa-fw");
@@ -703,7 +702,7 @@ function createForm() //creates mass edit form
     const cancelButton = document.createElement("button");
     cancelButton.setAttribute("id", "mass_edit_cancel_button");
     cancelButton.setAttribute("type", "button");
-    cancelButton.classList.add("btn", "btn-danger", "pull-right");
+    cancelButton.classList.add("btn", "btn-danger", "pull-right", "mr-1");
     cancelButton.style.marginRight = "4px";
     buttonsDiv.appendChild(cancelButton);
     const cancelButtonIcon = document.createElement("span");
@@ -753,8 +752,7 @@ function createForm() //creates mass edit form
     const openEditButton = document.createElement("button");
     openEditButton.setAttribute("id", "mass_edit_open_button");
     openEditButton.setAttribute("type", "button");
-    openEditButton.classList.add("btn", "btn-success", "float-right");
-    openEditButton.style.marginRight = "4px";
+    openEditButton.classList.add("btn", "btn-success", "float-right", "mr-1");
     actionsContainer.appendChild(openEditButton);
     const openEditButtonIcon = document.createElement("span");
     openEditButtonIcon.classList.add("fas", "fa-edit", "fa-fw");

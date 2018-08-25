@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.96
+// @version      1.97
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -35,24 +35,22 @@ function createForm() //creates mass upload form
     "Update 1.94:" +
         "<ul><li>If you enter a new line after the first group or if there's already more than one group, selecting another group from the dropdown will add it instead of replacing what's already there</ul>";
     const container = document.getElementById("content");
-    container.insertBefore(userscriptInfo, container.getElementsByClassName("panel panel-default")[1]); //insert info panel
+    container.insertBefore(userscriptInfo, container.getElementsByClassName("card mb-3")[1]); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
 
     //create form
     const massUploadForm = document.createElement("form");
     massUploadForm.setAttribute("id", "mass_upload_form");
-    massUploadForm.classList.add("form-horizontal");
-    massUploadForm.style.marginTop = "15px";
-    container.getElementsByClassName("panel-body")[1].insertBefore(massUploadForm, document.getElementById("upload_form")); //insert mass upload form
+    container.getElementsByClassName("card mb-3")[1].getElementsByClassName("card-body")[0].insertBefore(massUploadForm, document.getElementById("upload_form")); //insert mass upload form
 
     //create mango field
     const mangaContainer = document.createElement("div");
-    mangaContainer.classList.add("form-group");
+    mangaContainer.classList.add("form-group", "row");
     massUploadForm.appendChild(mangaContainer);
     const mangaLabel = document.createElement("label");
     mangaLabel.setAttribute("for","mass_manga_id");
-    mangaLabel.classList.add("col-sm-3", "control-label");
+    mangaLabel.classList.add("col-md-3", "col-form-label");
     mangaLabel.innerText = "Manga name";
     mangaContainer.appendChild(mangaLabel);
     const mangaFieldContainer = document.createElement("div");
@@ -69,11 +67,11 @@ function createForm() //creates mass upload form
 
     //create chapter name field
     const chapterNameContainer = document.createElement("div");
-    chapterNameContainer.classList.add("form-group");
+    chapterNameContainer.classList.add("form-group", "row");
     massUploadForm.appendChild(chapterNameContainer);
     const chapterNameLabel = document.createElement("label");
     chapterNameLabel.setAttribute("for","mass_chapter_name");
-    chapterNameLabel.classList.add("col-sm-3", "control-label");
+    chapterNameLabel.classList.add("col-md-3", "col-form-label");
     chapterNameLabel.innerText = "Chapter names";
     chapterNameContainer.appendChild(chapterNameLabel);
     const chapterNameFieldContainer = document.createElement("div");
@@ -89,11 +87,11 @@ function createForm() //creates mass upload form
 
     //create volume number field
     const volumeNumberContainer = document.createElement("div");
-    volumeNumberContainer.classList.add("form-group");
+    volumeNumberContainer.classList.add("form-group", "row");
     massUploadForm.appendChild(volumeNumberContainer);
     const volumeNumberLabel = document.createElement("label");
     volumeNumberLabel.setAttribute("for","mass_volume_number");
-    volumeNumberLabel.classList.add("col-sm-3", "control-label");
+    volumeNumberLabel.classList.add("col-md-3", "col-form-label");
     volumeNumberLabel.innerText = "Volume numbers";
     volumeNumberContainer.appendChild(volumeNumberLabel);
     const volumeNumberFieldContainer = document.createElement("div");
@@ -109,11 +107,11 @@ function createForm() //creates mass upload form
 
     //create chapter number field
     const chapterNumberContainer = document.createElement("div");
-    chapterNumberContainer.classList.add("form-group");
+    chapterNumberContainer.classList.add("form-group", "row");
     massUploadForm.appendChild(chapterNumberContainer);
     const chapterNumberLabel = document.createElement("label");
     chapterNumberLabel.setAttribute("for","mass_chapter_number");
-    chapterNumberLabel.classList.add("col-sm-3", "control-label");
+    chapterNumberLabel.classList.add("col-md-3", "col-form-label");
     chapterNumberLabel.innerText = "Chapter numbers";
     chapterNumberContainer.appendChild(chapterNumberLabel);
     const chapterNumberFieldContainer = document.createElement("div");
@@ -129,11 +127,11 @@ function createForm() //creates mass upload form
 
     //create delay field
     const groupDelayContainer = document.createElement("div");
-    groupDelayContainer.classList.add("form-group");
+    groupDelayContainer.classList.add("form-group", "row");
     massUploadForm.appendChild(groupDelayContainer);
     const groupDelayLabel = document.createElement("label");
     groupDelayLabel.setAttribute("for","mass_group_delay");
-    groupDelayLabel.classList.add("col-sm-3", "control-label");
+    groupDelayLabel.classList.add("col-md-3", "col-form-label");
     groupDelayLabel.innerText = "Apply group delays";
     groupDelayContainer.appendChild(groupDelayLabel);
     const groupDelayCheckboxContainer = document.createElement("div");
@@ -150,7 +148,7 @@ function createForm() //creates mass upload form
     groupDelayCheckboxField.setAttribute("type", "checkbox");
     groupDelayCheckboxField.setAttribute("disabled", "");
     groupDelayCheckbox.appendChild(groupDelayCheckboxField);
-    const groupDelayCheckboxText = document.createTextNode("Disabled because Holo deleted this.");
+    const groupDelayCheckboxText = document.createTextNode(" Disabled because Holo deleted this.");
     groupDelayCheckbox.appendChild(groupDelayCheckboxText);
     groupDelayCheckboxField.addEventListener("click", function()
                                                         {
@@ -159,11 +157,11 @@ function createForm() //creates mass upload form
 
     //create group1 field
     const group1Container = document.createElement("div");
-    group1Container.classList.add("form-group");
+    group1Container.classList.add("form-group", "row");
     massUploadForm.appendChild(group1Container);
     const group1Label = document.createElement("label");
     group1Label.setAttribute("for","mass_group_id");
-    group1Label.classList.add("col-sm-3", "control-label");
+    group1Label.classList.add("col-md-3", "col-form-label");
     group1Label.innerText = "Groups 1";
     group1Container.appendChild(group1Label);
     const group1FieldContainer = document.createElement("div");
@@ -195,11 +193,11 @@ function createForm() //creates mass upload form
 
     //create group2 field
     const group2Container = document.createElement("div");
-    group2Container.classList.add("form-group");
+    group2Container.classList.add("form-group", "row");
     massUploadForm.appendChild(group2Container);
     const group2Label = document.createElement("label");
     group2Label.setAttribute("for","mass_group_id_2");
-    group2Label.classList.add("col-sm-3", "control-label");
+    group2Label.classList.add("col-md-3", "col-form-label");
     group2Label.innerText = "Groups 2";
     group2Container.appendChild(group2Label);
     const group2FieldContainer = document.createElement("div");
@@ -231,11 +229,11 @@ function createForm() //creates mass upload form
 
     //create group3 field
     const group3Container = document.createElement("div");
-    group3Container.classList.add("form-group");
+    group3Container.classList.add("form-group", "row");
     massUploadForm.appendChild(group3Container);
     const group3Label = document.createElement("label");
     group3Label.setAttribute("for","mass_group_id_3");
-    group3Label.classList.add("col-sm-3", "control-label");
+    group3Label.classList.add("col-md-3", "col-form-label");
     group3Label.innerText = "Groups 3";
     group3Container.appendChild(group3Label);
     const group3FieldContainer = document.createElement("div");
@@ -267,11 +265,11 @@ function createForm() //creates mass upload form
 
     //create language field
     const languageContainer = document.createElement("div");
-    languageContainer.classList.add("form-group");
+    languageContainer.classList.add("form-group", "row");
     massUploadForm.appendChild(languageContainer);
     const languageLabel = document.createElement("label");
     languageLabel.setAttribute("for","mass_lang_id");
-    languageLabel.classList.add("col-sm-3", "control-label");
+    languageLabel.classList.add("col-md-3", "col-form-label");
     languageLabel.innerText = "Languages";
     languageContainer.appendChild(languageLabel);
     const languageFieldContainer = document.createElement("div");
@@ -287,11 +285,11 @@ function createForm() //creates mass upload form
 
     //create file field
     const fileContainer = document.createElement("div");
-    fileContainer.classList.add("form-group");
+    fileContainer.classList.add("form-group", "row");
     massUploadForm.appendChild(fileContainer);
     const fileLabel = document.createElement("label");
     fileLabel.setAttribute("for","mass_file");
-    fileLabel.classList.add("col-sm-3", "control-label");
+    fileLabel.classList.add("col-md-3", "col-form-label");
     fileLabel.innerText = "Files";
     fileContainer.appendChild(fileLabel);
     const fileFieldContainer = document.createElement("div");
@@ -342,11 +340,24 @@ function createForm() //creates mass upload form
 
     //create buttons
     const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("form-group");
+    buttonsContainer.classList.add("form-group", "row");
     massUploadForm.appendChild(buttonsContainer);
     const buttonsDiv = document.createElement("div");
-    buttonsDiv.classList.add("col-sm-12", "text-right", "btn-toolbar");
+    buttonsDiv.classList.add("col-sm-12", "text-right");
     buttonsContainer.appendChild(buttonsDiv);
+    const resetButton = document.createElement("button");
+    resetButton.setAttribute("id", "mass_reset_button");
+    resetButton.setAttribute("type", "reset");
+    resetButton.classList.add("btn", "btn-warning", "pull-right", "mr-1");
+    buttonsDiv.appendChild(resetButton);
+    const resetButtonIcon = document.createElement("span");
+    resetButtonIcon.classList.add("fas", "fa-trash-alt", "fa-fw");
+    resetButtonIcon.style.marginRight = "3px";
+    resetButton.appendChild(resetButtonIcon);
+    const resetButtonText = document.createElement("span");
+    resetButtonText.classList.add("span-1280");
+    resetButtonText.innerText = "Reset Form";
+    resetButton.appendChild(resetButtonText);
     const uploadButton = document.createElement("button");
     uploadButton.setAttribute("id", "mass_upload_button");
     uploadButton.setAttribute("type", "button");
@@ -360,19 +371,6 @@ function createForm() //creates mass upload form
     uploadButtonText.classList.add("span-1280");
     uploadButtonText.innerText = "Mass Upload";
     uploadButton.appendChild(uploadButtonText);
-    const resetButton = document.createElement("button");
-    resetButton.setAttribute("id", "mass_reset_button");
-    resetButton.setAttribute("type", "reset");
-    resetButton.classList.add("btn", "btn-warning", "pull-right");
-    buttonsDiv.appendChild(resetButton);
-    const resetButtonIcon = document.createElement("span");
-    resetButtonIcon.classList.add("fas", "fa-trash-alt", "fa-fw");
-    resetButtonIcon.style.marginRight = "3px";
-    resetButton.appendChild(resetButtonIcon);
-    const resetButtonText = document.createElement("span");
-    resetButtonText.classList.add("span-1280");
-    resetButtonText.innerText = "Reset Form";
-    resetButton.appendChild(resetButtonText);
     uploadButton.addEventListener("click", function(event)
                                             {
                                                 massUpload(event, [chapterNameField, volumeNumberField, chapterNumberField, group1Field, group2Field, group3Field, fileField]);
@@ -389,7 +387,7 @@ function massUpload(event, fields)
     }
     else
     {
-        document.getElementById("message_container").innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Error:</strong> Either the amount of files does not match names, volumes, chapters, or groups, or you left the group field empty. See instructions and try again. </div>.";
+        document.getElementById("message_container").innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a><strong>Error:</strong> Either the amount of files does not match names, volumes, chapters, or groups, or you left the group field empty. See instructions and try again. </div>.";
         console.log(splitFields);
     }
 }
@@ -525,33 +523,33 @@ function uploadNext(event, splitFields, i)
     }
     if(group1List.length == 1)
     {
-        document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group1List[0];
+        document.getElementById("group_id").nextSibling.childNodes[0].childNodes[0].childNodes[0].innerHTML = " id: " + group1List[0];
     }
     else
     {
-        document.getElementById("group_id").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group1List[i];
+        document.getElementById("group_id").nextSibling.childNodes[0].childNodes[0].childNodes[0].innerHTML = " id: " + group1List[i];
     }
     if(group2List.length == 1)
     {
-        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group2List[0];
+        document.getElementById("group_id_2").nextSibling.childNodes[0].childNodes[0].childNodes[0].innerHTML = " id: " + group2List[0];
     }
     else
     {
-        document.getElementById("group_id_2").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group2List[i];
+        document.getElementById("group_id_2").nextSibling.childNodes[0].childNodes[0].childNodes[0].innerHTML = " id: " + group2List[i];
     }
     if(group3List.length == 1)
     {
-        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group3List[0];
+        document.getElementById("group_id_3").nextSibling.childNodes[0].childNodes[0].childNodes[0].innerHTML = " id: " + group3List[0];
     }
     else
     {
-        document.getElementById("group_id_3").previousSibling.previousSibling.childNodes[0].innerHTML = " id: " + group3List[i];
+        document.getElementById("group_id_3").nextSibling.childNodes[0].childNodes[0].childNodes[0].innerHTML = " id: " + group3List[i];
     }
     document.getElementById("file").parentNode.parentNode.previousSibling.previousSibling.value = fileList[i].name;
 
     const j = i+1; //for printing purposes only
-    const success_msg = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Success:</strong> " + j + "/" + fileList.length + " chapters have been uploaded.</div>";
-    const error_msg = "<div class='alert alert-warning text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a><strong>Warning:</strong> Something went wrong with your upload at " + j + "/" + fileList.length + " files. All previous files have been uploaded.</div>";
+    const success_msg = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a><strong>Success:</strong> " + j + "/" + fileList.length + " chapters have been uploaded.</div>";
+    const error_msg = "<div class='alert alert-warning text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a><strong>Warning:</strong> Something went wrong with your upload at " + j + "/" + fileList.length + " files. All previous files have been uploaded.</div>";
 
     const uploadButton = document.getElementById("upload_button"); //disable buttons
     uploadButton.childNodes[0].classList.replace("fa-upload", "fa-spinner");
