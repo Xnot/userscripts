@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Cover Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.10
+// @version      0.20
 // @icon         https://mangadex.org/favicon.ico
 // @description  imagine if someone tried uploading conan covers without this
 // @author       Xnot
@@ -13,29 +13,24 @@
 
 function createForm()
 {
-    //const userscriptInfo = document.createElement("div"); //info panel with userscript instructions
-    //userscriptInfo.classList.add("alert", "alert-info");
-    //userscriptInfo.setAttribute("role", "alert");
-    //userscriptInfo.innerHTML = "<h4>You are using MangaDex Mass Uploader by Xnot</h4>" +
-    //    "<ol><li>Insert chapter names,volume numbers, chapter numbers, and group IDs into their respective fields. Each line is one chapter" +
-    //     "<br />Alternatively, inputting a single name/volume/groupID/non-numerical ch.number will use that for all uploads, and inputing a single numerical chapter will increment it for each upload" +
-    //     "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
-    //     "<br />If you want a chapter to have an empty title or whatever leave an empty line in the respective field. Except for Group 1, every chapter MUST have a Group 1" +
-    //     "<br />Selecting a group in the dropdown in the bottom form will give you the group IDs" +
-    //     "<li>Check the group delay box if you feel so inclined (will apply for all uploads)" +
-    //     "<li>Click browse and use shift/ctrl so select all files" +
-    //     "<br />If you hover over the browse button you can check if the files are in the expected order" +
-    //     "<li>Select language from the standard upload form below the mass upload form" +
-    //     "<li>Click the Mass Upload button" +
-    //     "<li>If you realized you've fucked up halfway through, just close the tab or something, cause I have no idea how to make a cancel button and Holo didn't make one for me to rip off</ol>" +
-    // "If there are any problems @ or pm me on Discord<br />" +
+    const userscriptInfo = document.createElement("div"); //info panel with userscript instructions
+    userscriptInfo.classList.add("alert", "alert-info");
+    userscriptInfo.setAttribute("role", "alert");
+    userscriptInfo.innerHTML = "<h6>You are using MangaDex Mass Cover Uploader by Xnot</h6>" +
+       "<ol><li>Insert volume numbers, into its respective field. Each line is one volume" +
+        "<br />Alternatively, inputting a single numerical volume will increment it by 1 for each upload" +
+        "<br />If you want a cover to have an empty volume for some reason leave an empty line in the appropiate spot" +
+        "<li>Click browse and use shift/ctrl to select all files, " +
+        "<br />If you hover over the browse button you can check if the files are in the expected order" +
+        "<li>Click the Save button</ol>" +
+    "If there are any problems @ or pm me on Discord";
     // "Update 1.91:" +
     //     "<ul><li>Language now doesn't reset on completion" +
     //     "<li><strike>Now works with Greasemonkey</strike> Adding Greasemonkey compatibility breaks random things unpredictably so fuck Greasemonkey</ul>" +
     // "Update 1.94:" +
     //     "<ul><li>If you enter a new line after the first group or if there's already more than one group, selecting another group from the dropdown will add it instead of replacing what's already there</ul>";
     const container = document.getElementById("manga_cover_upload_modal").getElementsByClassName("modal-content")[0];
-    //container.insertBefore(userscriptInfo, container.getElementsByClassName("card mb-3")[1]); //insert info panel
+    container.insertBefore(userscriptInfo, container.getElementsByClassName("modal-header")[0]); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
 
@@ -107,13 +102,13 @@ function massCoverUpload(volumes, files)
 {
     volumes = volumes.split("\n");
 
-    if((files.length == volumes.length || volumes.length == 1) && files.length > 0)
+    if((files.length == volumes.length || (volumes.length == 1 && !isNaN(parseFloat(volumes[0])))) && files.length > 0)
     {
         uploadNext(volumes, files, 0);
     }
     else
     {
-        document.getElementById("message_container").innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a><strong>Error:</strong> The amount of files does not match the amount volumes. See instructions and try again.</div>.";
+        document.getElementById("message_container").innerHTML = "<div class='alert alert-danger text-center' style='pointer-events: auto;' role='alert'><a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a><strong>Error:</strong> The amount of files does not match the amount volumes or you're using sequential upload with a non-number. See instructions and try again.</div>.";
         console.log(volumes + " | " + files);
     }
 }
@@ -126,14 +121,7 @@ function uploadNext(volumes, files, i)
     const formData = new FormData(); //create new form data
     if(volumes.length == 1) //sequential volume upload
     {
-        if(isNaN(parseFloat(volumes[0]))) //only use increment if is number
-        {
-            formData.append("volume", volumes[0]);
-        }
-        else
-        {
-            formData.append("volume", parseFloat(volumes[0]) + i);
-        }
+        formData.append("volume", parseFloat(volumes[0]) + i);
     }
     else //listed volume upload
     {

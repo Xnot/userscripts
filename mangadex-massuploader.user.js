@@ -16,14 +16,14 @@ function createForm() //creates mass upload form
     const userscriptInfo = document.createElement("div"); //info panel with userscript instructions
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
-    userscriptInfo.innerHTML = "<h4>You are using MangaDex Mass Uploader by Xnot</h4>" +
+    userscriptInfo.innerHTML = "<h5>You are using MangaDex Mass Uploader by Xnot</h5>" +
         "<ol><li>Insert chapter names,volume numbers, chapter numbers, and group IDs into their respective fields. Each line is one chapter" +
         "<br />Alternatively, inputting a single name/volume/groupID/non-numerical ch.number will use that for all uploads, and inputing a single numerical chapter will increment it for each upload" +
         "<br />Obviously only use those options if there is only one volume/group/if there are no special chapters in your files" +
         "<br />If you want a chapter to have an empty title or whatever leave an empty line in the respective field. Except for Group 1, every chapter MUST have a Group 1" +
         "<br />Selecting a group in the dropdown in the bottom form will give you the group IDs" +
         "<li>Check the group delay box if you feel so inclined (will apply for all uploads)" +
-        "<li>Click browse and use shift/ctrl so select all files" +
+        "<li>Click browse and use shift/ctrl to select all files" +
         "<br />If you hover over the browse button you can check if the files are in the expected order" +
         "<li>Select language from the standard upload form below the mass upload form" +
         "<li>Click the Mass Upload button" +

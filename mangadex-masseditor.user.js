@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         MangaDex (shitty) Mass Editor
+// @name         MangaDex Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
 // @version      0.99
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
@@ -24,7 +24,7 @@ function createForm() //creates mass edit form
     const userscriptInfo = document.createElement("div"); //info panel with userscript instructions
     userscriptInfo.classList.add("alert", "alert-info");
     userscriptInfo.setAttribute("role", "alert");
-    userscriptInfo.innerHTML = "<h4>You are using MangaDex (shitty) Mass Editor ßeta by Xnot with some code borrowed from bcvxy</h4>" +
+    userscriptInfo.innerHTML = "<h5>You are using MangaDex Mass Editor by Xnot with some code borrowed from bcvxy</h5>" +
         "<ol><li>Use the 'to edit' fields to grab the chapters you want. Each line is one value" +
         "<br />Use 'Read Online' to grab empty titles, ' ' (a space) to grab empty chapter/volume numbers, and '0' to grab empty groups2/3" +
         "<br />Only chapters in the page you are looking at can be grabbed" +
