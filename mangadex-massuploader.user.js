@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Uploader
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.97
+// @version      1.98
 // @icon         https://mangadex.org/favicon.ico
 // @description  try to get green!
 // @author       Xnot
@@ -381,7 +381,7 @@ function massUpload(event, fields)
 {
     const splitFields = splitInputs(fields);
     //this if statement is getting really long
-    if((splitFields[6].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[6].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[6].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[6].length == splitFields[3].length || splitFields[3].length == 1) && !splitFields[3].includes("") && (splitFields[6].length == splitFields[4].length || splitFields[4].length == 1) && (splitFields[6].length == splitFields[5].length || splitFields[5].length == 1))
+    if((splitFields[6].length == splitFields[0].length || splitFields[0].length == 1) && (splitFields[6].length == splitFields[1].length || splitFields[1].length == 1) && (splitFields[6].length == splitFields[2].length || splitFields[2].length == 1) && (splitFields[6].length == splitFields[3].length || splitFields[3].length == 1) && !splitFields[3].includes("") && (splitFields[6].length == splitFields[4].length || splitFields[4].length == 1) && (splitFields[6].length == splitFields[5].length || splitFields[5].length == 1) && splitFields[6].length > 0)
     {
         uploadNext(event, splitFields, 0);
     }
