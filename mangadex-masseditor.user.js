@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Editor
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.00
+// @version      1.10
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
@@ -39,11 +39,12 @@ function createForm() //creates mass edit form
         "<li>Press the Apply Edit button and wait until it's all cool and good" +
         "<li>Refresh after every edit so you aren't editing based on outdated information.</ol>" +
     "If there are any problems @ or pm me on Discord<br />" +
-    "Update 0.94:" +
-        "<ul><li>You can now transfer chapters to other manga entries by entering the manga IDs in the apropriate field" +
-        "<li>It follows the same rules as the other fields</ul>" +
     "Update 0.96:" +
-        "<ul><li>Updated for V3</ul>";
+        "<ul><li>Updated for V3</ul>" +
+    "Update 1.10:" +
+        "<ul><li>Fixed previews not working when using icelord's download script" +
+        "<li>Changed stuff in previews is now green" +
+        "<li>Added new languages</ul>";
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
@@ -805,12 +806,18 @@ function previewEdit(fields)
         "Korean":"kr",
         "Spanish (LATAM)":"mx",
         "Persian":"ir",
-        "Malaysian":"my",
+        "Malay":"my",
         "Thai":"th",
         "Catalan":"ct",
         "Filipino":"ph",
         "Chinese (Trad)":"hk",
-        "Ukrainian":"ua"
+        "Ukrainian":"ua",
+        "Burmese":"mm",
+        "Lithuanian":"lt",
+        "Hebrew":"il",
+        "Hindi":"in",
+        "Other":"",
+        "Norwegian":"no"
     };
 
     const oldChapterTitles = fields[0].split("\n");
@@ -831,12 +838,11 @@ function previewEdit(fields)
 
     const previewTable = document.getElementById("edit_preview");
 
-    while (previewTable.firstChild) //delete current preview
+    while(previewTable.firstChild) //delete current preview
     {
         previewTable.removeChild(previewTable.firstChild);
     }
 
-    var i = 0;
     $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).not($('a[href*="/edit"]')).each(function (chapter)
                                     {
                                         const row = this.parentNode.parentNode;
@@ -872,10 +878,16 @@ function previewEdit(fields)
                                         if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
                                         {
                                             const editPreviewOld = row.parentNode.parentNode.cloneNode(true);
-                                            editPreviewOld.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title=''></span>";
-                                            previewTable.appendChild(editPreviewOld);
                                             const editPreviewNew = row.parentNode.parentNode.cloneNode(true);
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title=''></span>";
+                                            editPreviewOld.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title='' style='color: rgb(255, 32, 32);'></span>";
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title='' style='color: rgb(32, 255, 32);'></span>";
+                                            //remove download button
+                                            if(editPreviewOld.childNodes[1].childNodes[1].childNodes[3].getElementsByClassName("fa-download").length > 0)
+                                            {
+                                                editPreviewOld.childNodes[1].childNodes[1].childNodes[3].removeChild(editPreviewOld.childNodes[1].childNodes[1].childNodes[3].getElementsByClassName("fa-download")[0])
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].removeChild(editPreviewNew.childNodes[1].childNodes[1].childNodes[3].getElementsByClassName("fa-download")[0])
+                                            }
+
                                             var chapterTitlePreview;
                                             if(newChapterTitles.length == 1)
                                             {
@@ -990,42 +1002,76 @@ function previewEdit(fields)
                                             }
 
                                             //fill in new preview
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].innerHTML = "<span></span><span></span>";
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].innerHTML = "<span></span><span></span><span></span>";
                                             if(volumeNumberPreview !== " " && volumeNumberPreview !== "0")
                                             {
                                                 editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText += "Vol. " + volumeNumberPreview;
+                                                if(volumeNumberPreview !== volNum)
+                                                {
+                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].style.color = "#20ff20";
+                                                }
                                             }
                                             if(chapterNumberPreview !== " ")
                                             {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText += " Ch. " + chapterNumberPreview;
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += " Ch. " + chapterNumberPreview;
+                                                if(chapterNumberPreview !== chapNum)
+                                                {
+                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].style.color = "#20ff20";
+                                                }
                                             }
-                                            if(editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText != "" && chapterTitlePreview !== " ")
+                                            if((editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText != "" || editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText != "") && chapterTitlePreview !== " ")
                                             {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += " - ";
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].innerText += " - ";
                                             }
                                             if((volumeNumberPreview === " " || volumeNumberPreview === "0") && chapterNumberPreview === " " && chapterTitlePreview === " ")
                                             {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += "Oneshot";
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].innerText += "Oneshot";
+                                                if(chapterTitlePreview !== title)
+                                                {
+                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].style.color = "#20ff20";
+                                                }
                                             }
                                             else
                                             {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += chapterTitlePreview;
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].innerText += chapterTitlePreview;
+                                                if(chapterTitlePreview !== title)
+                                                {
+                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].style.color = "#20ff20";
+                                                }
                                             }
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("src", "https://mangadex.org/images/flags/" + flags[languagePreview] + ".png");
+                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("class", "rounded flag flag-" + flags[languagePreview]);
                                             editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("alt", languagePreview);
                                             editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("title", languagePreview);
                                             editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
+                                            if(groupPreview !== groupId)
+                                            {
+                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML = "<a href='/group/" + groupPreview + "' style='color: rgb(32, 255, 32);'>" + groupPreview + "</a>";
+                                            }
                                             if(group2Preview != "0")
                                             {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
+                                                if(group2Preview === group2Id)
+                                                {
+                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
+                                                }
+                                                else
+                                                {
+                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group2Preview + "' style='color: rgb(32, 255, 32);'>" + group2Preview + "</a>";
+                                                }
                                             }
                                             if(group3Preview != "0")
                                             {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
+                                                if(group3Preview === group3Id)
+                                                {
+                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
+                                                }
+                                                else
+                                                {
+                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group3Preview + "' style='color: rgb(32, 255, 32);'>" + group3Preview + "</a>";
+                                                }
                                             }
 
+                                            previewTable.appendChild(editPreviewOld);
                                             previewTable.appendChild(editPreviewNew);
-                                            i++;
                                         }
                                     });
 }
@@ -1078,12 +1124,18 @@ async function massEdit(fields) {
         "Korean":"28",
         "Spanish (LATAM)":"29",
         "Persian":"30",
-        "Malaysian":"31",
+        "Malay":"31",
         "Thai":"32",
         "Catalan":"33",
         "Filipino":"34",
         "Chinese (Trad)":"35",
-        "Ukrainian":"36"
+        "Ukrainian":"36",
+        "Burmese":"37",
+        "Lithuanian":"38",
+        "Hebrew":"39",
+        "Hindi":"40",
+        "Other":"41",
+        "Norwegian":"42"
     };
 
     const oldMangaId = (/\/(\d+)/g).exec(window.location.href)[1];
@@ -1340,7 +1392,9 @@ async function massEdit(fields) {
                     });
 
                     if(!ok)
+                    {
                         throw new Error("Not ok.");
+                    }
 
                     console.log('ok.');
                 }
