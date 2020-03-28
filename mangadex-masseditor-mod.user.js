@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name         MangaDex Mass Editor
+// @name         MangaDex Mass Editor Mod Edition
 // @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.11
+// @version      1.00
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
-// @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
+// @description  mass edit script but you don't have to disable all your filters
 // @author       bcvxy, Xnot
-// @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
-// @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
-// @include      /.*mangadex\.org/title/.*/chapters
+// @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor-mod.user.js
+// @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor-mod.user.js
+// @include      /.*mangadex\.org/title/.*/mod_chapters
 // @grant        none
 // ==/UserScript==
 
@@ -742,8 +742,8 @@ function createForm() //creates mass edit form
                                             });
 
     //add preview table
-    const editPreviewTable = document.createElement("div");
-    editPreviewTable.classList.add("chapter-container");
+    const editPreviewTable = document.createElement("table");
+    editPreviewTable.classList.add("table", "table-striped", "table-hover", "table-sm");
     editPreviewTable.id = "edit_preview";
     massEditForm.appendChild(editPreviewTable);
 
@@ -772,7 +772,53 @@ createForm();
 
 function previewEdit(fields)
 {
-    const flags =
+    const langNames =
+    {
+        "1":"English",
+        "2":"Japanese",
+        "3":"Polish",
+        "4":"Serbo-Croatian",
+        "5":"Dutch",
+        "6":"Italian",
+        "7":"Russian",
+        "8":"German",
+        "9":"Hungarian",
+        "10":"French",
+        "11":"Finnish",
+        "12":"Vietnamese",
+        "13":"Greek",
+        "14":"Bulgarian",
+        "15":"Spanish (Es)",
+        "16":"Portuguese (Br)",
+        "17":"Portuguese (Pt)",
+        "18":"Swedish",
+        "19":"Arabic",
+        "20":"Danish",
+        "21":"Chinese (Simp)",
+        "22":"Bengali",
+        "23":"Romanian",
+        "24":"Czech",
+        "25":"Mongolian",
+        "26":"Turkish",
+        "27":"Indonesian",
+        "28":"Korean",
+        "29":"Spanish (LATAM)",
+        "30":"Persian",
+        "31":"Malay",
+        "32":"Thai",
+        "33":"Catalan",
+        "34":"Filipino",
+        "35":"Chinese (Trad)",
+        "36":"Ukrainian",
+        "37":"Burmese",
+        "38":"Lithuanian",
+        "39":"Hebrew",
+        "40":"Hindi",
+        "41":"Other",
+        "42":"Norwegian"
+    };
+
+    const langAcronyms =
     {
         "English":"gb",
         "Japanese":"jp",
@@ -842,238 +888,226 @@ function previewEdit(fields)
     }
 
     var i = 0;
-    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).not($('a[href*="/edit"]')).each(function (chapter)
-                                    {
-                                        const row = this.parentNode.parentNode;
-                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by " "
-                                        var title = " ";
-                                        if(row.getAttribute('data-title') !== "")
-                                        {
-                                            title = row.getAttribute('data-title');
-                                        }
-                                        var volNum = " ";
-                                        if(row.getAttribute('data-volume') !== "")
-                                        {
-                                            volNum = row.getAttribute('data-volume');
-                                        }
-                                        var chapNum = " ";
-                                        if(row.getAttribute('data-chapter') !== "")
-                                        {
-                                            chapNum = row.getAttribute('data-chapter');
-                                        }
-                                        const langTitle = row.childNodes[11].childNodes[1].title;
-                                        const groupId = row.childNodes[13].childNodes[1].href.match(/(\d+)/)[0];
-                                        var group2Id = "0";
-                                        if(row.childNodes[13].childNodes.length > 3)
-                                        {
-                                            group2Id = row.childNodes[13].childNodes[3].href.match(/(\d+)/)[0];
-                                        }
-                                        var group3Id = "0";
-                                        if(row.childNodes[13].childNodes.length > 5)
-                                        {
-                                            group3Id = row.childNodes[13].childNodes[5].href.match(/(\d+)/)[0];
-                                        }
+    $('tr[id*="toggle_mass_edit"]').each(function (chapter)
+    {
+        const row = this.childNodes[1].childNodes[1];
+        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by " "
+        var title = " ";
+        if(row.childNodes[9].getAttribute("value") !== "")
+        {
+            title = row.childNodes[9].getAttribute("value");
+        }
+        var volNum = " ";
+        if(row.childNodes[5].getAttribute("value") !== "")
+        {
+            volNum = row.childNodes[5].getAttribute("value");
+        }
+        var chapNum = " ";
+        if(row.childNodes[7].getAttribute("value") !== "")
+        {
+            chapNum = row.childNodes[7].getAttribute("value");
+        }
+        const langTitle = langNames[row.childNodes[13].getAttribute("value")];
+        const groupId = row.childNodes[17].getAttribute("value");
+        const group2Id = row.childNodes[19].getAttribute("value");
+        const group3Id = row.childNodes[21].getAttribute("value");
 
-                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
-                                        {
-                                            const editPreviewOld = row.parentNode.parentNode.cloneNode(true);
-                                            const editPreviewNew = row.parentNode.parentNode.cloneNode(true);
-                                            editPreviewOld.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-strikethrough' aria-hidden='true' title='' style='color: rgb(255, 32, 32);'></span>";
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[1].innerHTML = "<span class='fas fa-pencil-alt' aria-hidden='true' title='' style='color: rgb(32, 255, 32);'></span>";
-                                            //remove download button
-                                            if(editPreviewOld.childNodes[1].childNodes[1].childNodes[3].getElementsByClassName("fa-download").length > 0)
-                                            {
-                                                editPreviewOld.childNodes[1].childNodes[1].childNodes[3].removeChild(editPreviewOld.childNodes[1].childNodes[1].childNodes[3].getElementsByClassName("fa-download")[0])
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].removeChild(editPreviewNew.childNodes[1].childNodes[1].childNodes[3].getElementsByClassName("fa-download")[0])
-                                            }
+        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
+        {
+            const editPreviewOld = this.previousSibling.previousSibling.cloneNode(true);
+            const editPreviewNew = editPreviewOld.cloneNode(true);
+            editPreviewOld.childNodes[1].insertAdjacentHTML("beforebegin", "<td><span class='fas fa-strikethrough' aria-hidden='true' title='' style='color: rgb(255, 32, 32);'></span></td>");
+            editPreviewNew.childNodes[1].insertAdjacentHTML("beforebegin", "<td><span class='fas fa-pencil-alt' aria-hidden='true' title='' style='color: rgb(32, 255, 32);'></span></td>");
 
-                                            var chapterTitlePreview;
-                                            if(newChapterTitles.length == 1)
-                                            {
-                                                if(newChapterTitles[0] === "")
-                                                {
-                                                    chapterTitlePreview = title;
-                                                }
-                                                else
-                                                {
-                                                    chapterTitlePreview = newChapterTitles[0];
-                                                }
-                                            }
-                                            else
-                                            {
-                                                chapterTitlePreview = newChapterTitles[i] || title;
-                                            }
-                                            var volumeNumberPreview;
-                                            if(newVolumeNumbers.length == 1)
-                                            {
-                                                if(newVolumeNumbers[0] === "")
-                                                {
-                                                    volumeNumberPreview = volNum;
-                                                }
-                                                else
-                                                {
-                                                    volumeNumberPreview = newVolumeNumbers[0];
-                                                }
-                                            }
-                                            else
-                                            {
-                                                volumeNumberPreview = newVolumeNumbers[i] || volNum;
-                                            }
-                                            var chapterNumberPreview;
-                                            if(newChapterNumbers.length == 1)
-                                            {
-                                                if(newChapterNumbers[0] === "")
-                                                {
-                                                    chapterNumberPreview = chapNum;
-                                                }
-                                                else
-                                                {
-                                                    chapterNumberPreview = newChapterNumbers[0];
-                                                }
-                                            }
-                                            else
-                                            {
-                                                chapterNumberPreview = newChapterNumbers[i] || chapNum;
-                                            }
-                                            var languagePreview;
-                                            if(newLanguages.length == 1)
-                                            {
-                                                if(newLanguages[0] === "")
-                                                {
-                                                    languagePreview = langTitle;
-                                                }
-                                                else
-                                                {
-                                                    languagePreview = newLanguages[0];
-                                                }
-                                            }
-                                            else
-                                            {
-                                                languagePreview = newLanguages[i] || langTitle;
-                                            }
-                                            var groupPreview;
-                                            if(newGroups.length == 1)
-                                            {
-                                                if(newGroups[0] === "")
-                                                {
-                                                    groupPreview = groupId;
-                                                }
-                                                else
-                                                {
-                                                    groupPreview = newGroups[0];
-                                                }
-                                            }
-                                            else
-                                            {
-                                                groupPreview = newGroups[i] || groupId;
-                                            }
-                                            var group2Preview;
-                                            if(newGroups2.length == 1)
-                                            {
-                                                if(newGroups2[0] === "")
-                                                {
-                                                    group2Preview = group2Id;
-                                                }
-                                                else
-                                                {
-                                                    group2Preview = newGroups2[0];
-                                                }
-                                            }
-                                            else
-                                            {
-                                                group2Preview = newGroups2[i] || group2Id;
-                                            }
-                                            var group3Preview;
-                                            if(newGroups3.length == 1)
-                                            {
-                                                if(newGroups3[0] === "")
-                                                {
-                                                    group3Preview = group3Id;
-                                                }
-                                                else
-                                                {
-                                                    group3Preview = newGroups3[0];
-                                                }
-                                            }
-                                            else
-                                            {
-                                                group3Preview = newGroups3[i] || group3Id;
-                                            }
+            var chapterTitlePreview;
+            if(newChapterTitles.length == 1)
+            {
+                if(newChapterTitles[0] === "")
+                {
+                    chapterTitlePreview = title;
+                }
+                else
+                {
+                    chapterTitlePreview = newChapterTitles[0];
+                }
+            }
+            else
+            {
+                chapterTitlePreview = newChapterTitles[i] || title;
+            }
+            var volumeNumberPreview;
+            if(newVolumeNumbers.length == 1)
+            {
+                if(newVolumeNumbers[0] === "")
+                {
+                    volumeNumberPreview = volNum;
+                }
+                else
+                {
+                    volumeNumberPreview = newVolumeNumbers[0];
+                }
+            }
+            else
+            {
+                volumeNumberPreview = newVolumeNumbers[i] || volNum;
+            }
+            var chapterNumberPreview;
+            if(newChapterNumbers.length == 1)
+            {
+                if(newChapterNumbers[0] === "")
+                {
+                    chapterNumberPreview = chapNum;
+                }
+                else
+                {
+                    chapterNumberPreview = newChapterNumbers[0];
+                }
+            }
+            else
+            {
+                chapterNumberPreview = newChapterNumbers[i] || chapNum;
+            }
+            var languagePreview;
+            if(newLanguages.length == 1)
+            {
+                if(newLanguages[0] === "")
+                {
+                    languagePreview = langTitle;
+                }
+                else
+                {
+                    languagePreview = newLanguages[0];
+                }
+            }
+            else
+            {
+                languagePreview = newLanguages[i] || langTitle;
+            }
+            var groupPreview;
+            if(newGroups.length == 1)
+            {
+                if(newGroups[0] === "")
+                {
+                    groupPreview = groupId;
+                }
+                else
+                {
+                    groupPreview = newGroups[0];
+                }
+            }
+            else
+            {
+                groupPreview = newGroups[i] || groupId;
+            }
+            var group2Preview;
+            if(newGroups2.length == 1)
+            {
+                if(newGroups2[0] === "")
+                {
+                    group2Preview = group2Id;
+                }
+                else
+                {
+                    group2Preview = newGroups2[0];
+                }
+            }
+            else
+            {
+                group2Preview = newGroups2[i] || group2Id;
+            }
+            var group3Preview;
+            if(newGroups3.length == 1)
+            {
+                if(newGroups3[0] === "")
+                {
+                    group3Preview = group3Id;
+                }
+                else
+                {
+                    group3Preview = newGroups3[0];
+                }
+            }
+            else
+            {
+                group3Preview = newGroups3[i] || group3Id;
+            }
 
-                                            //fill in new preview
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].innerHTML = "<span></span><span></span><span></span>";
-                                            if(volumeNumberPreview !== " " && volumeNumberPreview !== "0")
-                                            {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText += "Vol. " + volumeNumberPreview;
-                                                if(volumeNumberPreview !== volNum)
-                                                {
-                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].style.color = "#20ff20";
-                                                }
-                                            }
-                                            if(chapterNumberPreview !== " ")
-                                            {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText += " Ch. " + chapterNumberPreview;
-                                                if(chapterNumberPreview !== chapNum)
-                                                {
-                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].style.color = "#20ff20";
-                                                }
-                                            }
-                                            if((editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[0].innerText != "" || editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].innerText != "") && chapterTitlePreview !== " ")
-                                            {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].innerText += " - ";
-                                            }
-                                            if((volumeNumberPreview === " " || volumeNumberPreview === "0") && chapterNumberPreview === " " && chapterTitlePreview === " ")
-                                            {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].innerText += "Oneshot";
-                                                if(chapterTitlePreview !== title)
-                                                {
-                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].style.color = "#20ff20";
-                                                }
-                                            }
-                                            else
-                                            {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].innerText += chapterTitlePreview;
-                                                if(chapterTitlePreview !== title)
-                                                {
-                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[3].childNodes[1].childNodes[2].style.color = "#20ff20";
-                                                }
-                                            }
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("class", "rounded flag flag-" + flags[languagePreview]);
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("alt", languagePreview);
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[11].childNodes[1].setAttribute("title", languagePreview);
-                                            editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
-                                            if(groupPreview !== groupId)
-                                            {
-                                                editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML = "<a href='/group/" + groupPreview + "' style='color: rgb(32, 255, 32);'>" + groupPreview + "</a>";
-                                            }
-                                            if(group2Preview != "0")
-                                            {
-                                                if(group2Preview === group2Id)
-                                                {
-                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
-                                                }
-                                                else
-                                                {
-                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group2Preview + "' style='color: rgb(32, 255, 32);'>" + group2Preview + "</a>";
-                                                }
-                                            }
-                                            if(group3Preview != "0")
-                                            {
-                                                if(group3Preview === group3Id)
-                                                {
-                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
-                                                }
-                                                else
-                                                {
-                                                    editPreviewNew.childNodes[1].childNodes[1].childNodes[13].innerHTML += " | <a href='/group/" + group3Preview + "' style='color: rgb(32, 255, 32);'>" + group3Preview + "</a>";
-                                                }
-                                            }
+            //fill in new preview
+            editPreviewNew.childNodes[2].childNodes[0].innerHTML = "<span></span><span></span><span></span>";
+            if(volumeNumberPreview !== " " && volumeNumberPreview !== "0")
+            {
+                editPreviewNew.childNodes[2].childNodes[0].childNodes[0].innerText += "Vol. " + volumeNumberPreview;
+                if(volumeNumberPreview !== volNum)
+                {
+                    editPreviewNew.childNodes[2].childNodes[0].childNodes[0].style.color = "#20ff20";
+                }
+            }
+            if(chapterNumberPreview !== " ")
+            {
+                editPreviewNew.childNodes[2].childNodes[0].childNodes[1].innerText += " Ch. " + chapterNumberPreview;
+                if(chapterNumberPreview !== chapNum)
+                {
+                    editPreviewNew.childNodes[2].childNodes[0].childNodes[1].style.color = "#20ff20";
+                }
+            }
+            if((editPreviewNew.childNodes[2].childNodes[0].childNodes[0].innerText != "" || editPreviewNew.childNodes[2].childNodes[0].childNodes[1].innerText != "") && chapterTitlePreview !== " ")
+            {
+                editPreviewNew.childNodes[2].childNodes[0].childNodes[2].innerText += " - ";
+            }
+            if((volumeNumberPreview === " " || volumeNumberPreview === "0") && chapterNumberPreview === " " && chapterTitlePreview === " ")
+            {
+                editPreviewNew.childNodes[2].childNodes[0].childNodes[2].innerText += "Oneshot";
+                if(chapterTitlePreview !== title)
+                {
+                    editPreviewNew.childNodes[2].childNodes[0].childNodes[2].style.color = "#20ff20";
+                }
+            }
+            else
+            {
+                editPreviewNew.childNodes[2].childNodes[0].childNodes[2].innerText += chapterTitlePreview;
+                if(chapterTitlePreview !== title)
+                {
+                    editPreviewNew.childNodes[2].childNodes[0].childNodes[2].style.color = "#20ff20";
+                }
+            }
+            // flag
+            editPreviewNew.childNodes[6].childNodes[0].setAttribute("class", "rounded flag flag-" + langAcronyms[languagePreview]);
+            editPreviewNew.childNodes[6].childNodes[0].setAttribute("alt", languagePreview);
+            editPreviewNew.childNodes[6].childNodes[0].setAttribute("title", languagePreview);
+            // groups
+            editPreviewNew.childNodes[8].innerHTML = "<a href='/group/" + groupPreview + "'>" + groupPreview + "</a>";
+            if(groupPreview !== groupId)
+            {
+                editPreviewNew.childNodes[8].innerHTML = "<a href='/group/" + groupPreview + "' style='color: rgb(32, 255, 32);'>" + groupPreview + "</a>";
+            }
+            if(group2Preview != "0")
+            {
+                if(group2Preview === group2Id)
+                {
+                    editPreviewNew.childNodes[8].innerHTML += " | <a href='/group/" + group2Preview + "'>" + group2Preview + "</a>";
+                }
+                else
+                {
+                    editPreviewNew.childNodes[8].innerHTML += " | <a href='/group/" + group2Preview + "' style='color: rgb(32, 255, 32);'>" + group2Preview + "</a>";
+                }
+            }
+            if(group3Preview != "0")
+            {
+                if(group3Preview === group3Id)
+                {
+                    editPreviewNew.childNodes[8].innerHTML += " | <a href='/group/" + group3Preview + "'>" + group3Preview + "</a>";
+                }
+                else
+                {
+                    editPreviewNew.childNodes[8].innerHTML += " | <a href='/group/" + group3Preview + "' style='color: rgb(32, 255, 32);'>" + group3Preview + "</a>";
+                }
+            }
 
-                                            previewTable.appendChild(editPreviewOld);
-                                            previewTable.appendChild(editPreviewNew);
-                                            i++;
-                                        }
-                                    });
+            previewTable.appendChild(editPreviewOld);
+            previewTable.appendChild(editPreviewNew);
+            i++;
+        }
+    });
 }
 
 function arraysEqual(a, b) {
@@ -1170,44 +1204,38 @@ async function massEdit(fields) {
         previewTable.removeChild(previewTable.firstChild);
     }
 
-    $('a[href*="/chapter/"]').not($('a[href*="/comments"]')).not($('a[href*="/edit"]')).each(function (chapter)
-                                    {
-                                        const row = this.parentNode.parentNode;
-                                        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by " "
-                                        var title = " "
-                                        if(row.getAttribute('data-title') !== "")
-                                        {
-                                            title = row.getAttribute('data-title');
-                                        }
-                                        var volNum = " ";
-                                        if(row.getAttribute('data-volume') !== "")
-                                        {
-                                            volNum = row.getAttribute('data-volume');
-                                        }
-                                        var chapNum = " ";
-                                        if(row.getAttribute('data-chapter') !== "")
-                                        {
-                                            chapNum = row.getAttribute('data-chapter');
-                                        }
-                                        const langTitle = row.childNodes[11].childNodes[1].title;
-                                        const groupId = row.childNodes[13].childNodes[1].href.match(/(\d+)/)[0];
-                                        var group2Id = "0";
-                                        if(row.childNodes[13].childNodes.length > 3)
-                                        {
-                                            group2Id = row.childNodes[13].childNodes[3].href.match(/(\d+)/)[0];
-                                        }
-                                        var group3Id = "0";
-                                        if(row.childNodes[13].childNodes.length > 5)
-                                        {
-                                            group3Id = row.childNodes[13].childNodes[5].href.match(/(\d+)/)[0];
-                                        }
+    $('tr[id*="toggle_mass_edit"]').each(function (chapter)
+    {
+        const row = this.childNodes[1].childNodes[1];
+        //title, volNum, and chapNum are given fake initial values so that empty values are grabbable by " "
+        var title = " ";
+        if(row.childNodes[9].getAttribute("value") !== "")
+        {
+            title = row.childNodes[9].getAttribute("value");
+        }
+        var volNum = " ";
+        if(row.childNodes[5].getAttribute("value") !== "")
+        {
+            volNum = row.childNodes[5].getAttribute("value");
+        }
+        var chapNum = " ";
+        if(row.childNodes[7].getAttribute("value") !== "")
+        {
+            chapNum = row.childNodes[7].getAttribute("value");
+        }
+        const langTitle = row.childNodes[13].getAttribute("value");
+        const groupId = row.childNodes[17].getAttribute("value");
+        const group2Id = row.childNodes[19].getAttribute("value");
+        const group3Id = row.childNodes[21].getAttribute("value");
+        const unavailable = row.childNodes[29].checked;
 
-                                        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
-                                        {
-                                            const chapId = row.getAttribute('data-id');
-                                            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, oldMangaId]);
-                                        }
-                                    });
+        // if anything is changed, add to toEdit array
+        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
+        {
+            const chapId = row.id;
+            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, unavailable, oldMangaId]);
+        }
+    });
     for (let i = 0, len = toEdit.length; i < len; i++)
     {
         messageContainer.innerHTML = "<div class='alert alert-success text-center' style='pointer-events: auto;' role='alert'><a href='#' class='pull-right fas fa-window-close' data-dismiss='alert'></a>Processing " + (i + 1) + "/" + len + "</div>."
@@ -1319,7 +1347,7 @@ async function massEdit(fields) {
             }
             else
             {
-                newData[7] = newLanguages[0];
+                newData[7] = langs[newLanguages[0]];
             }
         }
         else
@@ -1359,14 +1387,18 @@ async function massEdit(fields) {
             {
                 // build formdata and POST
                 const formData = new FormData();
-                formData.append('manga_id', newData[8]);
+                formData.append('manga_id', newData[9]);
                 formData.append('chapter_name', newData[3]);
                 formData.append('volume_number', newData[1]);
                 formData.append('chapter_number', newData[2]);
                 formData.append('group_id', newData[4]);
                 formData.append('group_id_2', newData[5]);
                 formData.append('group_id_3', newData[6]);
-                formData.append('lang_id', langs[newData[7]]);
+                formData.append('lang_id', newData[7]);
+                if(newData[8])
+                {
+                    formData.append('unavailable', "1")
+                }
                 if(!newFile)
                 {
                     formData.append("old_file", "");
