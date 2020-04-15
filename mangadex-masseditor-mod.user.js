@@ -1378,7 +1378,7 @@ async function massEdit(fields) {
     const newGroups2 = fields[15].split("\n");
     const newGroups3 = fields[16].split("\n");
     const newMangaIds = fields[17].split("\n");
-    const newAvailability = fields[18].split("\n").map(x=>Number(x)).map(x=>!Boolean(x)); //bigbrain casting sponsored by JavaScript™
+    const newAvailability = fields[18] != "" ? fields[18].split("\n").map(x=>Number(x)).map(x=>!Boolean(x)) : ""; //bigbrain casting sponsored by JavaScript™
     const newFiles = fields[19];
 
     const previewTable = document.getElementById("edit_preview");
