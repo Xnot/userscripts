@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         MangaDex Mass Cover Uploader
-// @namespace    https://github.com/LucasPratas/userscripts
-// @version      0.20
+// @namespace    https://github.com/Xnot/userscripts
+// @version      0.21
 // @icon         https://mangadex.org/favicon.ico
 // @description  imagine if someone tried uploading conan covers without this
 // @author       Xnot
-// @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masscoveruploader.user.js
-// @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masscoveruploader.user.js
+// @updateURL    https://github.com/Xnot/userscripts/raw/master/mangadex-masscoveruploader.user.js
+// @downloadURL  https://github.com/Xnot/userscripts/raw/master/mangadex-masscoveruploader.user.js
 // @include      /.*mangadex\.org/title/.*/covers/
 // @grant        none
 // ==/UserScript==

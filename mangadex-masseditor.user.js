@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         MangaDex Mass Editor
-// @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.11
+// @namespace    https://github.com/Xnot/userscripts
+// @version      1.12
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  stop robo from nuking untitled chapters by ripping off bcvxy's script
 // @author       bcvxy, Xnot
-// @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
-// @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor.user.js
+// @updateURL    https://github.com/Xnot/userscripts/raw/master/mangadex-masseditor.user.js
+// @downloadURL  https://github.com/Xnot/userscripts/raw/master/mangadex-masseditor.user.js
 // @include      /.*mangadex\.org/title/.*/chapters
 // @grant        none
 // ==/UserScript==

@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         MangaDex Mass Editor Mod Edition
-// @namespace    https://github.com/LucasPratas/userscripts
-// @version      1.00
+// @namespace    https://github.com/Xnot/userscripts
+// @version      1.10
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  mass edit script but you don't have to disable all your filters
 // @author       bcvxy, Xnot
-// @updateURL    https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor-mod.user.js
-// @downloadURL  https://github.com/LucasPratas/userscripts/raw/master/mangadex-masseditor-mod.user.js
+// @updateURL    https://github.com/Xnot/userscripts/raw/master/mangadex-masseditor-mod.user.js
+// @downloadURL  https://github.com/Xnot/userscripts/raw/master/mangadex-masseditor-mod.user.js
 // @include      /.*mangadex\.org/title/.*/mod_chapters
 // @grant        none
 // ==/UserScript==
@@ -46,6 +46,43 @@ function createForm() //creates mass edit form
     massEditForm.appendChild(userscriptInfo); //insert info panel
 
     document.getElementById("message_container").classList.replace("display-none", "display-block");
+
+    //create uploader to edit field
+    const uploaderToEditContainer = document.createElement("div");
+    uploaderToEditContainer.classList.add("form-group", "row");
+    massEditForm.appendChild(uploaderToEditContainer);
+    const uploaderToEditToggle = document.createElement("a");
+    uploaderToEditToggle.setAttribute("data-toggle", "collapse");
+    uploaderToEditToggle.setAttribute("data-target", "#mass_uploader_to_edit");
+    uploaderToEditToggle.classList.add("col-sm-2");
+    uploaderToEditContainer.appendChild(uploaderToEditToggle);
+    const uploaderToEditLabel = document.createElement("label");
+    uploaderToEditLabel.setAttribute("for","mass_uploader_to_edit");
+    uploaderToEditLabel.classList.add("control-label");
+    uploaderToEditLabel.innerText = "Uploaders to edit";
+    uploaderToEditToggle.appendChild(uploaderToEditLabel);
+    const uploaderToEditToggleIcon = document.createElement("span");
+    uploaderToEditToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    uploaderToEditLabel.appendChild(uploaderToEditToggleIcon);
+    const uploaderToEditFieldContainer = document.createElement("div");
+    uploaderToEditFieldContainer.classList.add("col-sm-10");
+    uploaderToEditContainer.appendChild(uploaderToEditFieldContainer);
+    const uploaderToEditField = document.createElement("textarea");
+    uploaderToEditField.setAttribute("id", "mass_uploader_to_edit");
+    uploaderToEditField.setAttribute("name", "mass_uploader_to_edit");
+    uploaderToEditField.setAttribute("placeholder", "Read Online\nRead Offline\nPlaceholder3");
+    uploaderToEditField.classList.add("form-control", "collapse", "show");
+    uploaderToEditField.style.height = "80px";
+    uploaderToEditFieldContainer.appendChild(uploaderToEditField);
+    $(uploaderToEditField).on("hidden.bs.collapse", function(event)
+                                                        {
+                                                            uploaderToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                        });
+    $(uploaderToEditField).on("shown.bs.collapse", function(event)
+                                                        {
+                                                            uploaderToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                            this.style.height = "80px";
+                                                        });
 
     //create chapter title to edit field
     const chapterTitleToEditContainer = document.createElement("div");
@@ -303,6 +340,80 @@ function createForm() //creates mass edit form
     $(group3IdToEditField).on("shown.bs.collapse", function(event)
                                                     {
                                                         group3IdToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
+
+    //create availability to edit field
+    const availabilityToEditContainer = document.createElement("div");
+    availabilityToEditContainer.classList.add("form-group", "row");
+    massEditForm.appendChild(availabilityToEditContainer);
+    const availabilityToEditToggle = document.createElement("a");
+    availabilityToEditToggle.setAttribute("data-toggle", "collapse");
+    availabilityToEditToggle.setAttribute("data-target", "#mass_availability_id_to_edit");
+    availabilityToEditToggle.classList.add("col-sm-2");
+    availabilityToEditContainer.appendChild(availabilityToEditToggle);
+    const availabilityToEditLabel = document.createElement("label");
+    availabilityToEditLabel.setAttribute("for","mass_availability_id_to_edit");
+    availabilityToEditLabel.classList.add("control-label");
+    availabilityToEditLabel.innerText = "Availability to edit";
+    availabilityToEditToggle.appendChild(availabilityToEditLabel);
+    const availabilityToEditToggleIcon = document.createElement("span");
+    availabilityToEditToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    availabilityToEditLabel.appendChild(availabilityToEditToggleIcon);
+    const availabilityToEditFieldContainer = document.createElement("div");
+    availabilityToEditFieldContainer.classList.add("col-sm-10");
+    availabilityToEditContainer.appendChild(availabilityToEditFieldContainer);
+    const availabilityToEditField = document.createElement("textarea");
+    availabilityToEditField.setAttribute("id", "mass_availability_id_to_edit");
+    availabilityToEditField.setAttribute("name", "mass_availability_id_to_edit");
+    availabilityToEditField.setAttribute("placeholder", "1\n2\n3");
+    availabilityToEditField.classList.add("form-control", "collapse");
+    availabilityToEditField.style.height = "80px";
+    availabilityToEditFieldContainer.appendChild(availabilityToEditField);
+    $(availabilityToEditField).on("hidden.bs.collapse", function(event)
+                                                    {
+                                                        availabilityToEditToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                    });
+    $(availabilityToEditField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        availabilityToEditToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                        this.style.height = "80px";
+                                                    });
+
+    //create new uploader field
+    const newUploaderContainer = document.createElement("div");
+    newUploaderContainer.classList.add("form-group", "row");
+    massEditForm.appendChild(newUploaderContainer);
+    const newUploaderToggle = document.createElement("a");
+    newUploaderToggle.setAttribute("data-toggle", "collapse");
+    newUploaderToggle.setAttribute("data-target", "#mass_new_uploader");
+    newUploaderToggle.classList.add("col-sm-2");
+    newUploaderContainer.appendChild(newUploaderToggle);
+    const newUploaderLabel = document.createElement("label");
+    newUploaderLabel.setAttribute("for","mass_new_uploader");
+    newUploaderLabel.classList.add("control-label");
+    newUploaderLabel.innerText = "New uploaders";
+    newUploaderToggle.appendChild(newUploaderLabel);
+    const newUploaderToggleIcon = document.createElement("span");
+    newUploaderToggleIcon.classList.add("fas", "fa-angle-down", "fa-fw");
+    newUploaderLabel.appendChild(newUploaderToggleIcon);
+    const newUploaderFieldContainer = document.createElement("div");
+    newUploaderFieldContainer.classList.add("col-sm-10");
+    newUploaderContainer.appendChild(newUploaderFieldContainer);
+    const newUploaderField = document.createElement("textarea");
+    newUploaderField.setAttribute("id", "mass_new_uploader");
+    newUploaderField.setAttribute("name", "mass_new_uploader");
+    newUploaderField.setAttribute("placeholder", "title1\ntitle2\ntitle3");
+    newUploaderField.classList.add("form-control", "collapse", "show");
+    newUploaderField.style.height = "80px";
+    newUploaderFieldContainer.appendChild(newUploaderField);
+    $(newUploaderField).on("hidden.bs.collapse", function(event)
+                                                    {
+                                                        newUploaderToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                    });
+    $(newUploaderField).on("shown.bs.collapse", function(event)
+                                                    {
+                                                        newUploaderToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
                                                         this.style.height = "80px";
                                                     });
 
@@ -602,6 +713,43 @@ function createForm() //creates mass edit form
                                                             this.style.height = "80px";
                                                         });
 
+    //create new availability field
+    const newAvailabilityContainer = document.createElement("div");
+    newAvailabilityContainer.classList.add("form-group", "row");
+    massEditForm.appendChild(newAvailabilityContainer);
+    const newAvailabilityToggle = document.createElement("a");
+    newAvailabilityToggle.setAttribute("data-toggle", "collapse");
+    newAvailabilityToggle.setAttribute("data-target", "#mass_new_availability");
+    newAvailabilityToggle.classList.add("col-sm-2");
+    newAvailabilityContainer.appendChild(newAvailabilityToggle);
+    const newAvailabilityLabel = document.createElement("label");
+    newAvailabilityLabel.setAttribute("for","mass_new_availability");
+    newAvailabilityLabel.classList.add("control-label");
+    newAvailabilityLabel.innerText = "New Availabilities";
+    newAvailabilityToggle.appendChild(newAvailabilityLabel);
+    const newAvailabilityToggleIcon = document.createElement("span");
+    newAvailabilityToggleIcon.classList.add("fas", "fa-angle-right", "fa-fw");
+    newAvailabilityLabel.appendChild(newAvailabilityToggleIcon);
+    const newAvailabilityFieldContainer = document.createElement("div");
+    newAvailabilityFieldContainer.classList.add("col-sm-10");
+    newAvailabilityContainer.appendChild(newAvailabilityFieldContainer);
+    const newAvailabilityField = document.createElement("textarea");
+    newAvailabilityField.setAttribute("id", "mass_new_availability");
+    newAvailabilityField.setAttribute("name", "mass_new_availability");
+    newAvailabilityField.setAttribute("placeholder", "1\n0\n1");
+    newAvailabilityField.classList.add("form-control", "collapse");
+    newAvailabilityField.style.height = "80px";
+    newAvailabilityFieldContainer.appendChild(newAvailabilityField);
+    $(newAvailabilityField).on("hidden.bs.collapse", function(event)
+                                                        {
+                                                            newAvailabilityToggleIcon.classList.replace("fa-angle-down", "fa-angle-right");
+                                                        });
+    $(newAvailabilityField).on("shown.bs.collapse", function(event)
+                                                        {
+                                                            newAvailabilityToggleIcon.classList.replace("fa-angle-right", "fa-angle-down");
+                                                            this.style.height = "80px";
+                                                        });
+
     //create file field
     const fileContainer = document.createElement("div");
     fileContainer.classList.add("form-group", "row");
@@ -728,9 +876,9 @@ function createForm() //creates mass edit form
     editButton.appendChild(editButtonText);
     editButton.addEventListener("click", function(event)
                                         {
-                                            massEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, newMangaIdField.value, reversedFiles]);
+                                            massEdit([uploaderToEditField.value, chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, availabilityToEditField.value, newUploaderField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, newMangaIdField.value, newAvailabilityField.value, reversedFiles]);
                                         });
-    cancelButton.addEventListener("click", function()
+    cancelButton.addEventListener("click", function(event)
                                             {
                                                 massEditForm.reset();
                                                 massEditForm.style.display = "none";
@@ -738,7 +886,7 @@ function createForm() //creates mass edit form
                                             });
     previewButton.addEventListener("click", function(event)
                                             {
-                                                previewEdit([chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, newMangaIdField.value, reversedFiles]);
+                                                previewEdit([uploaderToEditField.value, chapterTitleToEditField.value, volumeNumberToEditField.value, chapterNumberToEditField.value, languageToEditField.value, groupIdToEditField.value, group2IdToEditField.value, group3IdToEditField.value, availabilityToEditField.value, newUploaderField.value, newChapterTitleField.value, newVolumeNumberField.value, newChapterNumberField.value, newLanguageField.value, newGroupIdField.value, newGroup2IdField.value, newGroup3IdField.value, newMangaIdField.value, newAvailabilityField.value, reversedFiles]);
                                             });
 
     //add preview table
@@ -864,21 +1012,27 @@ function previewEdit(fields)
         "Norwegian":"no"
     };
 
-    const oldChapterTitles = fields[0].split("\n");
-    const oldVolumeNumbers = fields[1].split("\n");
-    const oldChapterNumbers = fields[2].split("\n");
-    const oldLanguages = fields[3].split("\n");
-    const oldGroups = fields[4].split("\n");
-    const oldGroups2 = fields[5].split("\n");
-    const oldGroups3 = fields[6].split("\n");
-    const newChapterTitles = fields[7].split("\n");
-    const newVolumeNumbers = fields[8].split("\n");
-    const newChapterNumbers = fields[9].split("\n");
-    const newLanguages = fields[10].split("\n");
-    const newGroups = fields[11].split("\n");
-    const newGroups2 = fields[12].split("\n");
-    const newGroups3 = fields[13].split("\n");
-    //add preview for new manga and files
+    const oldUploaders = fields[0].split("\n");
+    const oldChapterTitles = fields[1].split("\n");
+    const oldVolumeNumbers = fields[2].split("\n");
+    const oldChapterNumbers = fields[3].split("\n");
+    const oldLanguages = fields[4].split("\n");
+    const oldGroups = fields[5].split("\n");
+    const oldGroups2 = fields[6].split("\n");
+    const oldGroups3 = fields[7].split("\n");
+    const oldAvailability = fields[8].split("\n");
+    const newUploaders = fields[9].split("\n");
+    const newChapterTitles = fields[10].split("\n");
+    const newVolumeNumbers = fields[11].split("\n");
+    const newChapterNumbers = fields[12].split("\n");
+    const newLanguages = fields[13].split("\n");
+    const newGroups = fields[14].split("\n");
+    const newGroups2 = fields[15].split("\n");
+    const newGroups3 = fields[16].split("\n");
+    // const newMangaIds = fields[17].split("\n");
+    const newAvailability = fields[18].split("\n");
+    // const newFiles = fields[18];
+    //TODO: add preview for new manga, files, uploaders, availability
 
     const previewTable = document.getElementById("edit_preview");
 
@@ -911,8 +1065,9 @@ function previewEdit(fields)
         const groupId = row.childNodes[17].getAttribute("value");
         const group2Id = row.childNodes[19].getAttribute("value");
         const group3Id = row.childNodes[21].getAttribute("value");
+        const uploaderId = row.childNodes[25].getAttribute("value");
 
-        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
+        if((oldUploaders.includes(uploaderId) || (oldUploaders.length == 1 && oldUploaders[0] === "")) && (oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
         {
             const editPreviewOld = this.previousSibling.previousSibling.cloneNode(true);
             const editPreviewNew = editPreviewOld.cloneNode(true);
@@ -1031,6 +1186,22 @@ function previewEdit(fields)
             {
                 group3Preview = newGroups3[i] || group3Id;
             }
+            var uploaderPreview;
+            if(newUploaders.length == 1)
+            {
+                if(newUploaders[0] === "")
+                {
+                    uploaderPreview = uploaderId;
+                }
+                else
+                {
+                    uploaderPreview = newUploaders[0];
+                }
+            }
+            else
+            {
+                uploaderPreview = newUploaders[i] || uploaderId;
+            }
 
             //fill in new preview
             editPreviewNew.childNodes[2].childNodes[0].innerHTML = "<span></span><span></span><span></span>";
@@ -1100,6 +1271,15 @@ function previewEdit(fields)
                 else
                 {
                     editPreviewNew.childNodes[8].innerHTML += " | <a href='/group/" + group3Preview + "' style='color: rgb(32, 255, 32);'>" + group3Preview + "</a>";
+                }
+            }
+            // uploader
+            if(uploaderPreview != " ")
+            {
+                editPreviewNew.childNodes[10].childNodes[0].innerText = uploaderPreview;
+                if(uploaderPreview !== uploaderId)
+                {
+                    editPreviewNew.childNodes[10].childNodes[0].style.color = "#20ff20";
                 }
             }
 
@@ -1180,22 +1360,26 @@ async function massEdit(fields) {
     var newData = [];
 
     // good place to put some data:
-    const oldChapterTitles = fields[0].split("\n");
-    const oldVolumeNumbers = fields[1].split("\n");
-    const oldChapterNumbers = fields[2].split("\n");
-    const oldLanguages = fields[3].split("\n");
-    const oldGroups = fields[4].split("\n");
-    const oldGroups2 = fields[5].split("\n");
-    const oldGroups3 = fields[6].split("\n");
-    const newChapterTitles = fields[7].split("\n");
-    const newVolumeNumbers = fields[8].split("\n");
-    const newChapterNumbers = fields[9].split("\n");
-    const newLanguages = fields[10].split("\n");
-    const newGroups = fields[11].split("\n");
-    const newGroups2 = fields[12].split("\n");
-    const newGroups3 = fields[13].split("\n");
-    const newMangaIds = fields[14].split("\n");
-    const newFiles = fields[15];
+    const oldUploaders = fields[0].split("\n");
+    const oldChapterTitles = fields[1].split("\n");
+    const oldVolumeNumbers = fields[2].split("\n");
+    const oldChapterNumbers = fields[3].split("\n");
+    const oldLanguages = fields[4].split("\n");
+    const oldGroups = fields[5].split("\n");
+    const oldGroups2 = fields[6].split("\n");
+    const oldGroups3 = fields[7].split("\n");
+    const oldAvailability = fields[8].split("\n");
+    const newUploaders = fields[9].split("\n");
+    const newChapterTitles = fields[10].split("\n");
+    const newVolumeNumbers = fields[11].split("\n");
+    const newChapterNumbers = fields[12].split("\n");
+    const newLanguages = fields[13].split("\n");
+    const newGroups = fields[14].split("\n");
+    const newGroups2 = fields[15].split("\n");
+    const newGroups3 = fields[16].split("\n");
+    const newMangaIds = fields[17].split("\n");
+    const newAvailability = fields[18].split("\n").map(x=>Number(x)).map(x=>!Boolean(x)); //bigbrain casting sponsored by JavaScript™
+    const newFiles = fields[19];
 
     const previewTable = document.getElementById("edit_preview");
 
@@ -1228,12 +1412,14 @@ async function massEdit(fields) {
         const group2Id = row.childNodes[19].getAttribute("value");
         const group3Id = row.childNodes[21].getAttribute("value");
         const unavailable = row.childNodes[29].checked;
+        const uploaderId = row.childNodes[25].getAttribute("value");
 
         // if anything is changed, add to toEdit array
-        if((oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === ""))) //only push chapters in list
+        // this if statement was a mistake
+        if((oldUploaders.includes(uploaderId) || (oldUploaders.length == 1 && oldUploaders[0] === "")) && (oldChapterTitles.includes(title) || (oldChapterTitles.length == 1 && oldChapterTitles[0] === "")) && (oldChapterNumbers.includes(chapNum) || (oldChapterNumbers.length == 1 && oldChapterNumbers[0] === "")) && (oldVolumeNumbers.includes(volNum) || (oldVolumeNumbers.length == 1 && oldVolumeNumbers[0] === "")) && (oldLanguages.includes(langTitle) || (oldLanguages.length == 1 && oldLanguages[0] === "")) && (oldGroups.includes(groupId) || (oldGroups.length == 1 && oldGroups[0] === "")) && (oldGroups2.includes(group2Id) || (oldGroups2.length == 1 && oldGroups2[0] === "")) && (oldGroups3.includes(group3Id) || (oldGroups3.length == 1 && oldGroups3[0] === "")) && (oldAvailability.includes(unavailable) || (oldAvailability.length == 1 && oldAvailability[0] === ""))) //only push chapters in list
         {
             const chapId = row.id;
-            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, unavailable, oldMangaId]);
+            toEdit.push([chapId, volNum, chapNum, title, groupId, group2Id, group3Id, langTitle, unavailable, oldMangaId, uploaderId]);
         }
     });
     for (let i = 0, len = toEdit.length; i < len; i++)
@@ -1352,7 +1538,23 @@ async function massEdit(fields) {
         }
         else
         {
-            newData[7] = newLanguages[i] || oldData[7];
+            newData[7] = langs[newLanguages[i]] || oldData[7];
+        }
+        if(newAvailability.length == 1)
+        {
+            if(newAvailability[0] === "")
+            {
+                newData[8] = oldData[8];
+            }
+            else
+            {
+                newData[8] = newAvailability[0];
+            }
+        }
+        else
+        {
+            newData[8] = newAvailability[i] || oldData[8];
+        
         }
         var newFile = false
         if(newFiles[i] != undefined)
@@ -1363,16 +1565,31 @@ async function massEdit(fields) {
         {
             if(newMangaIds[0] === "")
             {
-                newData[8] = oldData[8];
+                newData[9] = oldData[9];
             }
             else
             {
-                newData[8] = newMangaIds[0];
+                newData[9] = newMangaIds[0];
             }
         }
         else
         {
-            newData[8] = newMangaIds[i] || oldData[8];
+            newData[9] = newMangaIds[i] || oldData[9];
+        }
+        if(newUploaders.length == 1)
+        {
+            if(newUploaders[0] === "")
+            {
+                newData[10] = oldData[10];
+            }
+            else
+            {
+                newData[10] = newUploaders[0];
+            }
+        }
+        else
+        {
+            newData[10] = newUploaders[i] || oldData[10];
         }
 
         // check for either volume or chapter present
@@ -1395,6 +1612,7 @@ async function massEdit(fields) {
                 formData.append('group_id_2', newData[5]);
                 formData.append('group_id_3', newData[6]);
                 formData.append('lang_id', newData[7]);
+                formData.append('user_id', newData[10]);
                 if(newData[8])
                 {
                     formData.append('unavailable', "1")
