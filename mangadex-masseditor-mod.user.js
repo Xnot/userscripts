@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Editor Mod Edition
 // @namespace    https://github.com/Xnot/userscripts
-// @version      1.10
+// @version      1.11
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  mass edit script but you don't have to disable all your filters
 // @author       bcvxy, Xnot
