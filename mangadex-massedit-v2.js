@@ -7,11 +7,11 @@
 // @author       Xnot
 // @updateURL    https://github.com/Xnot/userscripts/raw/master/mangadex-masseditor-v2.user.js
 // @downloadURL  https://github.com/Xnot/userscripts/raw/master/mangadex-masseditor-v2.user.js
-// @include      /.*mangadex\.org/title/.*/mod_chapters
+// @include      /.*mangadex\.org/(title|group|user)/([0-9]*?)/([^/]*)/?((chapters|mod_chapters|deleted)/?)?$
 // @grant        none
 // ==/UserScript==
 
-function createInfoBox(version = "", changelog = "") {
+function createInfoBox(version = "", changelog = ""){
     const infoBox = document.createElement("div");
     infoBox.classList.add("alert", "alert-info");
     infoBox.setAttribute("role", "alert");
@@ -87,11 +87,18 @@ function createMassEditForm(children){
     return massEditForm;
 }
 
-function getContainer(){
-    return document.getElementsByClassName("card mb-3")[0].getElementsByClassName("card-body p-0")[0];
+function getContainer(page){
+    if(page == "group"){
+        return document.getElementsByClassName("card mb-3")[5].getElementsByClassName("card-body")[0];
+    }
+    else{
+        return document.getElementsByClassName("card mb-3")[0].getElementsByClassName("card-body p-0")[0];
+    }
 }
 
 (function main(){
+    const page = window.location.href.match(/(?<=mangadex.org\/)(title|group|user)/gi)[0]; 
+    const tab = window.location.href.match(/(?<=.*\/?)(chapters|mod_chapters|deleted)?(?=\/?$)/gi)[0] || "chapters"
     const editFields = [
         "uploader_to_edit",
         "chapter_title_to_edit",
@@ -119,5 +126,5 @@ function getContainer(){
         formElements.push(createEditField(field, true));
     }
     
-    getContainer().appendChild(createMassEditForm(formElements));
+    getContainer(page).appendChild(createMassEditForm(formElements));
 })();
