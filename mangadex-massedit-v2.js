@@ -51,7 +51,7 @@ function createEditField(name = "", collapsed = false){
     editField.innerHTML =
         `
         <a data-toggle="collapse" data-target="#mass_${name}" class="col-sm-2 ${toggleStart}">
-            <label for="mass_${name}" class="control-label">
+            <label for="mass_${name}" class="control-label", style="text-transform: capitalize;">
                 ${name.replace(/_/g, " ")}
                 <span id=mass_${name}_arrow class="fas fa-angle-${arrowStart} fa-fw"></span>
             </label>
@@ -77,6 +77,21 @@ function createEditField(name = "", collapsed = false){
     return editField;
 }
 
+function createButton(name, icon, color, action){
+    const button = document.createElement("button");
+    button.setAttribute("id", `mass_${name}`);
+    button.setAttribute("type", "button");
+    button.classList.add("btn", "pull-right", "mr-1", `btn-${color}`);
+    button.innerHTML =
+        `
+        <span class="fas fa-${icon} fa-fw " aria-hidden="true" title="${name}"></span>
+        <span class="d-none d-xl-inline" style="text-transform: capitalize;">${name}</span>
+        `;
+    button.addEventListener("click", action);
+    
+    return button;
+}
+
 function createMassEditForm(children){
     const massEditForm = document.createElement("form");
     massEditForm.setAttribute("id", "mass_edit_form");
@@ -87,6 +102,7 @@ function createMassEditForm(children){
     return massEditForm;
 }
 
+// returns container in which massEditForm must be inserted
 function getContainer(page){
     if(page == "group"){
         return document.getElementsByClassName("card mb-3")[5].getElementsByClassName("card-body")[0];
@@ -94,6 +110,11 @@ function getContainer(page){
     else{
         return document.getElementsByClassName("card mb-3")[0].getElementsByClassName("card-body p-0")[0];
     }
+}
+
+// returns container in which openMassEditButton must be inserted
+function getButtonContainer(){
+
 }
 
 (function main(){
@@ -125,6 +146,8 @@ function getContainer(page){
     for(const field of editFields){
         formElements.push(createEditField(field, true));
     }
+    
+    formElements.push(createButton("test", "pencil-alt", "info", x => {console.log("test")}));
     
     getContainer(page).appendChild(createMassEditForm(formElements));
 })();
