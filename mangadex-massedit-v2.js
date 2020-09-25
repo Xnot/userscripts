@@ -11,14 +11,13 @@
 // @grant        none
 // ==/UserScript==
 
-function createInfoBox(version = "", changelog = ""){
+function createInfoBox(version = ""){
     const infoBox = document.createElement("div");
     infoBox.classList.add("alert", "alert-info");
     infoBox.setAttribute("role", "alert");
     infoBox.innerHTML =
         `
-        <div class="alert alert-info" role="alert">
-        <h6>MangaDex Mass Editor Script v${version}</h6>
+        <h6>MangaDex Mass Editor Script v${GM_info.script.version}</h6>
         <ul>
             <li>Use the 'to edit' fields to grab the chapters you want. Each line is one value
             <li>Use 'Read Online' to grab empty titles, ' ' (a space) to grab empty chapter/volume numbers, and '0' to grab empty groups2/3
@@ -34,9 +33,9 @@ function createInfoBox(version = "", changelog = ""){
             <li>Refresh after every edit so you aren't editing based on outdated information.
         </ul>
         <h6>Contact Xnot on MangaDex or Discord if there are any problems</h6>
-        <h6>Update ${version}:</h6>
+        <h6>Changelog:</h6>
         <ul>
-            ${changelog}
+            <li>This is a placeholder changelog.
         </ul>
         `;
     return infoBox;
@@ -79,75 +78,123 @@ function createEditField(name = "", collapsed = false){
 
 function createButton(name, icon, color, action){
     const button = document.createElement("button");
-    button.setAttribute("id", `mass_${name}`);
+    button.setAttribute("id", `mass_${name}_button`);
     button.setAttribute("type", "button");
-    button.classList.add("btn", "pull-right", "mr-1", `btn-${color}`);
+    button.classList.add("btn", "float-right", "mr-1", `btn-${color}`);
     button.innerHTML =
         `
         <span class="fas fa-${icon} fa-fw " aria-hidden="true" title="${name}"></span>
-        <span class="d-none d-xl-inline" style="text-transform: capitalize;">${name}</span>
+        <span class="d-none d-xl-inline" style="text-transform: capitalize;">${name.replace(/_/g, " ")}</span>
         `;
     button.addEventListener("click", action);
     
     return button;
 }
 
-function createMassEditForm(children){
+function createMassEditForm(page){
     const massEditForm = document.createElement("form");
     massEditForm.setAttribute("id", "mass_edit_form");
     massEditForm.classList.add("card-body");
-    for(const child of children){
+    massEditForm.style.display = "none";
+    
+    // create elements contained in the form
+    let formElements = [];
+    // information dialog 
+    formElements.push(createInfoBox("2.00"));
+    // mass edit fields
+    let editFields = [];
+    if(page != "title"){
+        editFields.push(["manga_to_edit", true])
+    }
+    if(page != "user"){
+        editFields.push(["uploader_to_edit", true])
+    }
+    editFields.push(
+        ["chapter_title_to_edit", false],
+        ["volume_number_to_edit", false],
+        ["chapter_number_to_edit", false],
+        ["language_to_edit", true],
+        ["group_id_to_edit", false],
+        ["group_2_id_to_edit", true],
+        ["group_3_id_to_edit", true],
+        ["availability_to_edit", true],
+        ["new_uploader", true],
+        ["new_chapter_title", false],
+        ["new_volume_number", false],
+        ["new_chapter_number", false],
+        ["new_language", true],
+        ["new_group_id", false],
+        ["new_group_2_id", true,],
+        ["new_group_3_id", true],
+        ["new_manga_id", true],
+        ["new_availability", true],
+    );
+    // parse field HTML and push
+    for(const field of editFields){
+        formElements.push(createEditField(field[0], field[1]));
+    }
+    // confirm/close buttons
+    formElements.push(createButton("apply", "check-double", "success", x => {console.log("test")}));
+    formElements.push(createButton("close", "window-close", "danger", toggleMassEditForm));
+    
+    //TODO:
+    // less cancerous spacing
+    const spacer = document.createElement("br");
+    spacer.setAttribute("clear", "all");
+    formElements.push(spacer);
+    formElements.push(spacer.cloneNode());
+    
+    //preview container
+    formElements.push(createMassEditPreview());
+    
+    // append all elements
+    for(const child of formElements){
         massEditForm.appendChild(child);
     }
     return massEditForm;
 }
 
+function createMassEditPreview(){
+    const editPreviewTable = document.getElementsByClassName("table table-striped table-hover table-sm")[0].cloneNode(true);
+    return editPreviewTable;
+}
+
 // returns container in which massEditForm must be inserted
 function getContainer(page){
     if(page == "group"){
-        return document.getElementsByClassName("card mb-3")[5].getElementsByClassName("card-body")[0];
+        return document.getElementsByClassName("card mb-3")[5];
     }
     else{
-        return document.getElementsByClassName("card mb-3")[0].getElementsByClassName("card-body p-0")[0];
+        return document.getElementsByClassName("card mb-3")[0];
     }
 }
 
 // returns container in which openMassEditButton must be inserted
-function getButtonContainer(){
-
+function getButtonContainer(page){
+    if(page == "group"){
+        return document.getElementsByClassName("card mb-3")[5].getElementsByClassName("card-body")[0];
+    }
+    else if(page == "title"){
+        return document.getElementsByClassName("btn btn-info float-right")[0].parentNode;
+    }
+    else if(page == "user"){
+        return document.getElementsByClassName("col-lg-9 col-xl-10")[8];
+    }
 }
 
-(function main(){
+// toggles visibility between mass edit form and its previous sibling
+function toggleMassEditForm(){
+    const massEditForm = document.getElementById("mass_edit_form");
+    massEditForm.previousElementSibling.style.display = massEditForm.previousElementSibling.style.display == "none" ? "block" : "none";
+    massEditForm.style.display = massEditForm.style.display == "none" ? "block" : "none";
+}
+
+(function main(){    
     const page = window.location.href.match(/(?<=mangadex.org\/)(title|group|user)/gi)[0]; 
-    const tab = window.location.href.match(/(?<=.*\/?)(chapters|mod_chapters|deleted)?(?=\/?$)/gi)[0] || "chapters"
-    const editFields = [
-        "uploader_to_edit",
-        "chapter_title_to_edit",
-        "volume_number_to_edit",
-        "chapter_number_to_edit",
-        "language_to_edit",
-        "group_id_to_edit",
-        "group_2_id_to_edit",
-        "group_3_id_to_edit",
-        "availability_id_to_edit",
-        "new_uploader",
-        "new_chapter_title",
-        "new_volume_number",
-        "new_chapter_number",
-        "new_language",
-        "new_group_id",
-        "new_group_2_id",
-        "new_group_3_id",
-        "new_manga_id",
-        "new_availability", 
-    ];
+    const tab = window.location.href.match(/(?<=.*\/?)(chapters|mod_chapters|deleted)?(?=\/?$)/gi)[0] || "chapters";
     
-    let formElements = [];
-    for(const field of editFields){
-        formElements.push(createEditField(field, true));
-    }
-    
-    formElements.push(createButton("test", "pencil-alt", "info", x => {console.log("test")}));
-    
-    getContainer(page).appendChild(createMassEditForm(formElements));
+    // create mass edit form and append 
+    getContainer(page).appendChild(createMassEditForm(page));
+    // create button to open the form
+    getButtonContainer(page).appendChild(createButton("mass_edit", "edit", "success", toggleMassEditForm));
 })();
