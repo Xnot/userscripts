@@ -13,11 +13,13 @@
 
 //TODO: 
 // add nuke button with confirm dialog
-// add alter logic for previews and submitting the edit
+// grabbing chapter ID will be necessary for href and submitting the requests
+// fix for groups without descriptions
+// stop preview from going down
 
-function createInfoBox(version = ""){
+function createInfoBox(){
     const infoBox = document.createElement("div");
-    infoBox.classList.add("alert", "alert-info");
+    infoBox.classList.add("alert", "alert-info", "col-12");
     infoBox.setAttribute("role", "alert");
     infoBox.innerHTML =
         `
@@ -133,6 +135,8 @@ function createButton(name, icon, color, action){
     button.setAttribute("id", `mass_${name}_button`);
     button.setAttribute("type", "button");
     button.classList.add("btn", "float-right", "mr-1", `btn-${color}`);
+    button.style.position = "sticky";
+    button.style.top = "75px";
     button.innerHTML =
         `
         <span class="fas fa-${icon} fa-fw " aria-hidden="true" title="${name}"></span>
@@ -144,16 +148,21 @@ function createButton(name, icon, color, action){
 }
 
 function createMassEditForm(page){
+    // container for the form and the preview table
+    const massEditContainer = document.createElement("div");
+    massEditContainer.setAttribute("id", "mass_edit_container");
+    massEditContainer.classList.add("row", "card-body");
+    massEditContainer.style.display = "none";
+    
+    // information dialog
+    massEditContainer.appendChild(createInfoBox());
+    
+    // form containing the edit fields
     const massEditForm = document.createElement("form");
     massEditForm.setAttribute("id", "mass_edit_form");
-    massEditForm.classList.add("card-body");
-    massEditForm.style.display = "none";
-    
-    // create elements contained in the form
-    let formElements = [];
-    // information dialog 
-    formElements.push(createInfoBox("2.00"));
-    // mass edit fields
+    massEditForm.classList.add("col-4");
+    massEditContainer.appendChild(massEditForm);
+    // create mass edit fields
     let editFields = [];
     if(page != "title"){
         editFields.push(["manga_id_to_edit", true])
@@ -181,37 +190,48 @@ function createMassEditForm(page){
         ["new_manga_id", true],
         ["new_availability", true],
     );
-    // parse field HTML and push
+    // parse field HTML and append
     for(const field of editFields){
-        formElements.push(createEditField(field[0], field[1]));
+        massEditForm.appendChild(createEditField(field[0], field[1]));
     }
     // file upload field
-    formElements.push(createFileField());
-    // confirm/close buttons
-    formElements.push(createButton("apply", "check-double", "success", x => {console.log("test")}));
-    formElements.push(createButton("close", "window-close", "danger", toggleMassEditForm));
+    massEditForm.appendChild(createFileField());
+    // action buttons
+    massEditForm.appendChild(createButton("apply", "check-double", "success", x => {console.log("test")}));
+    massEditForm.appendChild(createButton("delete", "dumpster-fire", "danger", x => {console.log("test")}));
+    massEditForm.appendChild(createButton("close", "window-close", "warning", toggleMassEditForm));
     
-    //TODO:
-    // less cancerous spacing
-    const spacer = document.createElement("br");
-    spacer.setAttribute("clear", "all");
-    formElements.push(spacer);
-    formElements.push(spacer.cloneNode());
+    // preview table
+    massEditContainer.appendChild(createPreviewTable());
     
-    //preview container
-    formElements.push(createPreviewTable());
-    
-    // append all elements
-    for(const child of formElements){
-        massEditForm.appendChild(child);
-    }
-    return massEditForm;
+    return massEditContainer;
 }
 
 function createPreviewTable(){
-    const editPreviewTable = getChapterTable().cloneNode(true);
+    const editPreviewTable = document.createElement("table")
     editPreviewTable.setAttribute("id", "mass_preview_table");
-    editPreviewTable.getElementsByTagName("tbody")[0].innerHTML = "";
+    editPreviewTable.classList.add("col-8", "table-striped", "table-bordered");
+    editPreviewTable.style.position = "sticky";
+    editPreviewTable.style.top = "75px";
+    editPreviewTable.innerHTML = 
+        `
+        <thead>
+            <tr>
+                <th><span class="fas fa-book fa-fw " title="manga_id"></span></th>
+                <th><span class="fas fa-volume-up fa-fw " title="volume_number"></span></th>
+                <th><span class="fas fa-file-alt fa-fw " title="chapter_number"></span></th>
+                <th><span class="fab fa-tumblr fa-fw " title="chapter_title"></span></th>
+                <th><span class="fas fa-globe fa-fw " title="language_id"></span></th>
+                <th><span class="fas fa-users fa-fw " title="group_id"></span></th>
+                <th><span class="fas fa-users fa-fw " title="group2_id"></span></th>
+                <th><span class="fas fa-users fa-fw " title="group3_id"></span></th>
+                <th><span class="fas fa-user fa-fw " title="uploader"></span></th>
+                <th><span class="fas fa-low-vision fa-fw " title="availability"></span></th>
+                <th><span class="fas fa-upload fa-fw " title="file"></span></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        `;
     return editPreviewTable;
 }
 
@@ -240,9 +260,9 @@ function getButtonContainer(page){
 
 // toggles visibility between mass edit form and its previous sibling
 function toggleMassEditForm(){
-    const massEditForm = document.getElementById("mass_edit_form");
+    const massEditForm = document.getElementById("mass_edit_container");
     massEditForm.previousElementSibling.style.display = massEditForm.previousElementSibling.style.display == "none" ? "block" : "none";
-    massEditForm.style.display = massEditForm.style.display == "none" ? "block" : "none";
+    massEditForm.style.display = massEditForm.style.display == "none" ? "flex" : "none";
 }
 
 // this is where I start regretting my life choices
@@ -250,9 +270,8 @@ function updatePreview(){
     const filterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_'][id$='_to_edit']"); 
     const alterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_new'], input[id^='mass_new']");
     
-    const chapterList = filterChapters(parseChapterList(), parseFilters(filterFields));
-    //TODO:
-    // alter
+    let chapterList = filterChapters(parseChapterList(), parseFilters(filterFields));
+    chapterList = parseAlterations(chapterList, alterFields);
     
     const previewTableBody = document.getElementById("mass_preview_table").getElementsByTagName("tbody")[0];
     previewTableBody.innerHTML = "";
@@ -264,7 +283,7 @@ function updatePreview(){
 //TODO:
 // table should be dependent on the tab, for now mod is assumed
 function getChapterTable(){
-    return document.getElementsByClassName("edit tab-content")[0].getElementsByClassName("table table-striped table-hover table-sm")[0];
+    return document.getElementsByClassName("tab-content")[0].getElementsByClassName("table table-striped table-hover table-sm")[0];
 }
 
 // returns a list of chapters with each element being a dict containing the chapter info
@@ -285,8 +304,8 @@ function parseChapterList(){
             "chapter_title": inlineEdit[3].value,
             "language_id": inlineEdit[4].value,
             "group_id": inlineEdit[5].value,
-            "group2_id": inlineEdit[6].value,
-            "group3_id": inlineEdit[7].value,
+            "group_2_id": inlineEdit[6].value,
+            "group_3_id": inlineEdit[7].value,
             "uploader_id": inlineEdit[8].value,
             "availability": inlineEdit[9].value,
         });
@@ -298,7 +317,7 @@ function parseFilters(fields){
     const filters = {};
     for(const field of fields){
         const name = field.id.replace("mass_", "").replace("_to_edit", "");
-        const values = field.value.split("\n")
+        const values = field.value.split("\n");
         // if field is empty, ignore filter
         if(!(values.length === 1 && values[0] === "")){
             filters[name] = values;
@@ -324,37 +343,56 @@ function filterChapters(chapters, filters){
     return filteredChapters;
 }
 
+function parseAlterations(chapters, fields){
+    // parse alterations
+    let alterations = {};
+    for(const field of fields){
+        const name = field.id.replace("mass_new_", "");
+        const values = field.value.split("\n");
+        // if field has only 1 value, use that for every chapter 
+        if(values.length === 1){
+            alterations[name] = Array(chapters.length).fill(values[0])
+        }
+        else{
+            alterations[name] = values;
+        }
+    }
+    
+    // add alterations to chapter objects
+    const altered_chapters = [];
+    for(const [index, chapter] of chapters.entries()){
+        const altered_chapter = {"old": chapter, "new": {}};
+        for(const [name, value] of Object.entries(alterations)){
+            // only add if the alteration is different from the current value
+            altered_chapter["new"][`${name}`] = chapter[name] !== value[index] ? value[index] : "";
+        }
+        altered_chapters.push(altered_chapter);
+    }
+    
+    return(altered_chapters)
+}
+
 //TODO:
-// fill this shit in properly
+// hrefs
+// language flags
+// available icon
+// file icon
 function createChapter(chapterInfo){
     const chapter = document.createElement("tr");
-    chapter.innerHTML = 
-        `
-        <td>
-            <a>Ch. ${chapterInfo["chapter_number"]} - ${chapterInfo["chapter_title"]}</a>
-        </td>
-        <td class="text-center">
-            <a>
-                <span class="badge badge-secondary" title="delete this">
-                    <span class="far fa-comments fa-fw " aria-hidden="true"></span>
-                    ??
-                 </span>
-             </a>
-         </td>
-        <td class="text-center">
-    <!--            <span class="rounded flag flag-gb" title="English"></span>-->
-                ${chapterInfo["language_id"]}
-        </td>
-        <td>
-            ${chapterInfo["group_id"]} | ${chapterInfo["group2_id"]} | ${chapterInfo["group3_id"]}
-        </td>
-        <td>
-            ${chapterInfo["uploader_id"]}
-        </td>
-        <td class="text-center text-info">????</td>
-        <td class="text-right">????</td>
-        <td class="text-right">?</td>
-        `;
+    for(const [name, value] of Object.entries(chapterInfo["old"])){
+        chapter.innerHTML +=
+            `
+            <td>
+                <a ${chapterInfo["new"][name] ? "style='color: red;'" : ""}">
+                    ${chapterInfo["old"][name]}
+                </a>
+                <br>
+                <a style="color: green;">
+                    ${chapterInfo["new"][name]}
+                </a>
+            </td>
+            `
+    }
     return chapter;
 }
 
