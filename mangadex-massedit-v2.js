@@ -12,8 +12,6 @@
 // ==/UserScript==
 
 //TODO: 
-// add nuke button with confirm dialog
-// grabbing chapter ID will be necessary for href and submitting the requests
 // fix for groups without descriptions
 // stop preview from going down
 
@@ -95,12 +93,12 @@ function createFileField(collapsed = false){
         <a data-toggle="collapse" data-target="#mass_new_file_container" class="col-sm-2 ${toggleStart}">
             <label class="control-label">
                 New Files
-                <span id=mass_new_file_arrow class="fas fa-angle-${arrowStart} fa-fw"></span>
+                <span id="mass_new_file_arrow" class="fas fa-angle-${arrowStart} fa-fw"></span>
             </label>
         </a>
         <div class="col-sm-10 ${fieldStart}" id="mass_new_file_container" style="">
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="No files selected" disabled="true">
+                <input id="mass_placeholder_new_file" class="form-control" type="text" placeholder="No files selected" disabled="true">
                     <span class="input-group-btn">
                         <span class="btn btn-default btn-file">
                             <span class="far fa-folder-open fa-fw" style="margin-right: 3px;"></span>
@@ -118,6 +116,8 @@ function createFileField(collapsed = false){
     // change arrow on expand/collapse
     const thisField = $(editField).find(`#mass_new_file_container`);
     const thisArrow = $(editField).find(`#mass_new_file_arrow`)[0];
+    const thisFiles = $(editField).find(`#mass_new_file`)[0];
+    const thisPlaceholder = $(editField).find(`#mass_placeholder_new_file`)[0];
     thisField.on("hidden.bs.collapse",
         function(){
             thisArrow.classList.replace("fa-angle-down", "fa-angle-right");
@@ -126,6 +126,13 @@ function createFileField(collapsed = false){
         function(){
             thisArrow.classList.replace("fa-angle-right", "fa-angle-down");
         });
+    // change text to show number of files selected
+    thisField.on("change",
+        function(){
+            thisPlaceholder.setAttribute("placeholder", `${thisFiles.files.length} file(s) selected`);
+        });
+    // update preview whenever field is changed
+    thisField.on("change keyup paste", updatePreview);
     
     return editField
 }
@@ -165,30 +172,32 @@ function createMassEditForm(page){
     // create mass edit fields
     let editFields = [];
     if(page != "title"){
-        editFields.push(["manga_id_to_edit", true])
+        editFields.push(["manga_id_to_edit", false])
     }
     if(page != "user"){
-        editFields.push(["uploader_id_to_edit", true])
+        editFields.push(["uploader_id_to_edit", false])
     }
     editFields.push(
+        // ["manga_id_to_edit", false],
+        // ["uploader_id_to_edit", false],
         ["chapter_title_to_edit", false],
         ["volume_number_to_edit", false],
         ["chapter_number_to_edit", false],
-        ["language_id_to_edit", true],
+        ["language_id_to_edit", false],
         ["group_id_to_edit", false],
-        ["group_2_id_to_edit", true],
-        ["group_3_id_to_edit", true],
-        ["availability_to_edit", true],
-        ["new_uploader_id", true],
+        ["group_2_id_to_edit", false],
+        ["group_3_id_to_edit", false],
+        ["availability_to_edit", false],
+        ["new_uploader_id", false],
         ["new_chapter_title", false],
         ["new_volume_number", false],
         ["new_chapter_number", false],
-        ["new_language_id", true],
+        ["new_language_id", false],
         ["new_group_id", false],
-        ["new_group_2_id", true,],
-        ["new_group_3_id", true],
-        ["new_manga_id", true],
-        ["new_availability", true],
+        ["new_group_2_id", false,],
+        ["new_group_3_id", false],
+        ["new_manga_id", false],
+        ["new_availability", false],
     );
     // parse field HTML and append
     for(const field of editFields){
@@ -197,8 +206,8 @@ function createMassEditForm(page){
     // file upload field
     massEditForm.appendChild(createFileField());
     // action buttons
-    massEditForm.appendChild(createButton("apply", "check-double", "success", x => {console.log("test")}));
-    massEditForm.appendChild(createButton("delete", "dumpster-fire", "danger", x => {console.log("test")}));
+    massEditForm.appendChild(createButton("apply", "check-double", "success", applyMassEdit));
+    massEditForm.appendChild(createButton("delete", "dumpster-fire", "danger", applyMassDelete));
     massEditForm.appendChild(createButton("close", "window-close", "warning", toggleMassEditForm));
     
     // preview table
@@ -237,8 +246,9 @@ function createPreviewTable(){
 
 // returns container in which massEditForm must be inserted
 function getContainer(page){
-    if(page == "group"){
-        return document.getElementsByClassName("card mb-3")[5];
+    if(page === "group"){
+        let container = document.getElementsByClassName("card mb-3")[5] || createGroupDescription();
+        return container;
     }
     else{
         return document.getElementsByClassName("card mb-3")[0];
@@ -247,15 +257,31 @@ function getContainer(page){
 
 // returns container in which openMassEditButton must be inserted
 function getButtonContainer(page){
-    if(page == "group"){
-        return document.getElementsByClassName("card mb-3")[5].getElementsByClassName("card-body")[0];
+    if(page === "group"){
+        let container = document.getElementsByClassName("card mb-3")[5] || createGroupDescription();
+        return container.getElementsByClassName("card-body")[0];
     }
-    else if(page == "title"){
+    else if(page === "title"){
         return document.getElementsByClassName("btn btn-info float-right")[0].parentNode;
     }
-    else if(page == "user"){
+    else if(page === "user"){
         return document.getElementsByClassName("col-lg-9 col-xl-10")[8];
     }
+}
+
+function createGroupDescription(){
+    const description = document.createElement("div");
+    description.classList.add("card", "mb-3");
+    description.innerHTML =
+        `
+                <h6 class="card-header">
+                    <span class="fas fa-info-circle fa-fw " aria-hidden="true"></span> Description
+                </h6>
+                <div class="card-body"></div>
+                `;
+
+    document.getElementById("content").insertBefore(description, document.getElementsByClassName("edit nav nav-tabs")[0]);
+    return description;
 }
 
 // toggles visibility between mass edit form and its previous sibling
@@ -275,7 +301,7 @@ function updatePreview(){
     
     const previewTableBody = document.getElementById("mass_preview_table").getElementsByTagName("tbody")[0];
     previewTableBody.innerHTML = "";
-    for(const chapter of chapterList){
+    for(const chapter of Object.entries(chapterList)){
         previewTableBody.appendChild(createChapter(chapter));
     }
 }
@@ -291,24 +317,27 @@ function getChapterTable(){
 // parsing method should be dependent on the tab, for now mod is assumed
 function parseChapterList(){
     // mod tab is parsed through the inline edit form 
-    const parsedChapters = [];
+    const parsedChapters = {};
     const unparsedElements = [...getChapterTable().getElementsByTagName("tbody")[0].getElementsByTagName("tr")];
     while(unparsedElements.length > 0){
         // throw away the chapter element and get the inputs from the inline edit element
         unparsedElements.shift();
-        const inlineEdit = unparsedElements.shift().getElementsByTagName("input");
-        parsedChapters.push({
-            "manga_id": inlineEdit[0].value,
-            "volume_number": inlineEdit[1].value,
-            "chapter_number": inlineEdit[2].value,
-            "chapter_title": inlineEdit[3].value,
-            "language_id": inlineEdit[4].value,
-            "group_id": inlineEdit[5].value,
-            "group_2_id": inlineEdit[6].value,
-            "group_3_id": inlineEdit[7].value,
-            "uploader_id": inlineEdit[8].value,
-            "availability": inlineEdit[9].value,
-        });
+        const inlineEdit = unparsedElements.shift();
+        const chapterID = inlineEdit.getElementsByClassName("btn btn-sm btn-danger mass_edit_delete_button")[0].id;
+        const infoFields = inlineEdit.getElementsByTagName("input");
+        parsedChapters[chapterID] = {
+            "manga_id": infoFields[0].value,
+            "volume_number": infoFields[1].value,
+            "chapter_number": infoFields[2].value,
+            "chapter_title": infoFields[3].value,
+            "language_id": infoFields[4].value,
+            "group_id": infoFields[5].value,
+            "group_2_id": infoFields[6].value,
+            "group_3_id": infoFields[7].value,
+            "uploader_id": infoFields[8].value,
+            "availability": infoFields[9].checked ? "0" : "1",
+            "file": "",
+        };
     }
     return parsedChapters;
 }
@@ -327,8 +356,8 @@ function parseFilters(fields){
 }
 
 function filterChapters(chapters, filters){
-    const filteredChapters = [];
-    for(const chapter of chapters){
+    const filteredChapters = {};
+    for(const [id, chapter] of Object.entries(chapters)){
         let passesFilters = true;
         for(const [name, values] of Object.entries(filters)){
             if(!values.includes(chapter[name])){
@@ -337,7 +366,7 @@ function filterChapters(chapters, filters){
             }
         }
         if(passesFilters){
-            filteredChapters.push(chapter);
+            filteredChapters[id] = chapter;
         }
     }
     return filteredChapters;
@@ -349,9 +378,13 @@ function parseAlterations(chapters, fields){
     for(const field of fields){
         const name = field.id.replace("mass_new_", "");
         const values = field.value.split("\n");
+        // file field is special snowflake
+        if(name === "file"){
+            alterations[name] = field.files;
+        }
         // if field has only 1 value, use that for every chapter 
-        if(values.length === 1){
-            alterations[name] = Array(chapters.length).fill(values[0])
+        else if(values.length === 1){
+            alterations[name] = Array(Object.keys(chapters).length).fill(values[0]);
         }
         else{
             alterations[name] = values;
@@ -359,46 +392,184 @@ function parseAlterations(chapters, fields){
     }
     
     // add alterations to chapter objects
-    const altered_chapters = [];
-    for(const [index, chapter] of chapters.entries()){
+    const altered_chapters = {};
+    for(const [index, [id, chapter]] of Object.entries(chapters).entries()){
         const altered_chapter = {"old": chapter, "new": {}};
         for(const [name, value] of Object.entries(alterations)){
             // only add if the alteration is different from the current value
-            altered_chapter["new"][`${name}`] = chapter[name] !== value[index] ? value[index] : "";
+            altered_chapter["new"][name] = chapter[name] !== value[index] ? value[index] || "" : "";
         }
-        altered_chapters.push(altered_chapter);
+        altered_chapters[id] = altered_chapter;
     }
-    
     return(altered_chapters)
 }
 
 //TODO:
 // hrefs
 // language flags
-// available icon
-// file icon
-function createChapter(chapterInfo){
-    const chapter = document.createElement("tr");
+function createChapter(chapter){
+    const chapterID = chapter[0];
+    const chapterInfo = chapter[1];
+    const chapterEl = document.createElement("tr");
     for(const [name, value] of Object.entries(chapterInfo["old"])){
-        chapter.innerHTML +=
-            `
-            <td>
-                <a ${chapterInfo["new"][name] ? "style='color: red;'" : ""}">
-                    ${chapterInfo["old"][name]}
-                </a>
-                <br>
-                <a style="color: green;">
-                    ${chapterInfo["new"][name]}
-                </a>
-            </td>
-            `
+        if(name === "availability"){
+            chapterEl.innerHTML +=
+                `
+                <td>
+                    <a ${chapterInfo["new"][name] ? "style='color: red;'" : ""}">
+                        ${value === "0" ? `<span class="fas fa-file-excel fa-fw " title="Unavailable"></span>` : ""} 
+                    </a>
+                    <a style="color: green;">
+                        ${chapterInfo["new"][name] === "0" ? `<span class="fas fa-file-excel fa-fw " title="Unavailable"></span>` : ""}
+                    </a>
+                </td>
+                `
+        }
+        else if(name === "file"){
+            chapterEl.innerHTML +=
+                `
+                <td>
+                    <a style="color: green;">
+                        ${chapterInfo["new"][name] ? `<span class="fas fa-file-upload fa-fw " title="${chapterInfo["new"][name].name}"></span>` : ""}
+                    </a>
+                </td>
+                `
+        }
+        else{
+            chapterEl.innerHTML +=
+                `
+                <td>
+                    <a ${chapterInfo["new"][name] ? "style='color: red;'" : ""}">
+                        ${value}
+                    </a>
+                    <br>
+                    <a style="color: green;">
+                        ${chapterInfo["new"][name]}
+                    </a>
+                </td>
+                `
+        }
     }
-    return chapter;
+    return chapterEl;
+}
+
+async function applyMassEdit(){
+    const filterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_'][id$='_to_edit']");
+    const alterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_new'], input[id^='mass_new']");
+
+    let chapterList = filterChapters(parseChapterList(), parseFilters(filterFields));
+    chapterList = parseAlterations(chapterList, alterFields);
+
+    for(const [id, chapter] of Object.entries(chapterList)){
+        
+        // skip completely unchanged chapters
+        if(Object.values(chapter["new"]).every(x => (x === undefined || x === ''))){
+            showAlert("info", `Skipping unchanged chapter ${id}`)
+            continue;
+        }
+        // use old value when new values are empty
+        for(const [name, value] of Object.entries(chapter["new"])){
+            chapter["new"][name] = value || chapter["old"][name];
+        }
+        
+        const formData = new FormData();
+        formData.append('manga_id', chapter["new"]["manga_id"]);
+        formData.append('chapter_name', chapter["new"]["chapter_title"]);
+        formData.append('volume_number', chapter["new"]["volume_number"]);
+        formData.append('chapter_number', chapter["new"]["chapter_number"]);
+        formData.append('group_id', chapter["new"]["group_id"]);
+        formData.append('group_id_2', chapter["new"]["group_2_id"]);
+        formData.append('group_id_3', chapter["new"]["group_3_id"]);
+        formData.append('lang_id', chapter["new"]["language_id"]);
+        formData.append('user_id', chapter["new"]["uploader_id"]);
+        if(chapter["new"]["availability"] == "0"){
+            formData.append('unavailable', "1");
+        }
+        if(chapter["new"]["file"]){
+            formData.append('old_file', "1");
+            formData.append('file', chapter["new"]["file"]);
+        }
+        const headers = new Headers();
+        headers.append("x-requested-with", "XMLHttpRequest");
+        
+        const {ok} = await fetch(`https://mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=${id}`, {
+            method: 'POST',
+            headers,
+            body: formData,
+            credentials: "same-origin",
+            cache: "no-store"
+        });
+
+        if(!ok)
+        {
+            console.log(`Not ok ${id}`);
+            showAlert("danger", `Not ok ${id}`);
+        }
+        else{
+            console.log(`Ok ${id}`);
+            showAlert("success", `Ok ${id}`);
+        }
+        console.log(chapter);
+        console.log(formData);
+    }
+    showAlert("info", `Done`);
+}
+
+async function applyMassDelete(){
+    const filterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_'][id$='_to_edit']");
+    const alterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_new'], input[id^='mass_new']");
+    
+    let chapterList = filterChapters(parseChapterList(), parseFilters(filterFields));
+    chapterList = parseAlterations(chapterList, alterFields);
+    
+    if(!confirm(`You are about to delete ${Object.keys(chapterList).length} chapters`)){
+        return;
+    }
+    for(const [id, chapter] of Object.entries(chapterList)){
+        const headers = new Headers();
+        headers.append("x-requested-with", "XMLHttpRequest");
+
+        const {ok} = await fetch(`https://mangadex.org/ajax/actions.ajax.php?function=chapter_delete&id=${id}`, {
+            method: 'POST',
+            headers,
+            credentials: "same-origin",
+            cache: "no-store"
+        });
+
+        if(!ok)
+        {
+            console.log(`Not ok ${id}`);
+            showAlert("danger", `Not ok ${id}`);
+        }
+        else{
+            console.log(`Ok ${id}`);
+            showAlert("success", `Ok ${id}`);
+        }
+        console.log(chapter);
+    }
+    showAlert("info", `Done`);
+}
+
+function showAlert(type, text){
+    const alertBox = document.getElementById("message_container");
+    alertBox.classList.replace("display-none", "display-block");
+    alertBox.innerHTML += 
+        `
+        <div class='alert alert-${type} text-center' style='pointer-events: auto;' role='alert'>
+            <a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a>
+            ${text}
+        </div>
+        `;
 }
 
 (function main(){    
     const page = window.location.href.match(/(?<=mangadex.org\/)(title|group|user)/gi)[0]; 
     const tab = window.location.href.match(/(?<=.*\/?)(chapters|mod_chapters|deleted)?(?=\/?$)/gi)[0] || "chapters";
+    
+    // I like to tell myself that someday I'll actually implement the other tabs
+    if(tab !== "mod_chapters"){
+        return;
+    }
     
     // create mass edit form and append 
     getContainer(page).appendChild(createMassEditForm(page));
