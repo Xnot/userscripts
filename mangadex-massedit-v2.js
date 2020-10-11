@@ -126,11 +126,14 @@ function createFileField(collapsed = false){
         function(){
             thisArrow.classList.replace("fa-angle-right", "fa-angle-down");
         });
-    // change text to show number of files selected
+    // change text to show number of files selected and reverse file order
     thisField.on("change",
         function(){
             thisPlaceholder.setAttribute("placeholder", `${thisFiles.files.length} file(s) selected`);
+            // why the fuck does FileList not inherit Array methods
+            thisFiles.filesArray = Array.from(thisFiles.files).reverse();
         });
+    thisFiles.filesArray = [];
     // update preview whenever field is changed
     thisField.on("change keyup paste", updatePreview);
     
@@ -301,7 +304,7 @@ function updatePreview(){
     
     const previewTableBody = document.getElementById("mass_preview_table").getElementsByTagName("tbody")[0];
     previewTableBody.innerHTML = "";
-    for(const chapter of Object.entries(chapterList)){
+    for(const chapter of chapterList){
         previewTableBody.appendChild(createChapter(chapter));
     }
 }
@@ -317,7 +320,7 @@ function getChapterTable(){
 // parsing method should be dependent on the tab, for now mod is assumed
 function parseChapterList(){
     // mod tab is parsed through the inline edit form 
-    const parsedChapters = {};
+    const parsedChapters = new Map();
     const unparsedElements = [...getChapterTable().getElementsByTagName("tbody")[0].getElementsByTagName("tr")];
     while(unparsedElements.length > 0){
         // throw away the chapter element and get the inputs from the inline edit element
@@ -325,7 +328,7 @@ function parseChapterList(){
         const inlineEdit = unparsedElements.shift();
         const chapterID = inlineEdit.getElementsByClassName("btn btn-sm btn-danger mass_edit_delete_button")[0].id;
         const infoFields = inlineEdit.getElementsByTagName("input");
-        parsedChapters[chapterID] = {
+        parsedChapters.set(chapterID, {
             "manga_id": infoFields[0].value,
             "volume_number": infoFields[1].value,
             "chapter_number": infoFields[2].value,
@@ -337,7 +340,7 @@ function parseChapterList(){
             "uploader_id": infoFields[8].value,
             "availability": infoFields[9].checked ? "0" : "1",
             "file": "",
-        };
+        });
     }
     return parsedChapters;
 }
@@ -356,8 +359,8 @@ function parseFilters(fields){
 }
 
 function filterChapters(chapters, filters){
-    const filteredChapters = {};
-    for(const [id, chapter] of Object.entries(chapters)){
+    const filteredChapters = new Map();
+    for(const [id, chapter] of chapters){
         let passesFilters = true;
         for(const [name, values] of Object.entries(filters)){
             if(!values.includes(chapter[name])){
@@ -366,7 +369,7 @@ function filterChapters(chapters, filters){
             }
         }
         if(passesFilters){
-            filteredChapters[id] = chapter;
+            filteredChapters.set(id, chapter);
         }
     }
     return filteredChapters;
@@ -380,11 +383,11 @@ function parseAlterations(chapters, fields){
         const values = field.value.split("\n");
         // file field is special snowflake
         if(name === "file"){
-            alterations[name] = field.files;
+            alterations[name] = field.filesArray;
         }
         // if field has only 1 value, use that for every chapter 
         else if(values.length === 1){
-            alterations[name] = Array(Object.keys(chapters).length).fill(values[0]);
+            alterations[name] = Array(chapters.size).fill(values[0]);
         }
         else{
             alterations[name] = values;
@@ -392,14 +395,16 @@ function parseAlterations(chapters, fields){
     }
     
     // add alterations to chapter objects
-    const altered_chapters = {};
-    for(const [index, [id, chapter]] of Object.entries(chapters).entries()){
+    const altered_chapters = new Map();
+    let index = 0;
+    for(const [id, chapter] of chapters){
         const altered_chapter = {"old": chapter, "new": {}};
         for(const [name, value] of Object.entries(alterations)){
             // only add if the alteration is different from the current value
             altered_chapter["new"][name] = chapter[name] !== value[index] ? value[index] || "" : "";
         }
-        altered_chapters[id] = altered_chapter;
+        altered_chapters.set(id, altered_chapter);
+        index++;
     }
     return(altered_chapters)
 }
@@ -460,7 +465,7 @@ async function applyMassEdit(){
     let chapterList = filterChapters(parseChapterList(), parseFilters(filterFields));
     chapterList = parseAlterations(chapterList, alterFields);
 
-    for(const [id, chapter] of Object.entries(chapterList)){
+    for(const [id, chapter] of chapterList){
         
         // skip completely unchanged chapters
         if(Object.values(chapter["new"]).every(x => (x === undefined || x === ''))){
@@ -522,10 +527,10 @@ async function applyMassDelete(){
     let chapterList = filterChapters(parseChapterList(), parseFilters(filterFields));
     chapterList = parseAlterations(chapterList, alterFields);
     
-    if(!confirm(`You are about to delete ${Object.keys(chapterList).length} chapters`)){
+    if(!confirm(`You are about to delete ${chapterList.size} chapters`)){
         return;
     }
-    for(const [id, chapter] of Object.entries(chapterList)){
+    for(const [id, chapter] of chapterList){
         const headers = new Headers();
         headers.append("x-requested-with", "XMLHttpRequest");
 
