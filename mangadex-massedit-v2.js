@@ -23,23 +23,24 @@ function createInfoBox(){
         `
         <h6>MangaDex Mass Editor Script v${GM_info.script.version}</h6>
         <ul>
-            <li>Use the 'to edit' fields to grab the chapters you want. Each line is one value
-            <li>Use 'Read Online' to grab empty titles, ' ' (a space) to grab empty chapter/volume numbers, and '0' to grab empty groups2/3
-            <li>Only chapters in the page you are looking at can be grabbed
-            <li>Filling in multiple 'to edit' fields will grab chapters that match both.
-            <li>For example filling titles with 'Read Online' and volume with '4' and '2' will grab all chapters titled 'Read Online' in volumes 4 and 2
-            <li>Empty 'to edit' fields are ignored
-            <li>The 'new' fields determine the new values for the grabbed chapters top to bottom
-            <li>Use ' ' to delete titles and chapter/volume numbers, and '0' to delete groups2/3
-            <li>Inputting a single value will use that value for all grabbed chapters instead
-            <li>Use the preview button if you feel so inclined
-            <li>Press the Apply Edit button and wait until it's all cool and good
-            <li>Refresh after every edit so you aren't editing based on outdated information.
+            <li>Use the 'to edit' fields to filter chapters. Each line is one value.
+            <li>Use an empty line for empty chapter titles/numbers/volumes and 0 for empty groups2/3.
+            <li>Only chapters in the page you are looking at can be edited.
+            <li>The 'new' fields determine the new values for the filtered chapters in whatever order they show up in.
+            <li>Use a space to delete chapter titles/chapters/volumes, and 0 to delete groups2/3.
+            <li>Inputting a single value will use that value for all chapters.
+            <li>Use an empty line to skip a chapter or pretend a single value is not a single value.
+            <li>The preview is objectively perfect now, so honestly it's pretty hard to fuck it up <s>unless the script is fucked</s>.
         </ul>
-        <h6>Contact Xnot on MangaDex or Discord if there are any problems</h6>
         <h6>Changelog:</h6>
         <ul>
-            <li>This is a placeholder changelog.
+            <li>Preview moved to the side.
+            <li>Preview updates automatically.
+            <li>Added manga id, files, and unavailable status to preview. 
+            <li>Languages are IDs now because I was lazy.
+            <li>It has a delete button.
+            <li>It works on group and user pages.
+            <li>It no longer causes cancer.
         </ul>
         `;
     return infoBox;
