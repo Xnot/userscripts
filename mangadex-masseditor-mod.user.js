@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         MangaDex Mass Editor v2 (definitely not) Beta
 // @namespace    https://github.com/Xnot/userscripts
-// @version      2.00
+// @version      2.01
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  mass edit script but it doesn't make me want to kill myself when I look at the code
 // @author       Xnot
 // @updateURL    https://github.com/Xnot/userscripts/raw/master/mangadex-masseditor-mod.user.js
 // @downloadURL  https://github.com/Xnot/userscripts/raw/master/mangadex-masseditor-mod.user.js
-// @include      /.*mangadex\.org/(title|group|user)/([0-9]*?)/([^/]*)/?((chapters|mod_chapters|deleted)/?)?$
+// @include      /.*mangadex\.org/(title|group|user)/([0-9]*?)/([^/]*)/?((chapters|mod_chapters|deleted)/?)?([0-9]*/?)$
 // @grant        none
 // ==/UserScript==
 
@@ -32,7 +32,7 @@ function createInfoBox(){
         <ul>
             <li>Preview moved to the side.
             <li>Preview updates automatically.
-            <li>Added manga id, files, and unavailable status to preview. 
+            <li>Added manga id, files, and unavailable status to preview.
             <li>Languages are IDs now because I was lazy.
             <li>It has a delete button.
             <li>It works on group and user pages.
@@ -60,7 +60,7 @@ function createEditField(name = "", collapsed = false){
             <textarea id="mass_${name}" name="mass_${name}" placeholder="Entry 1\nEntry 2\nEntry 3" class="form-control collapse ${fieldStart}" style="height: 80px;"></textarea>
         </div>
         `;
-    
+
     // change arrow and set correct height on expand/collapse
     const thisField = $(editField).find(`#mass_${name}`);
     const thisArrow = $(editField).find(`#mass_${name}_arrow`)[0];
@@ -75,7 +75,7 @@ function createEditField(name = "", collapsed = false){
         });
     // update preview whenever field is changed
     thisField.on("change keyup paste", updatePreview);
-    
+
     return editField;
 }
 
@@ -133,7 +133,7 @@ function createFileField(collapsed = false){
     thisFiles.filesArray = [];
     // update preview whenever field is changed
     thisField.on("change keyup paste", updatePreview);
-    
+
     return editField
 }
 
@@ -150,7 +150,7 @@ function createButton(name, icon, color, action){
         <span class="d-none d-xl-inline" style="text-transform: capitalize;">${name.replace(/_/g, " ")}</span>
         `;
     button.addEventListener("click", action);
-    
+
     return button;
 }
 
@@ -160,10 +160,10 @@ function createMassEditForm(page){
     massEditContainer.setAttribute("id", "mass_edit_container");
     massEditContainer.classList.add("row", "card-body");
     massEditContainer.style.display = "none";
-    
+
     // information dialog
     massEditContainer.appendChild(createInfoBox());
-    
+
     // form containing the edit fields
     const massEditForm = document.createElement("form");
     massEditForm.setAttribute("id", "mass_edit_form");
@@ -209,10 +209,10 @@ function createMassEditForm(page){
     massEditForm.appendChild(createButton("apply", "check-double", "success", applyMassEdit));
     massEditForm.appendChild(createButton("delete", "dumpster-fire", "danger", applyMassDelete));
     massEditForm.appendChild(createButton("close", "window-close", "warning", toggleMassEditForm));
-    
+
     // preview table
     massEditContainer.appendChild(createPreviewTable());
-    
+
     return massEditContainer;
 }
 
@@ -222,7 +222,7 @@ function createPreviewTable(){
     editPreviewTable.classList.add("col-8", "table-striped", "table-bordered");
     editPreviewTable.style.position = "sticky";
     editPreviewTable.style.top = "75px";
-    editPreviewTable.innerHTML = 
+    editPreviewTable.innerHTML =
         `
         <thead>
             <tr>
@@ -293,12 +293,12 @@ function toggleMassEditForm(){
 
 // this is where I start regretting my life choices
 function updatePreview(){
-    const filterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_'][id$='_to_edit']"); 
+    const filterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_'][id$='_to_edit']");
     const alterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_new'], input[id^='mass_new']");
-    
+
     let chapterList = filterChapters(parseChapterList(), parseFilters(filterFields));
     chapterList = parseAlterations(chapterList, alterFields);
-    
+
     const previewTableBody = document.getElementById("mass_preview_table").getElementsByTagName("tbody")[0];
     previewTableBody.innerHTML = "";
     for(const chapter of chapterList){
@@ -316,7 +316,7 @@ function getChapterTable(){
 //TODO:
 // parsing method should be dependent on the tab, for now mod is assumed
 function parseChapterList(){
-    // mod tab is parsed through the inline edit form 
+    // mod tab is parsed through the inline edit form
     const parsedChapters = new Map();
     const unparsedElements = [...getChapterTable().getElementsByTagName("tbody")[0].getElementsByTagName("tr")];
     while(unparsedElements.length > 0){
@@ -382,7 +382,7 @@ function parseAlterations(chapters, fields){
         if(name === "file"){
             alterations[name] = field.filesArray;
         }
-        // if field has only 1 value, use that for every chapter 
+        // if field has only 1 value, use that for every chapter
         else if(values.length === 1){
             alterations[name] = Array(chapters.size).fill(values[0]);
         }
@@ -390,7 +390,7 @@ function parseAlterations(chapters, fields){
             alterations[name] = values;
         }
     }
-    
+
     // add alterations to chapter objects
     const altered_chapters = new Map();
     let index = 0;
@@ -419,7 +419,7 @@ function createChapter(chapter){
                 `
                 <td>
                     <a ${chapterInfo["new"][name] ? "style='color: red;'" : ""}">
-                        ${value === "0" ? `<span class="fas fa-file-excel fa-fw " title="Unavailable"></span>` : ""} 
+                        ${value === "0" ? `<span class="fas fa-file-excel fa-fw " title="Unavailable"></span>` : ""}
                     </a>
                     <a style="color: green;">
                         ${chapterInfo["new"][name] === "0" ? `<span class="fas fa-file-excel fa-fw " title="Unavailable"></span>` : ""}
@@ -463,7 +463,7 @@ async function applyMassEdit(){
     chapterList = parseAlterations(chapterList, alterFields);
 
     for(const [id, chapter] of chapterList){
-        
+
         // skip completely unchanged chapters
         if(Object.values(chapter["new"]).every(x => (x === undefined || x === ''))){
             showAlert("info", `Skipping unchanged chapter ${id}`)
@@ -473,7 +473,7 @@ async function applyMassEdit(){
         for(const [name, value] of Object.entries(chapter["new"])){
             chapter["new"][name] = value || chapter["old"][name];
         }
-        
+
         const formData = new FormData();
         formData.append('manga_id', chapter["new"]["manga_id"]);
         formData.append('chapter_name', chapter["new"]["chapter_title"]);
@@ -493,7 +493,7 @@ async function applyMassEdit(){
         }
         const headers = new Headers();
         headers.append("x-requested-with", "XMLHttpRequest");
-        
+
         const {ok} = await fetch(`https://mangadex.org/ajax/actions.ajax.php?function=chapter_edit&id=${id}`, {
             method: 'POST',
             headers,
@@ -520,10 +520,10 @@ async function applyMassEdit(){
 async function applyMassDelete(){
     const filterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_'][id$='_to_edit']");
     const alterFields = document.getElementById("mass_edit_form").querySelectorAll("textarea[id^='mass_new'], input[id^='mass_new']");
-    
+
     let chapterList = filterChapters(parseChapterList(), parseFilters(filterFields));
     chapterList = parseAlterations(chapterList, alterFields);
-    
+
     if(!confirm(`You are about to delete ${chapterList.size} chapters`)){
         return;
     }
@@ -555,7 +555,7 @@ async function applyMassDelete(){
 function showAlert(type, text){
     const alertBox = document.getElementById("message_container");
     alertBox.classList.replace("display-none", "display-block");
-    alertBox.innerHTML += 
+    alertBox.innerHTML =
         `
         <div class='alert alert-${type} text-center' style='pointer-events: auto;' role='alert'>
             <a href='#' class='float-right fas fa-window-close' data-dismiss='alert'></a>
@@ -564,16 +564,16 @@ function showAlert(type, text){
         `;
 }
 
-(function main(){    
-    const page = window.location.href.match(/(?<=mangadex.org\/)(title|group|user)/gi)[0]; 
-    const tab = window.location.href.match(/(?<=.*\/?)(chapters|mod_chapters|deleted)?(?=\/?$)/gi)[0] || "chapters";
-    
+(function main(){
+    const page = window.location.href.match(/(?<=mangadex.org\/)(title|group|user)/gi)[0];
+    const tab = window.location.href.match(/(?<=.*\/?)(chapters|mod_chapters|deleted)?(?=\/?[0-9]*\/?$)/gi)[0] || "chapters";
+
     // I like to tell myself that someday I'll actually implement the other tabs
     if(tab !== "mod_chapters"){
         return;
     }
-    
-    // create mass edit form and append 
+
+    // create mass edit form and append
     getContainer(page).appendChild(createMassEditForm(page));
     // create button to open the form
     getButtonContainer(page).appendChild(createButton("mass_edit", "edit", "success", toggleMassEditForm));
