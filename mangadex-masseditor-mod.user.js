@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MangaDex Mass Editor v2 (definitely not) Beta
 // @namespace    https://github.com/Xnot/userscripts
-// @version      2.01
+// @version      2.02
 // @icon         https://mangadex.org/images/misc/default_brand.png?1
 // @description  mass edit script but it doesn't make me want to kill myself when I look at the code
 // @author       Xnot
@@ -265,7 +265,7 @@ function getButtonContainer(page){
         return document.getElementsByClassName("btn btn-info float-right")[0].parentNode;
     }
     else if(page === "user"){
-        return document.getElementsByClassName("col-lg-9 col-xl-10")[8];
+        return Array.from(document.querySelectorAll("div[class='col-lg-3 col-xl-2 strong']")).find(el => el.textContent === 'Moderation:').nextElementSibling;
     }
 }
 
